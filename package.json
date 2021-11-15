@@ -1,5 +1,5 @@
 {
-  "name": "vuexy-react-admin-dashboard",
+  "name": "odin-language-academy",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -29,12 +29,14 @@
     "cleave.js": "1.6.0",
     "draft-js": "0.11.7",
     "draftjs-to-html": "0.9.1",
+    "eslint": "7.11.0",
     "file-saver": "2.0.2",
     "flatpickr": "4.6.3",
     "history": "5.0.0",
     "html-to-draftjs": "1.5.0",
     "intl-messageformat": "7.8.4",
     "jquery": "3.5.1",
+    "js-cookie": "^3.0.1",
     "jsonwebtoken": "8.5.1",
     "leaflet": "1.6.0",
     "moment": "2.29.1",
@@ -83,7 +85,7 @@
     "sweetalert2-react-content": "3.0.1",
     "swiper": "6.0.4",
     "uppy": "1.21.2",
-    "webpack": "4.43.0",
+    "webpack": "4.44.2",
     "wnumb": "1.2.0",
     "xlsx": "0.16.2",
     "yarn": "1.21.1",
@@ -102,7 +104,6 @@
   },
   "devDependencies": {
     "@types/sortablejs": "1.10.6",
-    "eslint": "7.8.0",
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-react": "7.20.6",
     "sass-loader": "^8.0.2"

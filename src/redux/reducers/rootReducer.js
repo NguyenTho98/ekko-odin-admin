@@ -13,7 +13,9 @@ import invoice from '@src/views/apps/invoice/store/reducer'
 import calendar from '@src/views/apps/calendar/store/reducer'
 import ecommerce from '@src/views/apps/ecommerce/store/reducer'
 import dataTables from '@src/views/tables/data-tables/store/reducer'
-
+import center from './../../pages/center/CenterReducer';
+import course from './../../pages/course/CourseReducer';
+import classRoom from '../../pages/classRoom/ClassRoomReducer';
 const rootReducer = combineReducers({
   auth,
   todo,
@@ -25,7 +27,10 @@ const rootReducer = combineReducers({
   invoice,
   calendar,
   ecommerce,
-  dataTables
+  dataTables,
+  center,
+  course,
+  classRoom,
 })
 
 export default rootReducer

@@ -5,8 +5,9 @@ import forms from './forms'
 import tables from './tables'
 import others from './others'
 import dashboards from './dashboards'
+import dashboardCenter from './dashboardCenter'
 import uiElements from './ui-elements'
 import chartsAndMaps from './charts-maps'
 
 // ** Merge & Export
-export default [...dashboards, ...apps, ...pages, ...uiElements, ...forms, ...tables, ...chartsAndMaps, ...others]
+export default [...dashboardCenter, ...dashboards, ...apps, ...pages, ...uiElements, ...forms, ...tables, ...chartsAndMaps, ...others]

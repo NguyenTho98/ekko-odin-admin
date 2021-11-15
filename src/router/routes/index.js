@@ -5,6 +5,7 @@ import PagesRoutes from './Pages'
 import TablesRoutes from './Tables'
 import ChartMapsRoutes from './ChartsMaps'
 import DashboardRoutes from './Dashboards'
+import DashboardCenterRoutes from './DashboardCenter'
 import UiElementRoutes from './UiElements'
 import ExtensionsRoutes from './Extensions'
 import PageLayoutsRoutes from './PageLayouts'
@@ -13,10 +14,11 @@ import PageLayoutsRoutes from './PageLayouts'
 const TemplateTitle = '%s - Odin React Admin Template'
 
 // ** Default Route
-const DefaultRoute = '/dashboard/ecommerce'
+const DefaultRoute = '/center'
 
 // ** Merge Routes
 const Routes = [
+  ...DashboardCenterRoutes,
   ...DashboardRoutes,
   ...AppRoutes,
   ...PagesRoutes,

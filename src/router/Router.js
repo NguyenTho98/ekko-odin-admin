@@ -21,6 +21,7 @@ import { DefaultRoute, Routes } from './routes'
 import BlankLayout from '@layouts/BlankLayout'
 import VerticalLayout from '@src/layouts/VerticalLayout'
 import HorizontalLayout from '@src/layouts/HorizontalLayout'
+import { ToastContainer } from 'react-toastify'
 
 const Router = () => {
   // ** Hooks
@@ -184,7 +185,7 @@ const Router = () => {
   }
 
   return (
-    <AppRouter basename={process.env.REACT_APP_BASENAME}>
+    <AppRouter>
       <Switch>
         {/* If user is logged in Redirect user to DefaultRoute else to login */}
         <Route

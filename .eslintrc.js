@@ -15,6 +15,7 @@ module.exports = {
     }
   },
   rules: {
+    "semi": 0,
     'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
@@ -28,22 +29,22 @@ module.exports = {
 
     // Variable
     // 'init-declarations': 'error',
-    'no-use-before-define': 'error',
+    // 'no-use-before-define': 'error',
 
     // Stylistic Issues
     'array-bracket-newline': ['error', { multiline: true, minItems: null }],
     'array-bracket-spacing': 'error',
     'brace-style': ['error', '1tbs', { allowSingleLine: true }],
     'block-spacing': 'error',
-    'comma-dangle': 'error',
+    // 'comma-dangle': 'error',
     'comma-spacing': 'error',
     'comma-style': 'error',
     'computed-property-spacing': 'error',
     'func-call-spacing': 'error',
-    'implicit-arrow-linebreak': ['error', 'beside'],
+    // 'implicit-arrow-linebreak': ['error', 'beside'],
     // indent: ['error', 4],
     'keyword-spacing': 'error',
-    'multiline-ternary': ['error', 'never'],
+    // 'multiline-ternary': ['error', 'never'],
     // 'no-lonely-if': 'error',
     'no-mixed-operators': 'error',
     'no-multiple-empty-lines': ['error', { max: 2, maxEOF: 1 }],
@@ -54,7 +55,6 @@ module.exports = {
     'object-property-newline': ['error', { allowAllPropertiesOnSameLine: true }],
     'quote-props': ['error', 'as-needed'],
     // quotes: ['error', 'prefer-single'],
-    semi: ['error', 'never'],
     'semi-spacing': 'error',
     'space-before-blocks': 'error',
     // 'space-before-function-paren': 'error',
@@ -67,9 +67,9 @@ module.exports = {
     'no-confusing-arrow': 'error',
     'no-duplicate-imports': 'error',
     'no-var': 'error',
-    'object-shorthand': 'error',
-    'prefer-const': 'error',
-    'prefer-template': 'error'
+    'object-shorthand': 'error'
+    // 'prefer-const': 'error',
+    // 'prefer-template': 'error'
   }
 
   // rules: {

@@ -8,10 +8,10 @@ module.exports = {
                 sassOptions: {
                     includePaths: ['node_modules', 'src/assets']
                 }
-            },
+            }
         },
         postcss: {
-            plugins: [require('postcss-rtl')()],
+            plugins: [require('postcss-rtl')()]
         }
     },
     webpack: {
@@ -25,6 +25,6 @@ module.exports = {
                 '@configs': path.resolve(__dirname, 'src/configs'),
                 '@utils': path.resolve(__dirname, 'src/utility/Utils'),
                 '@hooks': path.resolve(__dirname, 'src/utility/hooks')
-        },
-    },
-};
+        }
+    }
+}
