@@ -24,6 +24,12 @@ export default [
         title: 'Phòng học',
         icon: <Circle size={12} />,
         navLink: '/classRoom'
+      },
+      {
+        id: 'classesDashCenter',
+        title: 'Lớp học',
+        icon: <Circle size={12} />,
+        navLink: '/classes'
       }
     ]
   }

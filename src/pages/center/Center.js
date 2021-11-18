@@ -135,7 +135,7 @@ const Center = (props) => {
       name: '#',
       minWidth: '107px',
       selector: 'id',
-      cell: row => <Link to={`/apps/invoice/preview/${row.id}`}>{`#${row.id}`}</Link>
+      cell: row => <span>{`#${row.id}`}</span>
     },
     {
       name: 'Tên trung tâm',

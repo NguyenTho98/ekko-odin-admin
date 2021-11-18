@@ -16,6 +16,7 @@ import dataTables from '@src/views/tables/data-tables/store/reducer'
 import center from './../../pages/center/CenterReducer';
 import course from './../../pages/course/CourseReducer';
 import classRoom from '../../pages/classRoom/ClassRoomReducer';
+import classes from '../../pages/classes/ClassesReducer';
 const rootReducer = combineReducers({
   auth,
   todo,
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   center,
   course,
   classRoom,
+  classes,
 })
 
 export default rootReducer

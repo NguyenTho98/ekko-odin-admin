@@ -1,4 +1,6 @@
 // ** Checks if an object is empty (returns boolean)
+import cookie from "js-cookie";
+import { TOKEN } from "./constants/config";
 export const isObjEmpty = obj => Object.keys(obj).length === 0
 
 // ** Returns K format from a number
@@ -48,7 +50,7 @@ export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
  ** This is completely up to you and how you want to store the token in your frontend application
  *  ? e.g. If you are using cookies to store the application please update this function
  */
-export const isUserLoggedIn = () => localStorage.getItem('userData')
+export const isUserLoggedIn = () => cookie.get(TOKEN)
 export const getUserData = () => JSON.parse(localStorage.getItem('userData'))
 
 /**

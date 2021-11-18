@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom"
 
 // ** Third Party Components
 import ReactPaginate from "react-paginate"
-import { ChevronDown, Edit, Trash} from "react-feather"
+import { ChevronDown, Edit, Plus, Trash} from "react-feather"
 import DataTable from "react-data-table-component"
 import { Button, Label, Input, CustomInput, Row, Col, Card, UncontrolledTooltip } from "reactstrap"
 
@@ -46,9 +46,10 @@ const CustomHeader = ({
               <option value="50">50</option>
             </CustomInput>
           </div>
-          <Button onClick={handleAddNew} color="primary">
-            Thêm mới
-          </Button>
+          <Button.Ripple onClick={handleAddNew} color="primary">
+            <Plus size={18} />
+            <span className="align-middle ml-25">Thêm mới</span>
+          </Button.Ripple>
         </Col>
         <Col
           lg="6"
@@ -85,8 +86,8 @@ const CustomHeader = ({
   );
 };
 let params = {
-    page: 1,
-    size: 20,
+    offset: 3,
+    limit: 20,
     query: "",
 };
 const ClassRoom = (props) => {
@@ -102,8 +103,8 @@ const ClassRoom = (props) => {
   useEffect(() => {
     return () => {
       params = {
-        page: 1,
-        size: 20,
+        offset: 3,
+        limit: 10,
         query: "",
       };
     };
@@ -117,7 +118,7 @@ const ClassRoom = (props) => {
   }, [profile]);
 
   const handleFetchClassRoom = (params = {}) => {
-    actionGetClassRooms({ ...params, page: params.page - 1 });
+    actionGetClassRooms({ ...params, offset: params.offset - 1 });
   };
 
   const handleEditItem = (items = {}) => {
@@ -135,7 +136,7 @@ const ClassRoom = (props) => {
       name: '#',
       minWidth: '107px',
       selector: 'id',
-      cell: row => <Link to={`/apps/invoice/preview/${row.id}`}>{`#${row.id}`}</Link>
+      cell: row => <span>{`#${row.id}`}</span>
     },
     {
       name: 'Tên phòng học',
@@ -163,7 +164,7 @@ const ClassRoom = (props) => {
       selector: 'center',
       sortable: true,
       minWidth: '200px',
-      cell: row => row.center || "---"
+      cell: row => row?.center?.name || "---"
     },
     {
       name: 'Action',

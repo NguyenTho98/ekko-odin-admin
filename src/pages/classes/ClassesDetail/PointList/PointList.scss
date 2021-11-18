@@ -1,0 +1,25 @@
+.point-list-wrapper {
+  .nav-item-point {
+    border: 1px solid #6e6b7b;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    .active{
+        color: #fff;
+        border: 0px solid #7367f0;
+        background: #7367f0 !important;
+        &::after{
+            background: none !important;
+        }
+    }
+  }
+  .content-point-list{
+      .title{
+          font-size: 22px;
+          font-weight: 600;
+          margin-bottom: 10px;
+      }
+      .sub-title{
+        font-size: 16px;
+      }
+  }
+}

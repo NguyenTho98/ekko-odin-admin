@@ -1,24 +1,33 @@
 // ** React Imports
-import { useState, useEffect, Fragment, useCallback } from "react"
-import { Link, withRouter } from "react-router-dom"
+import { useState, useEffect, Fragment, useCallback } from "react";
+import { Link, withRouter } from "react-router-dom";
 
 // ** Third Party Components
-import ReactPaginate from "react-paginate"
-import { ChevronDown, Edit, Plus, Trash} from "react-feather"
-import DataTable from "react-data-table-component"
-import { Button, Label, Input, CustomInput, Row, Col, Card, UncontrolledTooltip } from "reactstrap"
+import ReactPaginate from "react-paginate";
+import { ChevronDown, Edit, Plus, Trash } from "react-feather";
+import DataTable from "react-data-table-component";
+import {
+  Button,
+  Label,
+  Input,
+  CustomInput,
+  Row,
+  Col,
+  Card,
+  UncontrolledTooltip,
+} from "reactstrap";
 
 // ** Store & Actions
-import { connect } from "react-redux"
-import { actionGetCourses } from "./CourseAction";
+import { connect } from "react-redux";
+import { actionGetClassess } from "./ClassesAction";
 // ** Styles
-import "@styles/react/apps/app-invoice.scss"
-import "@styles/react/libs/tables/react-dataTable-component.scss"
+import "@styles/react/apps/app-invoice.scss";
+import "@styles/react/libs/tables/react-dataTable-component.scss";
 // ** Custom Components
-import Breadcrumbs from "@components/breadcrumbs"
-import { isEmpty } from "../../utility/Utils"
-import AddOrEditCourseModal from "./AddOrEditCourseModal"
-import DeleteCourseModal from "./DeleteCourseModal"
+import Breadcrumbs from "@components/breadcrumbs";
+import { isEmpty } from "../../utility/Utils";
+import AddOrEditClassesModal from "./AddOrEditClassesModal";
+import DeleteClassesModal from "./DeleteClassesModal";
 const CustomHeader = ({
   handleFilter,
   value,
@@ -31,8 +40,8 @@ const CustomHeader = ({
   return (
     <div className="invoice-list-table-header w-100 py-2">
       <Row>
-        <Col lg="6" className="d-flex align-items-course px-0 px-lg-1">
-          <div className="d-flex align-items-course mr-2">
+        <Col lg="6" className="d-flex align-items-classes px-0 px-lg-1">
+          <div className="d-flex align-items-classes mr-2">
             <Label for="rows-per-page">Hiện thị</Label>
             <CustomInput
               className="form-control ml-50 pr-3"
@@ -53,9 +62,9 @@ const CustomHeader = ({
         </Col>
         <Col
           lg="6"
-          className="actions-right d-flex align-items-course justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pr-lg-1 p-0"
+          className="actions-right d-flex align-items-classes justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pr-lg-1 p-0"
         >
-          <div className="d-flex align-items-course">
+          <div className="d-flex align-items-classes">
             <Label for="search-invoice">Tìm kiếm</Label>
             <Input
               id="search-invoice"
@@ -63,7 +72,7 @@ const CustomHeader = ({
               type="text"
               value={value}
               onChange={(e) => handleFilter(e.target.value)}
-              placeholder="Tìm kiếm tên khóa học"
+              placeholder="Tìm kiếm tên lớp học"
             />
           </div>
           {/* <Input
@@ -86,12 +95,12 @@ const CustomHeader = ({
   );
 };
 let params = {
-    page: 1,
-    size: 20,
-    query: "",
+  page: 1,
+  size: 20,
+  query: "",
 };
-const Course = (props) => {
-  const { profile, actionGetCourses, courses = {}, isFetching } = props;
+const Classes = (props) => {
+  const { profile, actionGetClassess, classess = {}, isFetching } = props;
   const [visibleModal, setVisibleModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
@@ -112,13 +121,13 @@ const Course = (props) => {
 
   useEffect(() => {
     if (isEmpty(profile)) {
-      console.log("courses", courses);
-      handleFetchCourse(params);
+      console.log("classess", classess);
+      handleFetchClasses(params);
     }
   }, [profile]);
 
-  const handleFetchCourse = (params = {}) => {
-    actionGetCourses({ ...params, page: params.page - 1 });
+  const handleFetchClasses = (params = {}) => {
+    actionGetClassess({ ...params, page: params.page - 1 });
   };
 
   const handleEditItem = (items = {}) => {
@@ -129,82 +138,102 @@ const Course = (props) => {
   const handleEditItemDelete = (items = {}) => {
     setSelectedItemDelete(items);
     setVisibleModalDelete(true);
-  }
+  };
 
   const columns = [
     {
-      name: '#',
-      minWidth: '107px',
-      selector: 'id',
-      cell: row => <span>{`#${row.id}`}</span>
+      name: "#",
+      selector: "id",
+      cell: (row) => <Link to={`/classes/edit/${row.id}`}>{`#${row.id}`}</Link>,
     },
     {
-      name: 'Tên khóa học',
-      selector: 'name',
-      minWidth: '200px',
+      name: "Tên lớp học",
+      selector: "name",
       sortable: true,
-      cell: row => <span>{row.name || "---"}</span>
+      minWidth: "150px",
+      cell: (row) => <span>{row.name || "---"}</span>,
+    },
+
+    {
+      name: "Lịch học",
+      selector: "schedule",
+      minWidth: "150px",
+      sortable: true,
+      cell: (row) => row.schedule || "---",
     },
     {
-      name: 'Giá gốc',
-      selector: 'cost',
+      name: "Ngày kết thúc",
+      selector: "end_date",
+      minWidth: "150px",
       sortable: true,
-      cell: row => row.cost || "---"
+      cell: (row) => row?.end_date || "---",
+    },
+
+    {
+      name: "Thời gian",
+      selector: "time",
+      sortable: true,
+      cell: (row) => row?.time || "---",
     },
     {
-      name: 'Giá ca ngày',
-      selector: 'night_cost',
+      name: "Trạng thái lớp học",
+      selector: "status_classes",
       sortable: true,
-      cell: row => row.night_cost || "---"
+      minWidth: "150px",
+      cell: (row) => row?.status_classes || "---",
     },
+
     {
-      name: 'Giá ca tối',
-      selector: 'daytime_cost',
+      name: "Khóa học",
+      selector: "course",
       sortable: true,
-      cell: row => row.daytime_cost || "---"
+      minWidth: "200px",
+      cell: (row) => row?.course?.name || "---",
     },
+
     {
-      name: 'Số buổi học',
-      selector: 'study_shift_count',
+      name: "Action",
+      minWidth: "110px",
+      selector: "",
       sortable: true,
-      cell: row => row.study_shift_count || "---"
-    },
-    {
-      name: 'Mô tả',
-      selector: 'description',
-      sortable: true,
-      minWidth: '200px',
-      cell: row => row.description || "---"
-    },
-    {
-      name: 'Action',
-      minWidth: '110px',
-      selector: '',
-      sortable: true,
-      cell: row => (
-        <div className='column-action d-flex align-items-course'>
-          <Trash  style={{ cursor: "pointer" }} size={17} id={`send-tooltip-${row.id}`} onClick={() => handleEditItemDelete(row)} />
-          <UncontrolledTooltip placement='top' target={`send-tooltip-${row.id}`} >
+      cell: (row) => (
+        <div className="column-action d-flex align-items-classes">
+          <Trash
+            style={{ cursor: "pointer" }}
+            size={17}
+            id={`send-tooltip-${row.id}`}
+            onClick={() => handleEditItemDelete(row)}
+          />
+          <UncontrolledTooltip
+            placement="top"
+            target={`send-tooltip-${row.id}`}
+          >
             Delete
           </UncontrolledTooltip>
-          <Edit style={{ cursor: "pointer" }} size={17} className='mx-1' id={`pw-tooltip-${row.id}`} onClick={() => handleEditItem(row)}/>
-          <UncontrolledTooltip placement='top' target={`pw-tooltip-${row.id}`}>
+          <Edit
+            style={{ cursor: "pointer" }}
+            size={17}
+            className="mx-1"
+            id={`pw-tooltip-${row.id}`}
+            onClick={() => handleEditItem(row)}
+          />
+          <UncontrolledTooltip placement="top" target={`pw-tooltip-${row.id}`}>
             Edit
           </UncontrolledTooltip>
         </div>
-      )
-    }
-  ]
-//   useEffect(() => {
-//     dispatch(
-//       getData({
-//         page: currentPage,
-//         perPage: rowsPerPage,
-//         status: statusValue,
-//         q: value,
-//       })
-//     );
-//   }, [dispatch, store.data.length]);
+      ),
+    },
+  ];
+  //   useEffect(() => {
+  //     dispatch(
+  //       getData({
+  //         page: currentPage,
+  //         perPage: rowsPerPage,
+  //         status: statusValue,
+  //         q: value,
+  //       })
+  //     );
+  //   }, [dispatch, store.data.length]);
 
   const handleFilter = (val) => {
     setValue(val);
@@ -257,7 +286,7 @@ const Course = (props) => {
     setVisibleModal(true);
   }, []);
   const CustomPagination = () => {
-    const count = Number((courses.count / rowsPerPage).toFixed(0));
+    const count = Number((classess.count / rowsPerPage).toFixed(0));
     return (
       <ReactPaginate
         pageCount={count || 1}
@@ -282,7 +311,7 @@ const Course = (props) => {
 
   return (
     <Fragment>
-      <Breadcrumbs breadCrumbTitle="Khóa học" />
+      <Breadcrumbs breadCrumbTitle="Lớp học" />
       <div className="invoice-list-wrapper">
         <Card>
           <div className="invoice-list-dataTable">
@@ -298,7 +327,7 @@ const Course = (props) => {
               defaultSortField="invoiceId"
               paginationDefaultPage={currentPage}
               paginationComponent={CustomPagination}
-              data={courses.results}
+              data={classess.results}
               subHeaderComponent={
                 <CustomHeader
                   handleAddNew={handleAddNew}
@@ -315,11 +344,11 @@ const Course = (props) => {
         </Card>
       </div>
       {visibleModal && (
-        <AddOrEditCourseModal
+        <AddOrEditClassesModal
           visible={visibleModal}
           onCancel={(isRefreshData) => {
             if (isRefreshData) {
-              handleFetchCourse(params);
+              handleFetchClasses(params);
             }
             setSelectedItem({});
             setVisibleModal(false);
@@ -328,13 +357,13 @@ const Course = (props) => {
         />
       )}
       {visibleModalDelete && (
-        <DeleteCourseModal
+        <DeleteClassesModal
           visible={visibleModalDelete}
           onCancel={() => {
             setSelectedItemDelete({});
             setVisibleModalDelete(false);
           }}
-          handleFetchCourse={() => handleFetchCourse(params)}
+          handleFetchClasses={() => handleFetchClasses(params)}
           item={selectedItemDelete}
         />
       )}
@@ -343,10 +372,10 @@ const Course = (props) => {
 };
 
 export default connect(
-    (state) => ({
-      profile: state.system?.profile,
-      courses: state.course?.courses,
-      isFetching: state.course?.isFetching,
-    }),
-    { actionGetCourses }
-  )(withRouter(Course));
+  (state) => ({
+    profile: state.system?.profile,
+    classess: state.classes?.classess,
+    isFetching: state.classes?.isFetching,
+  }),
+  { actionGetClassess }
+)(withRouter(Classes));

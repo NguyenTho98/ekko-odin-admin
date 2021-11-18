@@ -23,7 +23,7 @@ module.exports = {
     eqeqeq: 'error',
     'no-invalid-this': 'error',
     'no-return-assign': 'error',
-    'no-unused-expressions': ['error', { allowTernary: true }],
+    // 'no-unused-expressions': ['error', { allowTernary: true }],
     'no-useless-concat': 'error',
     'no-useless-return': 'error',
 

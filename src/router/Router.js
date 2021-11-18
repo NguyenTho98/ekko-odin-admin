@@ -69,7 +69,6 @@ const Router = () => {
   const FinalRoute = props => {
     const route = props.route
     let action, resource
-
     // ** Assign vars based on route meta
     if (route.meta) {
       action = route.meta.action ? route.meta.action : null
@@ -91,7 +90,7 @@ const Router = () => {
     } else if (route.meta && route.meta.authRoute && isUserLoggedIn()) {
       // ** If route has meta and authRole and user is Logged in then redirect user to home page (DefaultRoute)
       return <Redirect to='/' />
-    } else if (isUserLoggedIn() && !ability.can(action || 'read', resource)) {
+    } else if (isUserLoggedIn() && ability.can(action || 'read', resource)) {
       // ** If user is Logged in and doesn't have ability to visit the page redirect the user to Not Authorized
       return <Redirect to='/misc/not-authorized' />
     } else {
@@ -110,7 +109,6 @@ const Router = () => {
 
       // ** Get Routes and Paths of the Layout
       const { LayoutRoutes, LayoutPaths } = LayoutRoutesAndPaths(layout)
-
       // ** We have freedom to display different layout for different route
       // ** We have made LayoutTag dynamic based on layout, we can also replace it with the only layout component,
       // ** that we want to implement like VerticalLayout or HorizontalLayout

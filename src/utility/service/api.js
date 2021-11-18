@@ -30,13 +30,11 @@ request.interceptors.response.use(
         }, 1000);
       }
     } else if (status === 401) {
-      cookie.remove(TOKEN);
+      // cookie.remove(TOKEN);
     //   message.error(
     //     "Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại!"
     //   );
-      setTimeout(() => {
-        window.location.href =  '/login';
-      }, 1000);
+    Be
     } else {
     //   message.error(data?.status?.message || "Lỗi hệ thống!");
     }
@@ -55,7 +53,8 @@ const api = (options) => {
     },
   };
   if (cookie.get(TOKEN)) {
-    config.headers.Authorization = `${cookie.get(TOKEN)}`;
+    const tmpToken = `Token ${cookie.get(TOKEN)}`;
+    config.headers.Authorization = tmpToken;
   }
   return request(config);
 };

@@ -15,6 +15,18 @@ const DashboardCenterRoutes = [
     component: lazy(() => import('../../pages/classRoom/ClassRoom')),
     exact: true
   },
+  {
+    path: '/classes',
+    component: lazy(() => import('../../pages/classes/Classes')),
+    exact: true
+  },
+  {
+    path: '/classes/edit/:id',
+    component: lazy(() => import('../../pages/classes/ClassesDetail')),
+    meta: {
+      navLink: '/classes/edit'
+    }
+  },
 ]
 
 export default DashboardCenterRoutes

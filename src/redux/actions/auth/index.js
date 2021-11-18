@@ -1,6 +1,7 @@
 // ** UseJWT import to get config
 import useJwt from '@src/auth/jwt/useJwt'
-
+import cookie from "js-cookie";
+import { TOKEN } from '../../../utility/constants/config';
 const config = useJwt.jwtConfig
 
 // ** Handle User Login
@@ -30,5 +31,6 @@ export const handleLogout = () => {
     localStorage.removeItem('userData')
     localStorage.removeItem(config.storageTokenKeyName)
     localStorage.removeItem(config.storageRefreshTokenKeyName)
+    cookie.remove(TOKEN)
   }
 }
