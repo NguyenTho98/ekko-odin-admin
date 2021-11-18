@@ -12,6 +12,7 @@ function ClassesDetail(props) {
                   <Input
                     type="text"
                     name="name"
+                    disabled
                     value={classesDetail.code}
                     placeholder="Mã lớp học"
                   />
@@ -23,6 +24,7 @@ function ClassesDetail(props) {
                   <Input
                     type="text"
                     name="name"
+                    disabled
                     value={classesDetail.name}
                     placeholder="Tên lớp học"
                   />
@@ -34,6 +36,7 @@ function ClassesDetail(props) {
                   <Input
                     type="text"
                     name="address"
+                    disabled
                     value={classesDetail.teachers}
                     placeholder="Danh sách giáo viên"
                   />
@@ -45,6 +48,7 @@ function ClassesDetail(props) {
                   <Input
                     type="text"
                     name="address"
+                    disabled
                     value={classesDetail.schedule}
                     placeholder="Lịch học"
                   />
@@ -55,6 +59,7 @@ function ClassesDetail(props) {
                   <Label for="nameVertical">Ngày khai giảng</Label>
                   <Input
                     type="text"
+                    disabled
                     name="name"
                     value={moment(classesDetail.start_date).format("DD-MM-YYYY")}
                     placeholder="Ngày khai giảng"
@@ -67,6 +72,7 @@ function ClassesDetail(props) {
                   <Input
                     type="text"
                     name="name"
+                    disabled
                     value={moment(classesDetail.end_date).format("DD-MM-YYYY")}
                     placeholder="Ngày kết thúc"
                   />
@@ -78,6 +84,7 @@ function ClassesDetail(props) {
                   <Input
                     type="text"
                     name="address"
+                    disabled
                     value={classesDetail.available}
                     placeholder="Số buổi học"
                   />
@@ -89,6 +96,7 @@ function ClassesDetail(props) {
                   <Input
                     type="text"
                     name="address"
+                    disabled
                     value={classesDetail.capacity}
                     placeholder="Số học viên"
                   />
@@ -99,6 +107,7 @@ function ClassesDetail(props) {
                   <Label for="nameVertical">Thời gian</Label>
                   <Input
                     type="text"
+                    disabled
                     name="name"
                     value={classesDetail.time}
                     placeholder="Thời gian"
@@ -110,6 +119,7 @@ function ClassesDetail(props) {
                   <Label for="EmailVertical">Trạng thái lớp học</Label>
                   <Input
                     type="text"
+                    disabled
                     name="address"
                     value={classesDetail.status_classes}
                     placeholder="Địa chỉ"
@@ -122,6 +132,7 @@ function ClassesDetail(props) {
                   <Input
                     type="text"
                     name="address"
+                    disabled
                     value={classesDetail?.center?.name}
                     placeholder="Trung tâm"
                   />
@@ -132,6 +143,7 @@ function ClassesDetail(props) {
                   <Label for="nameVertical">Khóa học</Label>
                   <Input
                     type="text"
+                    disabled
                     name="name"
                     value={classesDetail?.course?.name}
                     placeholder="Khóa học"
@@ -143,6 +155,7 @@ function ClassesDetail(props) {
                   <Label for="EmailVertical">Phòng học</Label>
                   <Input
                     type="text"
+                    disabled
                     name="address"
                     value={classesDetail?.classroom?.name}
                     placeholder="Phòng học"

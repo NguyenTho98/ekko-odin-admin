@@ -87,7 +87,7 @@ function Classes(props) {
               <ClassesDetail classesDetail={classesDetail} />
             </TabPane>
             <TabPane tabId="2">
-              <PointList />
+              <PointList classesDetail={classesDetail}/>
             </TabPane>
             <TabPane tabId="3">
               <p>

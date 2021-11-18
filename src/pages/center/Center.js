@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom"
 
 // ** Third Party Components
 import ReactPaginate from "react-paginate"
-import { ChevronDown, Edit, Trash} from "react-feather"
+import { ChevronDown, Edit, Plus, Trash} from "react-feather"
 import DataTable from "react-data-table-component"
 import { Button, Label, Input, CustomInput, Row, Col, Card, UncontrolledTooltip } from "reactstrap"
 
@@ -46,9 +46,10 @@ const CustomHeader = ({
               <option value="50">50</option>
             </CustomInput>
           </div>
-          <Button onClick={handleAddNew} color="primary">
-            Thêm mới
-          </Button>
+          <Button.Ripple onClick={handleAddNew} color="primary">
+            <Plus size={18} />
+            <span className="align-middle ml-25">Thêm mới</span>
+          </Button.Ripple>
         </Col>
         <Col
           lg="6"

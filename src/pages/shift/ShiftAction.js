@@ -1,6 +1,6 @@
 import api from "../../utility/service/api";
 import * as actionType from "../../utility/constants/actions";
-export const actionGetClassess =
+export const actionGetShifts =
   (params = {}) =>
   async (dispatch) => {
     try {
@@ -17,13 +17,13 @@ export const actionGetClassess =
       dispatch({ type: actionType.FETCHING_CENTER, payload: false });
     }
   };
-export const getClassesList = (id) => {
+export const getShiftList = (id) => {
   return api({
     method: "get",
     url: `/shift?classes=${id}`,
   });
 };
-export const actionAddClasses = (data = {}) => {
+export const actionAddShift = (data = {}) => {
   return api({
     method: "post",
     url: `/shift`,
@@ -31,7 +31,7 @@ export const actionAddClasses = (data = {}) => {
   });
 };
 
-export const actionEditClasses = (data = {}, id) => {
+export const actionEditShift = (data = {}, id) => {
   return api({
     method: "put",
     url: `/shift/${id}`,
@@ -40,14 +40,14 @@ export const actionEditClasses = (data = {}, id) => {
 };
 
 
-export const actionDetailClasses = (id) => {
+export const actionDetailShift = (id) => {
   return api({
     method: "get",
     url: `/shift/${id}`
   });
 };
 
-export const actionDeleteClasses = (id) => {
+export const actionDeleteShift = (id) => {
   return api({
     method: "delete",
     url: `/shift/${id}`,

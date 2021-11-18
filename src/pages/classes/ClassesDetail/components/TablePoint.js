@@ -58,6 +58,195 @@ const TablePoint = () => {
             </UncontrolledTooltip>
           </td>
         </tr>
+        <tr>
+          <td>Nguyễn Xuân Thọ</td>
+          <td style={{textAlign: "center"}}>
+            <CustomInput
+              type="checkbox"
+              className="custom-control-Primary"
+              id="Primary"
+              defaultChecked
+              inline
+            />
+          </td>
+          <td>10</td>
+          <td>
+            nghỉ học k phép
+          </td>
+          <td>
+            <Edit
+              style={{ cursor: "pointer" }}
+              size={17}
+              className="mx-1"
+              id={`pw-tooltip-1`}
+            />
+            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
+              Edit
+            </UncontrolledTooltip>
+          </td>
+        </tr>
+        <tr>
+          <td>Nguyễn Xuân Thọ</td>
+          <td style={{textAlign: "center"}}>
+            <CustomInput
+              type="checkbox"
+              className="custom-control-Primary"
+              id="Primary"
+              defaultChecked
+              inline
+            />
+          </td>
+          <td>10</td>
+          <td>
+            nghỉ học k phép
+          </td>
+          <td>
+            <Edit
+              style={{ cursor: "pointer" }}
+              size={17}
+              className="mx-1"
+              id={`pw-tooltip-1`}
+            />
+            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
+              Edit
+            </UncontrolledTooltip>
+          </td>
+        </tr>
+        <tr>
+          <td>Nguyễn Xuân Thọ</td>
+          <td style={{textAlign: "center"}}>
+            <CustomInput
+              type="checkbox"
+              className="custom-control-Primary"
+              id="Primary"
+              defaultChecked
+              inline
+            />
+          </td>
+          <td>10</td>
+          <td>
+            nghỉ học k phép
+          </td>
+          <td>
+            <Edit
+              style={{ cursor: "pointer" }}
+              size={17}
+              className="mx-1"
+              id={`pw-tooltip-1`}
+            />
+            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
+              Edit
+            </UncontrolledTooltip>
+          </td>
+        </tr>
+        <tr>
+          <td>Nguyễn Xuân Thọ</td>
+          <td style={{textAlign: "center"}}>
+            <CustomInput
+              type="checkbox"
+              className="custom-control-Primary"
+              id="Primary"
+              defaultChecked
+              inline
+            />
+          </td>
+          <td>10</td>
+          <td>
+            nghỉ học k phép
+          </td>
+          <td>
+            <Edit
+              style={{ cursor: "pointer" }}
+              size={17}
+              className="mx-1"
+              id={`pw-tooltip-1`}
+            />
+            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
+              Edit
+            </UncontrolledTooltip>
+          </td>
+        </tr>
+        <tr>
+          <td>Nguyễn Xuân Thọ</td>
+          <td style={{textAlign: "center"}}>
+            <CustomInput
+              type="checkbox"
+              className="custom-control-Primary"
+              id="Primary"
+              defaultChecked
+              inline
+            />
+          </td>
+          <td>10</td>
+          <td>
+            nghỉ học k phép
+          </td>
+          <td>
+            <Edit
+              style={{ cursor: "pointer" }}
+              size={17}
+              className="mx-1"
+              id={`pw-tooltip-1`}
+            />
+            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
+              Edit
+            </UncontrolledTooltip>
+          </td>
+        </tr>
+        <tr>
+          <td>Nguyễn Xuân Thọ</td>
+          <td style={{textAlign: "center"}}>
+            <CustomInput
+              type="checkbox"
+              className="custom-control-Primary"
+              id="Primary"
+              defaultChecked
+              inline
+            />
+          </td>
+          <td>10</td>
+          <td>
+            nghỉ học k phép
+          </td>
+          <td>
+            <Edit
+              style={{ cursor: "pointer" }}
+              size={17}
+              className="mx-1"
+              id={`pw-tooltip-1`}
+            />
+            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
+              Edit
+            </UncontrolledTooltip>
+          </td>
+        </tr>
+        <tr>
+          <td>Nguyễn Xuân Thọ</td>
+          <td style={{textAlign: "center"}}>
+            <CustomInput
+              type="checkbox"
+              className="custom-control-Primary"
+              id="Primary"
+              defaultChecked
+              inline
+            />
+          </td>
+          <td>10</td>
+          <td>
+            nghỉ học k phép
+          </td>
+          <td>
+            <Edit
+              style={{ cursor: "pointer" }}
+              size={17}
+              className="mx-1"
+              id={`pw-tooltip-1`}
+            />
+            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
+              Edit
+            </UncontrolledTooltip>
+          </td>
+        </tr>
       </tbody>
     </Table>
   );
