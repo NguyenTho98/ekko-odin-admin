@@ -13,15 +13,12 @@ import {
   ModalHeader,
   Row,
 } from "reactstrap";
+import { selectThemeColors } from "@utils";
 import { toastSuccess } from "../../utility/common/toastify";
 import { isEmpty } from "../../utility/Utils";
 import { actionAddReward, actionEditReward } from "./RewardAction";
-import { selectThemeColors } from "@utils";
 import { getCenterList } from "../center/CenterAction";
-import Select from "react-select";
-import { getUserList } from "../users/UsersAction";
-import { getClassRoomList } from "../classRoom/ClassRoomAction";
-import { getClassesList } from "../classes/ClassesAction";
+import Select, { components } from "react-select";
 import Flatpickr from "react-flatpickr";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
 function AddOrEditRewardModal(props) {
@@ -41,22 +38,17 @@ function AddOrEditRewardModal(props) {
       setObject(item);
     }
   }, [item]);
-  useEffect(() => {
-    handleFetchCenterData();
-  }, [item]);
-  const handleFetchCenterData = async (field, value) => {
-    try {
-      let rqParams = { page: 0, size: 50, query: "" };
-      if (field && value) {
-        rqParams.query = isNaN(value)
-          ? `${field}=="*${value}*"`
-          : `${field}==${value}`;
-      }
 
-      const { data } = await getCenterList(rqParams);
+  const handleFetchCenterData = async () => {
+    try {
+      const { data } = await getCenterList();
       setCenterData(data?.results || []);
     } catch (error) {}
   };
+
+  useEffect(() => {
+    handleFetchCenterData();
+  }, [item]);
 
   const hanldChange = (e) => {
     const { name, value } = e.target;
@@ -194,7 +186,7 @@ function AddOrEditRewardModal(props) {
                 </FormGroup>
               </Col>
               <Col sm="12">
-              <FormGroup>
+                <FormGroup>
                   <Label for="nameVertical">Ghi chú</Label>
                   <Input
                     type="textarea"
@@ -206,27 +198,22 @@ function AddOrEditRewardModal(props) {
                 </FormGroup>
               </Col>
               <Col sm="12">
-                <FormGroup>
-                  <Label>Trung tâm</Label>
-                  <Input
-                    type="select"
-                    name="centre"
-                    id="select-basic"
-                    onChange={hanldChange}
-                    value={object?.center}
-                    multiple
-                  >
-                    <option value={0}>Chọn trung tâm</option>
-                    {centerData.map((item, index) => (
-                      <option key={index} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </Input>
-                </FormGroup>
+                <Label for="nameVertical">Trung tâm</Label>
+                <Select
+                  isClearable={false}
+                  theme={selectThemeColors}
+                  isMulti
+                  name="colors"
+                  options={centerData}
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                  className="react-select"
+                  classNamePrefix="select"
+                  placeholder="Chọn trung tâm"
+                />
               </Col>
               <Col sm="12">
-                <FormGroup className="d-flex mb-0 justify-content-end">
+                <FormGroup className="d-flex mt-2 mb-0 justify-content-end">
                   <Button.Ripple
                     outline
                     color="secondary"
