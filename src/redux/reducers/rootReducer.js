@@ -17,6 +17,8 @@ import center from './../../pages/center/CenterReducer';
 import course from './../../pages/course/CourseReducer';
 import classRoom from '../../pages/classRoom/ClassRoomReducer';
 import classes from '../../pages/classes/ClassesReducer';
+import comment from '../../pages/comment/CommentReducer';
+import reward from '../../pages/reward/RewardReducer';
 const rootReducer = combineReducers({
   auth,
   todo,
@@ -33,6 +35,8 @@ const rootReducer = combineReducers({
   course,
   classRoom,
   classes,
+  comment,
+  reward,
 })
 
 export default rootReducer

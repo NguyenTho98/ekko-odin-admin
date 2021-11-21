@@ -6,6 +6,7 @@ import PointList from "./PointList/PointList";
 import { useParams, useHistory } from "react-router-dom";
 import { actionDetailClasses } from "../ClassesAction";
 import ClassesDetail from "./Detail/ClassesDetail";
+import Summary from "./Summary/Summary";
 import { ChevronLeft } from "react-feather";
 function Classes(props) {
   const { id } = useParams();
@@ -90,18 +91,7 @@ function Classes(props) {
               <PointList classesDetail={classesDetail}/>
             </TabPane>
             <TabPane tabId="3">
-              <p>
-                Gingerbread cake cheesecake lollipop topping bonbon chocolate
-                sesame snaps. Dessert macaroon bonbon carrot cake biscuit.
-                Lollipop lemon drops cake gingerbread liquorice. Sweet gummies
-                dragée. Donut bear claw pie halvah oat cake cotton candy sweet
-                roll. Cotton candy sweet roll donut ice cream.
-              </p>
-              <p>
-                Halvah bonbon topping halvah ice cream cake candy. Wafer gummi
-                bears chocolate cake topping powder. Sweet marzipan cheesecake
-                jelly-o powder wafer lemon drops lollipop cotton candy.
-              </p>
+              <Summary></Summary>
             </TabPane>
           </TabContent>
         </Card>

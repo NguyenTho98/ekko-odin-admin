@@ -1,19 +1,19 @@
 import * as actions from "../../utility/constants/actions";
 
 const initialState = {
-  courses: {},
+  comments: {},
   isFetching: false,
 };
 
-const course = (state = initialState, action) => {
+const comment = (state = initialState, action) => {
   switch (action.type) {
-    case actions.FETCHING_COURSE:
+    case actions.FETCHING_COMMENT:
       return { ...state, isFetching: action.payload || false };
-    case actions.FETCH_COURSE_DONE:
-      return { ...state, courses: action.payload, isFetching: false };
+    case actions.FETCH_COMMENT_DONE:
+      return { ...state, comments: action.payload, isFetching: false };
     default:
       return state;
   }
 };
 
-export default course;
+export default comment;

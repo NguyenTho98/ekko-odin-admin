@@ -1,24 +1,33 @@
 // ** React Imports
-import { useState, useEffect, Fragment, useCallback } from "react"
-import { Link, withRouter } from "react-router-dom"
+import { useState, useEffect, Fragment, useCallback } from "react";
+import { Link, withRouter } from "react-router-dom";
 
 // ** Third Party Components
-import ReactPaginate from "react-paginate"
-import { ChevronDown, Edit, Plus, Trash} from "react-feather"
-import DataTable from "react-data-table-component"
-import { Button, Label, Input, CustomInput, Row, Col, Card, UncontrolledTooltip } from "reactstrap"
+import ReactPaginate from "react-paginate";
+import { ChevronDown, Edit, Plus, Trash } from "react-feather";
+import DataTable from "react-data-table-component";
+import {
+  Button,
+  Label,
+  Input,
+  CustomInput,
+  Row,
+  Col,
+  Card,
+  UncontrolledTooltip,
+} from "reactstrap";
 
 // ** Store & Actions
-import { connect } from "react-redux"
-import { actionGetClassRooms } from "./ClassRoomAction";
+import { connect } from "react-redux";
+import { actionGetComments } from "./CommentAction";
 // ** Styles
-import "@styles/react/apps/app-invoice.scss"
-import "@styles/react/libs/tables/react-dataTable-component.scss"
+import "@styles/react/apps/app-invoice.scss";
+import "@styles/react/libs/tables/react-dataTable-component.scss";
 // ** Custom Components
-import Breadcrumbs from "@components/breadcrumbs"
-import { isEmpty } from "../../utility/Utils"
-import AddOrEditClassRoomModal from "./AddOrEditClassRoomModal"
-import DeleteClassRoomModal from "./DeleteClassRoomModal"
+import Breadcrumbs from "@components/breadcrumbs";
+import { isEmpty } from "../../utility/Utils";
+import AddOrEditCommentModal from "./AddOrEditCommentModal";
+import DeleteCommentModal from "./DeleteCommentModal";
 const CustomHeader = ({
   handleFilter,
   value,
@@ -31,8 +40,8 @@ const CustomHeader = ({
   return (
     <div className="invoice-list-table-header w-100 py-2">
       <Row>
-        <Col lg="6" className="d-flex align-items-classRoom px-0 px-lg-1">
-          <div className="d-flex align-items-classRoom mr-2">
+        <Col lg="6" className="d-flex align-items-comment px-0 px-lg-1">
+          <div className="d-flex align-items-comment mr-2">
             <Label for="rows-per-page">Hiện thị</Label>
             <CustomInput
               className="form-control ml-50 pr-3"
@@ -53,9 +62,9 @@ const CustomHeader = ({
         </Col>
         <Col
           lg="6"
-          className="actions-right d-flex align-items-classRoom justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pr-lg-1 p-0"
+          className="actions-right d-flex align-items-comment justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pr-lg-1 p-0"
         >
-          <div className="d-flex align-items-classRoom">
+          <div className="d-flex align-items-comment">
             <Label for="search-invoice">Tìm kiếm</Label>
             <Input
               id="search-invoice"
@@ -63,7 +72,7 @@ const CustomHeader = ({
               type="text"
               value={value}
               onChange={(e) => handleFilter(e.target.value)}
-              placeholder="Tìm kiếm tên phòng học"
+              placeholder="Tìm kiếm tên bình luận"
             />
           </div>
           {/* <Input
@@ -86,12 +95,11 @@ const CustomHeader = ({
   );
 };
 let params = {
-    offset: 0,
-    limit: 20,
-    query: "",
+  offset: 0,
+  limit: 20,
 };
-const ClassRoom = (props) => {
-  const { profile, actionGetClassRooms, classRooms = {}, isFetching } = props;
+const Comment = (props) => {
+  const { profile, actionGetComments, comments = {}, isFetching } = props;
   const [visibleModal, setVisibleModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
@@ -105,20 +113,19 @@ const ClassRoom = (props) => {
       params = {
         offset: 0,
         limit: 10,
-        query: "",
       };
     };
   }, []);
 
   useEffect(() => {
     if (isEmpty(profile)) {
-        console.log("classRooms", classRooms);
-      handleFetchClassRoom(params);
+      console.log("comments", comments);
+      handleFetchComment(params);
     }
   }, [profile]);
 
-  const handleFetchClassRoom = (params = {}) => {
-    actionGetClassRooms({ ...params, offset: params.offset - 1 });
+  const handleFetchComment = (params = {}) => {
+    actionGetComments({ ...params, offset: params.offset - 1 });
   };
 
   const handleEditItem = (items = {}) => {
@@ -129,72 +136,107 @@ const ClassRoom = (props) => {
   const handleEditItemDelete = (items = {}) => {
     setSelectedItemDelete(items);
     setVisibleModalDelete(true);
-  }
+  };
 
   const columns = [
     {
-      name: '#',
-      minWidth: '107px',
-      selector: 'id',
-      cell: row => <span>{`#${row.id}`}</span>
+      name: "#",
+      minWidth: "107px",
+      selector: "id",
+      cell: (row) => <span>{`#${row.id}`}</span>,
     },
     {
-      name: 'Tên phòng học',
-      selector: 'name',
+      name: "Tiêu đề",
+      selector: "title",
       sortable: true,
-      minWidth: '150px',
-      cell: row => <span>{row.name || "---"}</span>
+      minWidth: "150px",
+      cell: (row) => <span>{row.title || "---"}</span>,
     },
     {
-      name: 'Địa chỉ',
-      selector: 'address',
+      name: "Nội dung",
+      selector: "content",
       sortable: true,
-      minWidth: '200px',
-      cell: row => row.address || "---"
+      minWidth: "200px",
+      cell: (row) => row.content || "---",
     },
     {
-      name: 'Số ghế',
-      selector: 'size',
+      name: "Phân loại",
+      selector: "category",
       sortable: true,
-      minWidth: '200px',
-      cell: row => row.size || "---"
+      minWidth: "200px",
+      cell: (row) => row.category || "---",
     },
     {
-      name: 'Trung tâm',
-      selector: 'center',
+      name: "Trạng thái",
+      selector: "state",
       sortable: true,
-      minWidth: '200px',
-      cell: row => row?.center?.name || "---"
+      minWidth: "200px",
+      cell: (row) => row?.state || "---",
     },
     {
-      name: 'Action',
-      minWidth: '110px',
-      selector: '',
+      name: "Người dùng",
+      selector: "users",
       sortable: true,
-      cell: row => (
-        <div className='column-action d-flex align-items-classRoom'>
-          <Trash  style={{ cursor: "pointer" }} size={17} id={`send-tooltip-${row.id}`} onClick={() => handleEditItemDelete(row)} />
-          <UncontrolledTooltip placement='top' target={`send-tooltip-${row.id}`} >
+      minWidth: "200px",
+      cell: (row) => row?.users || "---",
+    },
+    {
+      name: "Trung tâm",
+      selector: "centre",
+      sortable: true,
+      minWidth: "200px",
+      cell: (row) => row?.centre || "---",
+    },
+    {
+      name: "Lớp học",
+      selector: "classes",
+      sortable: true,
+      minWidth: "200px",
+      cell: (row) => row?.classes || "---",
+    },
+    {
+      name: "Action",
+      minWidth: "110px",
+      selector: "",
+      sortable: true,
+      cell: (row) => (
+        <div className="column-action d-flex align-items-comment">
+          <Trash
+            style={{ cursor: "pointer" }}
+            size={17}
+            id={`send-tooltip-${row.id}`}
+            onClick={() => handleEditItemDelete(row)}
+          />
+          <UncontrolledTooltip
+            placement="top"
+            target={`send-tooltip-${row.id}`}
+          >
             Delete
           </UncontrolledTooltip>
-          <Edit style={{ cursor: "pointer" }} size={17} className='mx-1' id={`pw-tooltip-${row.id}`} onClick={() => handleEditItem(row)}/>
-          <UncontrolledTooltip placement='top' target={`pw-tooltip-${row.id}`}>
+          <Edit
+            style={{ cursor: "pointer" }}
+            size={17}
+            className="mx-1"
+            id={`pw-tooltip-${row.id}`}
+            onClick={() => handleEditItem(row)}
+          />
+          <UncontrolledTooltip placement="top" target={`pw-tooltip-${row.id}`}>
             Edit
           </UncontrolledTooltip>
         </div>
-      )
-    }
-  ]
-//   useEffect(() => {
-//     dispatch(
-//       getData({
-//         page: currentPage,
-//         perPage: rowsPerPage,
-//         status: statusValue,
-//         q: value,
-//       })
-//     );
-//   }, [dispatch, store.data.length]);
+      ),
+    },
+  ];
+  //   useEffect(() => {
+  //     dispatch(
+  //       getData({
+  //         page: currentPage,
+  //         perPage: rowsPerPage,
+  //         status: statusValue,
+  //         q: value,
+  //       })
+  //     );
+  //   }, [dispatch, store.data.length]);
 
   const handleFilter = (val) => {
     setValue(val);
@@ -247,7 +289,7 @@ const ClassRoom = (props) => {
     setVisibleModal(true);
   }, []);
   const CustomPagination = () => {
-    const count = Number((classRooms.count / rowsPerPage).toFixed(0));
+    const count = Number((comments.count / rowsPerPage).toFixed(0));
     return (
       <ReactPaginate
         pageCount={count || 1}
@@ -272,7 +314,7 @@ const ClassRoom = (props) => {
 
   return (
     <Fragment>
-      <Breadcrumbs breadCrumbTitle="Phòng học" />
+      <Breadcrumbs breadCrumbTitle="Bình luận" />
       <div className="invoice-list-wrapper">
         <Card>
           <div className="invoice-list-dataTable">
@@ -288,7 +330,7 @@ const ClassRoom = (props) => {
               defaultSortField="invoiceId"
               paginationDefaultPage={currentPage}
               paginationComponent={CustomPagination}
-              data={classRooms.results}
+              data={comments.results}
               subHeaderComponent={
                 <CustomHeader
                   handleAddNew={handleAddNew}
@@ -305,11 +347,11 @@ const ClassRoom = (props) => {
         </Card>
       </div>
       {visibleModal && (
-        <AddOrEditClassRoomModal
+        <AddOrEditCommentModal
           visible={visibleModal}
           onCancel={(isRefreshData) => {
             if (isRefreshData) {
-              handleFetchClassRoom(params);
+              handleFetchComment(params);
             }
             setSelectedItem({});
             setVisibleModal(false);
@@ -318,13 +360,13 @@ const ClassRoom = (props) => {
         />
       )}
       {visibleModalDelete && (
-        <DeleteClassRoomModal
+        <DeleteCommentModal
           visible={visibleModalDelete}
           onCancel={() => {
             setSelectedItemDelete({});
             setVisibleModalDelete(false);
           }}
-          handleFetchClassRoom={() => handleFetchClassRoom(params)}
+          handleFetchComment={() => handleFetchComment(params)}
           item={selectedItemDelete}
         />
       )}
@@ -333,10 +375,10 @@ const ClassRoom = (props) => {
 };
 
 export default connect(
-    (state) => ({
-      profile: state.system?.profile,
-      classRooms: state.classRoom?.classRooms,
-      isFetching: state.classRoom?.isFetching,
-    }),
-    { actionGetClassRooms }
-  )(withRouter(ClassRoom));
+  (state) => ({
+    profile: state.system?.profile,
+    comments: state.comment?.comments,
+    isFetching: state.comment?.isFetching,
+  }),
+  { actionGetComments }
+)(withRouter(Comment));

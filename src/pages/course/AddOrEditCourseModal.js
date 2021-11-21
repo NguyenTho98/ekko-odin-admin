@@ -9,8 +9,10 @@ function AddOrEditCourseModal(props) {
   const isAddNew = isEmpty(item);
   const [object, setObject] = useState({});
   useEffect(() => {
-    setObject(item);
-  }, [item])
+    if (item && item.id) {
+      setObject(item);
+    }
+  }, [item]);
 
   const hanldChange = (e) => {
       const {name, value} = e.target;

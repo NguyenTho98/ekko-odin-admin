@@ -4,17 +4,17 @@ export const actionGetShifts =
   (params = {}) =>
   async (dispatch) => {
     try {
-      dispatch({ type: actionType.FETCHING_CENTER, payload: true });
+      dispatch({ type: actionType.FETCHING_SHIFT, payload: true });
       const { data = {} } = await api({
         method: "get",
         url: `/shift`,
         params,
       });
 
-      dispatch({ type: actionType.FETCH_CENTER_DONE, payload: data });
+      dispatch({ type: actionType.FETCH_SHIFT_DONE, payload: data });
     } catch (error) {
       console.log(error);
-      dispatch({ type: actionType.FETCHING_CENTER, payload: false });
+      dispatch({ type: actionType.FETCHING_SHIFT, payload: false });
     }
   };
 export const getShiftList = (id) => {

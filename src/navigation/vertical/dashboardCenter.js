@@ -30,7 +30,19 @@ export default [
         title: 'Lớp học',
         icon: <Circle size={12} />,
         navLink: '/classes'
-      }
+      },
+      {
+        id: 'commentDashCenter',
+        title: 'Bình luận',
+        icon: <Circle size={12} />,
+        navLink: '/comment'
+      },
+      {
+        id: 'rewardDashCenter',
+        title: 'Ưu đãi',
+        icon: <Circle size={12} />,
+        navLink: '/reward'
+      },
     ]
   }
 ]

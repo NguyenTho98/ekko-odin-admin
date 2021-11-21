@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Col,
@@ -15,12 +15,15 @@ import {
 } from "reactstrap";
 
 function CancelShiftModal(props) {
-  const {} = props;
-  const onSummit = () => {};
+  const { visible, onCancel}  = props;
+  const [reason_holiday, setReasonHoliday] = useState('')
+  const onSummit = () => {
+    // actionEditClasses()
+  };
   return (
     <div>
-      <Modal isOpen={visible} toggle={() => onCancel(true)}>
-        <ModalHeader toggle={() => onCancel(true)}>Hủy buổi học ngày</ModalHeader>
+      <Modal isOpen={visible} toggle={() => onCancel()}>
+        <ModalHeader toggle={() => onCancel()}>Hủy buổi học ngày</ModalHeader>
         <ModalBody>
           <Form>
             <Row>
@@ -28,10 +31,10 @@ function CancelShiftModal(props) {
                 <FormGroup>
                   <Label for="nameVertical">Lý do buổi học</Label>
                   <Input
-                    type="text"
-                    name="name"
-                    value={object?.name}
-                    onChange={hanldChange}
+                    type="textarea"
+                    name="reason_holiday"
+                    value={reason_holiday}
+                    onChange={(e) => setReasonHoliday(e.target.value)}
                     placeholder="Nhập lý do hủy buổi học"
                   />
                 </FormGroup>

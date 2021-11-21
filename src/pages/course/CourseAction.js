@@ -4,17 +4,17 @@ export const actionGetCourses =
   (params = {}) =>
   async (dispatch) => {
     try {
-      dispatch({ type: actionType.FETCHING_CENTER, payload: true });
+      dispatch({ type: actionType.FETCHING_COURSE, payload: true });
       const { data = {} } = await api({
         method: "get",
         url: `/course`,
         params,
       });
 
-      dispatch({ type: actionType.FETCH_CENTER_DONE, payload: data });
+      dispatch({ type: actionType.FETCH_COURSE_DONE, payload: data });
     } catch (error) {
       console.log(error);
-      dispatch({ type: actionType.FETCHING_CENTER, payload: false });
+      dispatch({ type: actionType.FETCHING_COURSE, payload: false });
     }
   };
 export const getCourseList = (params = {}) => {

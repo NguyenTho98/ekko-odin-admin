@@ -7,9 +7,9 @@ const initialState = {
 
 const classes = (state = initialState, action) => {
   switch (action.type) {
-    case actions.FETCHING_CENTER:
+    case actions.FETCHING_CLASSES:
       return { ...state, isFetching: action.payload || false };
-    case actions.FETCH_CENTER_DONE:
+    case actions.FETCH_CLASSES_DONE:
       return { ...state, classess: action.payload, isFetching: false };
     default:
       return state;

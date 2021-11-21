@@ -15,12 +15,14 @@ import {
 } from "reactstrap";
 import { getShiftList } from "../../../shift/ShiftAction";
 import AddPoint from "../components/AddPoint";
+import CancelShiftModal from "../components/CancelShiftModal";
 import TablePoint from "../components/TablePoint";
 import "./PointList.scss";
 const PointList = (props) => {
   const { classesDetail } = props;
   const { id } = useParams();
   const [active, setActive] = useState(0);
+  const [visible, setVisible] = useState(false);
   const [pointList, setPointList] = useState([]);
   useEffect(() => {
     getShiftList(id).then((res) => {
@@ -79,6 +81,7 @@ const PointList = (props) => {
                       outline
                       color="primary"
                       id={`ekko-tooltip-1`}
+                      onClick={() => setVisible(true)}
                     >
                       <Meh size={16} />
                     </Button.Ripple>
@@ -93,7 +96,9 @@ const PointList = (props) => {
                 </Col>
                 <Col md={6} xs={12}>
                   {" "}
-                  <div className="item">Trạng thái: {item.status_holiday ? "Nghỉ học" : item.status } </div>
+                  <div className="item">
+                    Trạng thái: {item.status_holiday ? "Nghỉ học" : item.status}{" "}
+                  </div>
                   <div className="item">Nội dung: {item.content || "---"}</div>
                 </Col>
               </Row>
@@ -111,6 +116,14 @@ const PointList = (props) => {
           </div>
         </TabPane>
       </TabContent>
+      {visible && (
+        <CancelShiftModal
+          visible={visible}
+          onCancel={() => {
+            setVisible(!visible);
+          }}
+        />
+      )}
     </div>
   );
 };

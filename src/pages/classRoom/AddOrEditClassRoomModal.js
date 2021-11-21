@@ -13,8 +13,10 @@ function AddOrEditClassRoomModal(props) {
   const [object, setObject] = useState({});
   const [centerData, setCenterData] = useState([]);
   useEffect(() => {
-    setObject(item);
-  }, [item])
+    if (item && item.id) {
+      setObject(item);
+    }
+  }, [item]);
   useEffect(() => {
     handleFetchCenterData();
   }, [item]) 
@@ -97,7 +99,7 @@ function AddOrEditClassRoomModal(props) {
                 <Label>Trung tâm</Label>
                 <Input type='select' name='center' id='select-basic' onChange={hanldChange} value={object?.center?.id}>
                   {
-                    centerData.map((item, index) => <option key={index} value={item} >{item.name}</option>)
+                    centerData.map((item, index) => <option key={index} value={item.id}>{item.name}</option>)
                   }
                 </Input>
                 </FormGroup>

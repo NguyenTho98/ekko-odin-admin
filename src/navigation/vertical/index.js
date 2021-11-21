@@ -10,4 +10,5 @@ import uiElements from './ui-elements'
 import chartsAndMaps from './charts-maps'
 
 // ** Merge & Export
+// export default [...dashboardCenter]
 export default [...dashboardCenter, ...dashboards, ...apps, ...pages, ...uiElements, ...forms, ...tables, ...chartsAndMaps, ...others]

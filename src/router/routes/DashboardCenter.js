@@ -27,6 +27,16 @@ const DashboardCenterRoutes = [
       navLink: '/classes/edit'
     }
   },
+  {
+    path: '/comment',
+    component: lazy(() => import('../../pages/comment/Comment')),
+    exact: true
+  },
+  {
+    path: '/reward',
+    component: lazy(() => import('../../pages/reward/Reward')),
+    exact: true
+  },
 ]
 
 export default DashboardCenterRoutes
