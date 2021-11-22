@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import Avatar from '@components/avatar'
 import { useSkin } from '@hooks/useSkin'
 import useJwt from '@src/auth/jwt/useJwt'
-import { useDispatch } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { toast, Slide } from 'react-toastify'
 import { handleLogin } from '@store/actions/auth'
@@ -30,6 +30,7 @@ import cookie from "js-cookie";
 import '@styles/base/pages/page-auth.scss'
 import { actionLogin } from './LoginAction'
 import { TOKEN } from '../../utility/constants/config'
+import { getUserInfo } from '../system/systemAction'
 
 const ToastContent = ({ name, role }) => (
   <Fragment>
@@ -46,6 +47,7 @@ const ToastContent = ({ name, role }) => (
 )
 
 const Login = props => {
+  const { getUserInfo } = props;
   const [skin, setSkin] = useSkin()
   const ability = useContext(AbilityContext)
   const dispatch = useDispatch()
@@ -67,16 +69,14 @@ const Login = props => {
                 //   expires: new Date(data.data.expiredTime || EXPIRE_TIME + Date.now()),
                 // });
                 cookie.set(TOKEN, res?.data?.key)
-                // get user info
+                getUserInfo(history)
                
               }
         //   const data = 
         //   dispatch(handleLogin(data))
            const tmp = { action:"manage", subject: "all" }
            ability.update([tmp])
-           setTimeout(() => {
-            history.push("/")
-           }, 0)
+         
           
         //   history.push(getHomeRouteForLoggedInUser(data.role))
           toast.success(
@@ -248,5 +248,11 @@ const Login = props => {
     </div>
   )
 }
-
-export default Login
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    getUserInfo: (history) => {
+      dispatch(getUserInfo(history))
+    }
+  }
+}
+export default connect(null, mapDispatchToProps)(Login)

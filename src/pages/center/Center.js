@@ -111,8 +111,7 @@ const Center = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isEmpty(profile)) {
-        console.log("centers", centers);
+    if (!isEmpty(profile)) {
       handleFetchCenter(params);
     }
   }, [profile]);

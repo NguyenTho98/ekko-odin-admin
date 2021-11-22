@@ -19,6 +19,7 @@ import classRoom from '../../pages/classRoom/ClassRoomReducer';
 import classes from '../../pages/classes/ClassesReducer';
 import comment from '../../pages/comment/CommentReducer';
 import reward from '../../pages/reward/RewardReducer';
+import system from "../../pages/system/systemReducer";
 const rootReducer = combineReducers({
   auth,
   todo,
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   classes,
   comment,
   reward,
+  system,
 })
 
 export default rootReducer

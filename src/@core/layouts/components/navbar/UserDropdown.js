@@ -1,6 +1,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
@@ -9,7 +9,7 @@ import Avatar from '@components/avatar'
 import { isUserLoggedIn } from '@utils'
 
 // ** Store & Actions
-import { useDispatch } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { handleLogout } from '@store/actions/auth'
 
 // ** Third Party Components
@@ -19,13 +19,14 @@ import { User, Mail, CheckSquare, MessageSquare, Settings, CreditCard, HelpCircl
 // ** Default Avatar Image
 import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
 
-const UserDropdown = () => {
+const UserDropdown = (props) => {
   // ** Store Vars
   const dispatch = useDispatch()
 
   // ** State
   const [userData, setUserData] = useState(null)
-
+  const { account } = props;
+  console.log("account", account);
   //** ComponentDidMount
   useEffect(() => {
     if (isUserLoggedIn() !== null) {
@@ -40,17 +41,17 @@ const UserDropdown = () => {
     <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>
       <DropdownToggle href='/' tag='a' className='nav-link dropdown-user-link' onClick={e => e.preventDefault()}>
         <div className='user-nav d-sm-flex d-none'>
-          <span className='user-name font-weight-bold'>{(userData && userData['username']) || 'John Doe'}</span>
+          <span className='user-name font-weight-bold'>{ account?.username  || 'Nguyễn Thọ'}</span>
           <span className='user-status'>{(userData && userData.role) || 'Admin'}</span>
         </div>
         <Avatar img={userAvatar} imgHeight='40' imgWidth='40' status='online' />
       </DropdownToggle>
       <DropdownMenu right>
-        <DropdownItem tag={Link} to='/pages/profile'>
+        <DropdownItem tag={Link} to='/profile'>
           <User size={14} className='mr-75' />
-          <span className='align-middle'>Profile</span>
+          <span className='align-middle'>Thông tin</span>
         </DropdownItem>
-        <DropdownItem tag={Link} to='/apps/email'>
+        {/* <DropdownItem tag={Link} to='/apps/email'>
           <Mail size={14} className='mr-75' />
           <span className='align-middle'>Inbox</span>
         </DropdownItem>
@@ -74,14 +75,18 @@ const UserDropdown = () => {
         <DropdownItem tag={Link} to='/pages/faq'>
           <HelpCircle size={14} className='mr-75' />
           <span className='align-middle'>FAQ</span>
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem tag={Link} to='/login' onClick={() => dispatch(handleLogout())}>
           <Power size={14} className='mr-75' />
-          <span className='align-middle'>Logout</span>
+          <span className='align-middle'>Đăng xuất</span>
         </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>
   )
 }
-
-export default UserDropdown
+export default connect(
+  (state) => ({
+    account: state.system.profile,
+  }),
+  {}
+)(withRouter(UserDropdown));

@@ -120,7 +120,7 @@ const Classes = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isEmpty(profile)) {
+    if (!isEmpty(profile)) {
       console.log("classess", classess);
       handleFetchClasses(params);
     }

@@ -118,7 +118,7 @@ const Reward = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isEmpty(profile)) {
+    if (!isEmpty(profile)) {
       console.log("rewards", rewards);
       handleFetchReward(params);
     }

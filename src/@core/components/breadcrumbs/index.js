@@ -22,7 +22,7 @@ const BreadCrumbs = props => {
       <div className='content-header-left col-md-9 col-12 md-1 '>
         <div className='row breadcrumbs-top'>
           <div className='col-12'>
-            {breadCrumbTitle ? <h2 className='content-header-title float-left mb-0'>{breadCrumbTitle}</h2> : ''}
+            {breadCrumbTitle ? <h2 className='content-header-title float-left mb-1'>{breadCrumbTitle}</h2> : ''}
             {/* <div className='breadcrumb-wrapper vs-breadcrumbs d-sm-block d-none col-12'>
               <Breadcrumb>
                 <BreadcrumbItem tag='li'>

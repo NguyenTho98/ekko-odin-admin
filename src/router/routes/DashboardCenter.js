@@ -37,6 +37,11 @@ const DashboardCenterRoutes = [
     component: lazy(() => import('../../pages/reward/Reward')),
     exact: true
   },
+  {
+    path: '/profile',
+    component: lazy(() => import('../../pages/profile/Profile')),
+    exact: true
+  },
 ]
 
 export default DashboardCenterRoutes

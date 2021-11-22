@@ -34,15 +34,15 @@ const ThemeNavbar = props => {
         <NavbarBookmarks setMenuVisibility={setMenuVisibility} />
       </div>
       <ul className='nav navbar-nav align-items-center ml-auto'>
-        <IntlDropdown />
-        <NavItem className='d-none d-lg-block'>
+        {/* <IntlDropdown /> */}
+        {/* <NavItem className='d-none d-lg-block'>
           <NavLink className='nav-link-style'>
             <ThemeToggler />
           </NavLink>
         </NavItem>
         <NavbarSearch />
         <CartDropdown />
-        <NotificationDropdown />
+        <NotificationDropdown /> */}
         <UserDropdown />
       </ul>
     </Fragment>

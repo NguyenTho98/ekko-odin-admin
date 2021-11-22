@@ -111,7 +111,7 @@ const Course = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isEmpty(profile)) {
+    if (!isEmpty(profile)) {
       console.log("courses", courses);
       handleFetchCourse(params);
     }

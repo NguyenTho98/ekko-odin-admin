@@ -111,7 +111,7 @@ const ClassRoom = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isEmpty(profile)) {
+    if (!isEmpty(profile)) {
         console.log("classRooms", classRooms);
       handleFetchClassRoom(params);
     }

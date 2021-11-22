@@ -118,7 +118,7 @@ const Comment = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isEmpty(profile)) {
+    if (!isEmpty(profile)) {
       console.log("comments", comments);
       handleFetchComment(params);
     }
