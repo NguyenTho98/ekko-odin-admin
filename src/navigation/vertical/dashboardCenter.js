@@ -43,6 +43,18 @@ export default [
         icon: <Circle size={12} />,
         navLink: '/reward'
       },
+      {
+        id: 'paymentDashCenter',
+        title: 'Hóa đơn',
+        icon: <Circle size={12} />,
+        navLink: '/payment'
+      },
+      {
+        id: 'contractDashCenter',
+        title: 'Hợp đồng',
+        icon: <Circle size={12} />,
+        navLink: '/contract'
+      },
     ]
   }
 ]

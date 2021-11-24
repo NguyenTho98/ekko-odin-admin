@@ -21,9 +21,10 @@ import { getCenterList } from "../center/CenterAction";
 import Select, { components } from "react-select";
 import Flatpickr from "react-flatpickr";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
+import moment from "moment";
 function AddOrEditRewardModal(props) {
   const { visible, onCancel, item = {} } = props;
-  const [picker, setPicker] = useState(new Date());
+  const [picker, setPicker] = useState(["2020-02-01", "2020-02-15"]);
   const isAddNew = isEmpty(item);
   const [object, setObject] = useState({
     title: "",
@@ -32,7 +33,14 @@ function AddOrEditRewardModal(props) {
     state: 1,
   });
   const [centerData, setCenterData] = useState([]);
-
+  const [center, setCenter] = useState([]);
+  const onChangeMulCenter = (value) => {
+    let tmp = null;
+    if (value && value.length > 0) {
+     tmp = value.map((item) => item.id);
+    }
+    setCenter(tmp);
+  }
   useEffect(() => {
     if (item && item.id) {
       setObject(item);
@@ -54,50 +62,28 @@ function AddOrEditRewardModal(props) {
     const { name, value } = e.target;
     setObject({ ...object, [name]: value });
   };
-  console.log("object", object);
   const onSummit = async () => {
     if (isAddNew) {
-      await actionAddReward(object);
+      const data = {
+        ...object,
+        course: center,
+        start_date: moment(new Date(picker[0])).format("YYYY-MM-DD"),
+        end_date: moment(new Date(picker[1])).format("YYYY-MM-DD"),
+      }
+      await actionAddReward(data);
       toastSuccess("Thêm mới ưu đãi thành công");
     } else {
-      await actionEditReward(object, item?.id);
+      await actionEditReward(data, item?.id);
       toastSuccess("Cập nhật ưu đãi thành công");
     }
     onCancel(true);
   };
   const renderCategory = () => {
-    if (object.time === "Bảo lưu") {
+    if (object.time === "Quà tặng") {
       return 2;
-    }
-    if (object.time === "Hộ trợ học tập") {
-      return 3;
-    }
-    if (object.time === "Rút quyền lợi") {
-      return 4;
-    }
-    if (object.time === "Khiếu nại") {
-      return 5;
-    }
-    if (object.time === "Khác") {
-      return 6;
     }
     return 1;
   };
-
-  const renderState = () => {
-    if (object.time === "Đang xử lý") {
-      return 2;
-    }
-    if (object.time === "Hoàn thành") {
-      return 3;
-    }
-    if (object.time === "Hủy") {
-      return 4;
-    }
-
-    return 1;
-  };
-  console.log("picker", picker);
   return (
     <div>
       <Modal isOpen={visible} toggle={() => onCancel(true)}>
@@ -139,8 +125,8 @@ function AddOrEditRewardModal(props) {
                   <Label for="EmailVertical">Số lượng</Label>
                   <Input
                     type="number"
-                    name="content"
-                    value={object?.content}
+                    name="quantity"
+                    value={object?.quantity}
                     onChange={hanldChange}
                     placeholder="Số lượng"
                   />
@@ -151,8 +137,8 @@ function AddOrEditRewardModal(props) {
                   <Label for="EmailVertical">Quà tặng</Label>
                   <Input
                     type="text"
-                    name="content"
-                    value={object?.content}
+                    name="gift"
+                    value={object?.gift}
                     onChange={hanldChange}
                     placeholder="Quà tặng"
                   />
@@ -163,8 +149,8 @@ function AddOrEditRewardModal(props) {
                   <Label for="EmailVertical">Giảm giá(%)</Label>
                   <Input
                     type="number"
-                    name="content"
-                    value={object?.content}
+                    name="discount"
+                    value={object?.discount}
                     onChange={hanldChange}
                     placeholder="Giảm giá(%)"
                   />
@@ -209,6 +195,7 @@ function AddOrEditRewardModal(props) {
                   getOptionValue={(option) => option.id}
                   className="react-select"
                   classNamePrefix="select"
+                  onChange={onChangeMulCenter}
                   placeholder="Chọn trung tâm"
                 />
               </Col>

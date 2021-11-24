@@ -20,6 +20,9 @@ import classes from '../../pages/classes/ClassesReducer';
 import comment from '../../pages/comment/CommentReducer';
 import reward from '../../pages/reward/RewardReducer';
 import system from "../../pages/system/systemReducer";
+import student from "../../pages/student/StudentReducer";
+import payment from "../../pages/payment/PaymentReducer";
+import contract from "../../pages/contract/ContractReducer";
 const rootReducer = combineReducers({
   auth,
   todo,
@@ -39,6 +42,9 @@ const rootReducer = combineReducers({
   comment,
   reward,
   system,
+  student,
+  payment,
+  contract,
 })
 
 export default rootReducer

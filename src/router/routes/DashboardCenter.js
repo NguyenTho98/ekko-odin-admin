@@ -42,6 +42,26 @@ const DashboardCenterRoutes = [
     component: lazy(() => import('../../pages/profile/Profile')),
     exact: true
   },
+  {
+    path: '/payment',
+    component: lazy(() => import('../../pages/payment/Payment')),
+    exact: true
+  },
+  {
+    path: '/contract',
+    component: lazy(() => import('../../pages/contract/Contract')),
+    exact: true
+  },
+  {
+    path: '/payment/print/',
+    layout: 'BlankLayout',
+    component: lazy(() => import('../../pages/print/PrintPayment'))
+  },
+  {
+    path: '/contract/print/',
+    layout: 'BlankLayout',
+    component: lazy(() => import('../../pages/print/PrintContract'))
+  },
 ]
 
 export default DashboardCenterRoutes

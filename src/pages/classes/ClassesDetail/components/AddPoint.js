@@ -3,7 +3,6 @@ import { Col, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import "./AddPoint.scss";
 
 import Flatpickr from "react-flatpickr";
-
 import "@styles/react/libs/flatpickr/flatpickr.scss";
 import { actionAddShift } from "../../../shift/ShiftAction";
 import moment from "moment";
