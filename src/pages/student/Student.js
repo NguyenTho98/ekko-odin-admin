@@ -1,33 +1,24 @@
 // ** React Imports
-import { useState, useEffect, Fragment, useCallback } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { useState, useEffect, Fragment, useCallback } from "react"
+import { Link, withRouter } from "react-router-dom"
 
 // ** Third Party Components
-import ReactPaginate from "react-paginate";
-import { ChevronDown, Edit, Plus, Trash } from "react-feather";
-import DataTable from "react-data-table-component";
-import {
-  Button,
-  Label,
-  Input,
-  CustomInput,
-  Row,
-  Col,
-  Card,
-  UncontrolledTooltip,
-} from "reactstrap";
+import ReactPaginate from "react-paginate"
+import { ChevronDown, Edit, Plus, Trash} from "react-feather"
+import DataTable from "react-data-table-component"
+import { Button, Label, Input, CustomInput, Row, Col, Card, UncontrolledTooltip } from "reactstrap"
 
 // ** Store & Actions
-import { connect } from "react-redux";
+import { connect } from "react-redux"
 import { actionGetStudents } from "./StudentAction";
 // ** Styles
-import "@styles/react/apps/app-invoice.scss";
-import "@styles/react/libs/tables/react-dataTable-component.scss";
+import "@styles/react/apps/app-invoice.scss"
+import "@styles/react/libs/tables/react-dataTable-component.scss"
 // ** Custom Components
-import Breadcrumbs from "@components/breadcrumbs";
-import { isEmpty } from "../../utility/Utils";
-import AddOrEditStudentModal from "./AddOrEditStudentModal";
-import DeleteStudentModal from "./DeleteStudentModal";
+import Breadcrumbs from "@components/breadcrumbs"
+import { isEmpty } from "../../utility/Utils"
+import AddOrEditStudentModal from "./AddOrEditStudentModal"
+import DeleteStudentModal from "./DeleteStudentModal"
 const CustomHeader = ({
   handleFilter,
   value,
@@ -95,8 +86,9 @@ const CustomHeader = ({
   );
 };
 let params = {
-  offset: 0,
-  limit: 20,
+    page: 1,
+    size: 20,
+    query: "",
 };
 const Student = (props) => {
   const { profile, actionGetStudents, students = {}, isFetching } = props;
@@ -111,21 +103,21 @@ const Student = (props) => {
   useEffect(() => {
     return () => {
       params = {
-        offset: 0,
-        limit: 10,
+        page: 1,
+        size: 20,
+        query: "",
       };
     };
   }, []);
 
   useEffect(() => {
     if (!isEmpty(profile)) {
-      console.log("students", students);
       handleFetchStudent(params);
     }
   }, [profile]);
 
   const handleFetchStudent = (params = {}) => {
-    actionGetStudents({ ...params, offset: params.offset - 1 });
+    actionGetStudents({ ...params, page: params.page - 1 });
   };
 
   const handleEditItem = (items = {}) => {
@@ -136,112 +128,107 @@ const Student = (props) => {
   const handleEditItemDelete = (items = {}) => {
     setSelectedItemDelete(items);
     setVisibleModalDelete(true);
-  };
+  }
 
   const columns = [
     {
-      name: "#",
-      selector: "id",
-      cell: (row) => <span>{`#${row.id}`}</span>,
+      name: '#',
+      minWidth: '107px',
+      selector: 'id',
+      cell: row => <span>{`#${row.id}`}</span>
     },
     {
-      name: "Tiêu đề",
-      selector: "title",
+      name: 'Họ và tên',
+      selector: 'full_name',
       sortable: true,
-      cell: (row) => <span>{row.title || "---"}</span>,
+      minWidth: '150px',
+      cell: row => <span>{row.full_name || "---"}</span>
     },
     {
-      name: "Loại học viên",
-      selector: "type",
+      name: 'Tên đăng nhập',
+      selector: 'addusernameress',
       sortable: true,
-      cell: (row) => row.type || "---",
+      minWidth: '200px',
+      cell: row => row.username || "---"
     },
     {
-      name: "Số lượng",
-      selector: "quantity",
+      name: 'Email',
+      selector: 'email',
       sortable: true,
-      cell: (row) => row.quantity || "---",
+      minWidth: '200px',
+      cell: row => row.email || "---"
     },
     {
-      name: "Quà tặng",
-      selector: "gift",
+      name: 'Số điện thoại',
+      selector: 'phone',
       sortable: true,
-      cell: (row) => row?.gift || "---",
+      minWidth: '200px',
+      cell: row => row.phone || "---"
     },
     {
-      name: "Giảm giá(%)",
-      selector: "discount",
+      name: 'Giới tính',
+      selector: 'gender',
       sortable: true,
-      cell: (row) => row?.discount || "---",
+      minWidth: '200px',
+      cell: row => row.gender || "---"
     },
     {
-      name: "Ngày bắt đầu",
-      selector: "start_date",
+      name: 'Trung tâm',
+      selector: 'center',
       sortable: true,
-      cell: (row) => row?.start_date || "---",
+      minWidth: '200px',
+      cell: row => row?.center?.name || "---"
     },
     {
-      name: "Ngày kết thúc",
-      selector: "end_date",
+      name: 'Địa chỉ',
+      selector: 'address',
       sortable: true,
-      cell: (row) => row?.end_date || "---",
+      minWidth: '200px',
+      cell: row => row.address || "---"
     },
     {
-      name: "Ghi chú",
-      selector: "note",
+      name: 'Ngày sinh',
+      selector: 'birth_day',
       sortable: true,
-      minWidth: "200px",
-      cell: (row) => row?.note || "---",
+      minWidth: '200px',
+      cell: row => row.birth_day || "---"
     },
+    // {
+    //   name: 'Chuyên ngành',
+    //   selector: 'Specialize',
+    //   sortable: true,
+    //   minWidth: '200px',
+    //   cell: row => row.Specialize || "---"
+    // },
     {
-      name: "Khóa học",
-      selector: "course",
+      name: 'Action',
+      minWidth: '110px',
+      selector: '',
       sortable: true,
-      cell: (row) => JSON.stringify(row?.course) || "---",
-    },
-    {
-      name: "Action",
-      minWidth: "110px",
-      selector: "",
-      sortable: true,
-      cell: (row) => (
-        <div className="column-action d-flex align-items-student">
-          <Trash
-            style={{ cursor: "pointer" }}
-            size={17}
-            id={`send-tooltip-${row.id}`}
-            onClick={() => handleEditItemDelete(row)}
-          />
-          <UncontrolledTooltip
-            placement="top"
-            target={`send-tooltip-${row.id}`}
-          >
+      cell: row => (
+        <div className='column-action d-flex align-items-student'>
+          <Trash  style={{ cursor: "pointer" }} size={17} id={`send-tooltip-${row.id}`} onClick={() => handleEditItemDelete(row)} />
+          <UncontrolledTooltip placement='top' target={`send-tooltip-${row.id}`} >
             Delete
           </UncontrolledTooltip>
-          <Edit
-            style={{ cursor: "pointer" }}
-            size={17}
-            className="mx-1"
-            id={`pw-tooltip-${row.id}`}
-            onClick={() => handleEditItem(row)}
-          />
-          <UncontrolledTooltip placement="top" target={`pw-tooltip-${row.id}`}>
+          <Edit style={{ cursor: "pointer" }} size={17} className='mx-1' id={`pw-tooltip-${row.id}`} onClick={() => handleEditItem(row)}/>
+          <UncontrolledTooltip placement='top' target={`pw-tooltip-${row.id}`}>
             Edit
           </UncontrolledTooltip>
         </div>
-      ),
-    },
-  ];
-  //   useEffect(() => {
-  //     dispatch(
-  //       getData({
-  //         page: currentPage,
-  //         perPage: rowsPerPage,
-  //         status: statusValue,
-  //         q: value,
-  //       })
-  //     );
-  //   }, [dispatch, store.data.length]);
+      )
+    }
+  ]
+//   useEffect(() => {
+//     dispatch(
+//       getData({
+//         page: currentPage,
+//         perPage: rowsPerPage,
+//         status: statusValue,
+//         q: value,
+//       })
+//     );
+//   }, [dispatch, store.data.length]);
 
   const handleFilter = (val) => {
     setValue(val);
@@ -380,10 +367,10 @@ const Student = (props) => {
 };
 
 export default connect(
-  (state) => ({
-    profile: state.system?.profile,
-    students: state.student?.students,
-    isFetching: state.student?.isFetching,
-  }),
-  { actionGetStudents }
-)(withRouter(Student));
+    (state) => ({
+      profile: state.system?.profile,
+      students: state.student?.students,
+      isFetching: state.student?.isFetching,
+    }),
+    { actionGetStudents }
+  )(withRouter(Student));

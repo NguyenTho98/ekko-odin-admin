@@ -7,7 +7,7 @@ export const actionGetStudents =
       dispatch({ type: actionType.FETCHING_STUDENT, payload: true });
       const { data = {} } = await api({
         method: "get",
-        url: `/users`,
+        url: `/students`,
         params,
       });
 
@@ -20,14 +20,14 @@ export const actionGetStudents =
 export const getStudentList = (params = {}) => {
   return api({
     method: "get",
-    url: `/users`,
+    url: `/students`,
     params,
   });
 };
 export const actionAddStudent = (data = {}) => {
   return api({
     method: "post",
-    url: `/users`,
+    url: `/students`,
     data,
   });
 };
@@ -35,7 +35,7 @@ export const actionAddStudent = (data = {}) => {
 export const actionEditStudent = (data = {}, id) => {
   return api({
     method: "put",
-    url: `/users/${id}`,
+    url: `/students/${id}`,
     data,
   });
 };
@@ -43,6 +43,6 @@ export const actionEditStudent = (data = {}, id) => {
 export const actionDeleteStudent = (id) => {
   return api({
     method: "delete",
-    url: `/users/${id}`,
+    url: `/students/${id}`,
   });
 };

@@ -110,7 +110,7 @@ function AddOrEditRewardModal(props) {
                   <Label for="select-basic">Loại ưu đãi</Label>
                   <Input
                     type="select"
-                    value={renderCategory()}
+                    value={object.type}
                     name="type"
                     id="select-basic"
                     onChange={hanldChange}

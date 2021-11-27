@@ -23,6 +23,11 @@ import system from "../../pages/system/systemReducer";
 import student from "../../pages/student/StudentReducer";
 import payment from "../../pages/payment/PaymentReducer";
 import contract from "../../pages/contract/ContractReducer";
+import bussinessemployee from "../../pages/bussinessemployee/BussinessemployeeReducer";
+import managers from "../../pages/managers/ManagersReducer";
+import receptionist from "../../pages/receptionist/ReceptionistReducer";
+import studentcare from "../../pages/studentcare/StudentcareReducer";
+import teachers from "../../pages/teachers/TeachersReducer";
 const rootReducer = combineReducers({
   auth,
   todo,
@@ -45,6 +50,11 @@ const rootReducer = combineReducers({
   student,
   payment,
   contract,
+  bussinessemployee,
+  managers,
+  receptionist,
+  studentcare,
+  teachers,
 })
 
 export default rootReducer

@@ -1,10 +1,10 @@
-import { Home, Circle } from 'react-feather'
+import { Box, Circle } from 'react-feather'
 
 export default [
   {
     id: 'dashboardCenter',
     title: 'Quản lý trung tâm',
-    icon: <Home size={20} />,
+    icon: <Box size={20} />,
     badge: 'light-warning',
     children: [
       {

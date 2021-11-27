@@ -1,7 +1,19 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "reactstrap";
 import "./PrintPayment.scss";
+import { useParams, useHistory } from "react-router-dom";
+import { getPaymentDetail } from './../payment/PaymentAction'
 function PrintPayment(props) {
+    const { id } = useParams();
+    const [payment, setpayment] = useState({});
+    console.log("payment", payment);
+    useEffect(() => {
+      if (id) {
+        getPaymentDetail(id).then((res) => {
+            setpayment(res.data);
+        });
+      }
+    }, []);
   return (
     <div className="print-payment-wrapper">
       <Container>

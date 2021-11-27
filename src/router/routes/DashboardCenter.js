@@ -45,7 +45,6 @@ const DashboardCenterRoutes = [
   {
     path: '/payment',
     component: lazy(() => import('../../pages/payment/Payment')),
-    exact: true
   },
   {
     path: '/contract',
@@ -53,7 +52,7 @@ const DashboardCenterRoutes = [
     exact: true
   },
   {
-    path: '/payment/print/',
+    path: '/payment/print/:id',
     layout: 'BlankLayout',
     component: lazy(() => import('../../pages/print/PrintPayment'))
   },

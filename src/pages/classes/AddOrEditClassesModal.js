@@ -185,7 +185,7 @@ function AddOrEditClassesModal(props) {
                   <Input
                     type="select"
                     name="status_classes"
-                    value={renderStatusClasses()}
+                    value={object.status_classes}
                     id="select-basic"
                     onChange={hanldChange}
                   >
@@ -239,7 +239,7 @@ function AddOrEditClassesModal(props) {
                   <Label for="select-basic">Lịch học</Label>
                   <Input
                     type="select"
-                    value={renderSchedule()}
+                    value={object.schedule}
                     name="schedule"
                     id="select-basic"
                     onChange={hanldChange}
@@ -255,7 +255,7 @@ function AddOrEditClassesModal(props) {
                   <Label for="select-basic">Thời gian</Label>
                   <Input
                     type="select"
-                    value={renderTime()}
+                    value={object.time}
                     name="time"
                     id="select-basic"
                     onChange={hanldChange}

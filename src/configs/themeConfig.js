@@ -8,7 +8,7 @@ const themeConfig = {
   },
   layout: {
     isRTL: false,
-    skin: 'semi-dark', // light, dark, bordered, semi-dark
+    skin: 'dark', // light, dark, bordered, semi-dark
     routerTransition: 'fadeIn', // fadeIn, fadeInLeft, zoomIn, none or check this for more transition https://animate.style/
     type: 'vertical', // vertical, horizontal
     contentWidth: 'full', // full, boxed
@@ -22,9 +22,9 @@ const themeConfig = {
       backgroundColor: 'white' // BS color options [primary, success, etc]
     },
     footer: {
-      type: 'sticky' // static, sticky, hidden
+      type: 'hidden' // static, sticky, hidden
     },
-    customizer: false,
+    customizer: true,
     scrollTop: true // Enable scroll to top button
   }
 }

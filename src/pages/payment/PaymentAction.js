@@ -24,6 +24,12 @@ export const getPaymentList = (params = {}) => {
     params,
   });
 };
+export const getPaymentDetail = (id) => {
+  return api({
+    method: "get",
+    url: `/payment/${id}`
+  });
+};
 export const actionAddPayment = (data = {}) => {
   return api({
     method: "post",

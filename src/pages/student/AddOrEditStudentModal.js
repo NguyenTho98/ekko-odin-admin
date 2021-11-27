@@ -21,18 +21,17 @@ import { getCenterList } from "../center/CenterAction";
 import Select, { components } from "react-select";
 import Flatpickr from "react-flatpickr";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
+import moment from "moment";
 function AddOrEditStudentModal(props) {
   const { visible, onCancel, item = {} } = props;
-  const [picker, setPicker] = useState(new Date());
+  const [picker, setPicker] = useState(new Date(item?.birth_day) || new Date());
+ 
   const isAddNew = isEmpty(item);
   const [object, setObject] = useState({
-    title: "",
-    content: "",
-    category: 1,
-    state: 1,
-  });
+    gender: 1,
+   });
   const [centerData, setCenterData] = useState([]);
-
+  const [center, setCenter] = useState({});
   useEffect(() => {
     if (item && item.id) {
       setObject(item);
@@ -56,47 +55,22 @@ function AddOrEditStudentModal(props) {
   };
   console.log("object", object);
   const onSummit = async () => {
+    const data = {
+      ...object,
+      center: center.id,
+      birth_day: moment(new Date(picker)).format("YYYY-MM-DD"),
+    }
     if (isAddNew) {
-      await actionAddStudent(object);
+      await actionAddStudent(data);
       toastSuccess("Thêm mới học viên thành công");
     } else {
-      await actionEditStudent(object, item?.id);
+      await actionEditStudent(data, item?.id);
       toastSuccess("Cập nhật học viên thành công");
     }
     onCancel(true);
   };
-  const renderCategory = () => {
-    if (object.time === "Bảo lưu") {
-      return 2;
-    }
-    if (object.time === "Hộ trợ học tập") {
-      return 3;
-    }
-    if (object.time === "Rút quyền lợi") {
-      return 4;
-    }
-    if (object.time === "Khiếu nại") {
-      return 5;
-    }
-    if (object.time === "Khác") {
-      return 6;
-    }
-    return 1;
-  };
 
-  const renderState = () => {
-    if (object.time === "Đang xử lý") {
-      return 2;
-    }
-    if (object.time === "Hoàn thành") {
-      return 3;
-    }
-    if (object.time === "Hủy") {
-      return 4;
-    }
 
-    return 1;
-  };
   console.log("picker", picker);
   return (
     <div>
@@ -112,83 +86,10 @@ function AddOrEditStudentModal(props) {
                   <Label for="nameVertical">Họ và tên</Label>
                   <Input
                     type="text"
-                    name="title"
-                    value={object?.title}
+                    name="full_name"
+                    value={object?.full_name}
                     onChange={hanldChange}
-                    placeholder="Tiêu đề"
-                  />
-                </FormGroup>
-              </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="nameVertical">Tên đăng nhập</Label>
-                  <Input
-                    type="text"
-                    name="title"
-                    value={object?.title}
-                    onChange={hanldChange}
-                    placeholder="Tiêu đề"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="12">
-              <CustomInput
-            type='checkbox'
-            className='custom-control-Primary'
-            id='Primary'
-            label='Cấp quyền admin'
-            inline
-          />
-            <CustomInput
-            type='checkbox'
-            className='custom-control-Primary'
-            id='Primary'
-            label='Cấp quyền quản lý'
-            defaultChecked
-            inline
-          />
-            <CustomInput
-            type='checkbox'
-            className='custom-control-Primary'
-            id='Primary'
-            label='Kích hoạt tài khoản'
-            defaultChecked
-            inline
-          />
-              </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="nameVertical">Email</Label>
-                  <Input
-                    type="text"
-                    name="title"
-                    value={object?.title}
-                    onChange={hanldChange}
-                    placeholder="Tiêu đề"
-                  />
-                </FormGroup>
-              </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="nameVertical">Số điện thoại</Label>
-                  <Input
-                    type="text"
-                    name="title"
-                    value={object?.title}
-                    onChange={hanldChange}
-                    placeholder="Tiêu đề"
-                  />
-                </FormGroup>
-              </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="nameVertical">Password</Label>
-                  <Input
-                    type="password"
-                    name="title"
-                    value={object?.title}
-                    onChange={hanldChange}
-                    placeholder="Tiêu đề"
+                    placeholder="Họ và tên"
                   />
                 </FormGroup>
               </Col>
@@ -197,131 +98,86 @@ function AddOrEditStudentModal(props) {
                   <Label for="select-basic">Giới tính</Label>
                   <Input
                     type="select"
-                    value={renderCategory()}
-                    name="type"
+                    name="gender"
+                    value={object?.gender}
                     id="select-basic"
                     onChange={hanldChange}
                   >
-                    <option value="1">Giảm giá</option>
-                    <option value="2">Quà tặng</option>
+                    <option value="1">Nam</option>
+                    <option value="2">Nữ</option>
+                    <option value="3">Khác</option>
                   </Input>
                 </FormGroup>
               </Col>
               <Col sm="6">
                 <FormGroup>
-                  <CustomInput
-            type='checkbox'
-            className='custom-control-Primary'
-            id='Primary'
-            label='Chờ xếp lớp'
-            defaultChecked
-            inline
-          />
-                </FormGroup>
-              </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="EmailVertical">Ngày sinh</Label>
+                  <Label for="nameVertical">Tên đăng nhập</Label>
                   <Input
                     type="text"
-                    name="content"
-                    value={object?.content}
+                    name="username"
+                    value={object?.username}
                     onChange={hanldChange}
-                    placeholder="Quà tặng"
+                    placeholder="Tên đăng nhập"
                   />
                 </FormGroup>
               </Col>
               <Col sm="6">
                 <FormGroup>
-                  <Label for="EmailVertical">Số điện thoại bổ sung</Label>
+                  <Label for="nameVertical">Email</Label>
                   <Input
                     type="text"
-                    name="content"
-                    value={object?.content}
+                    name="email"
+                    value={object?.email}
                     onChange={hanldChange}
-                    placeholder="Quà tặng"
+                    placeholder="Email"
                   />
                 </FormGroup>
               </Col>
               <Col sm="6">
                 <FormGroup>
-                  <Label for="EmailVertical">Cơ quan/trường học hiện tại</Label>
+                  <Label for="nameVertical">Số điện thoại</Label>
                   <Input
-                    type="text"
-                    name="content"
-                    value={object?.content}
+                    type="number"
+                    name="phone"
+                    value={object?.phone}
                     onChange={hanldChange}
-                    placeholder="Quà tặng"
+                    placeholder="Số điện thoại"
+                  />
+                </FormGroup>
+              </Col>
+            
+              <Col sm="6">
+                <FormGroup>
+                  <Label for="default-picker">Ngày sinh</Label>
+                  <Flatpickr
+                    className="form-control"
+                    value={picker}
+                    onChange={(date) => onChangePicker(date)}
+                    id="default-picker"
+                    options={{
+                      dateFormat: "Y-m-d",
+                    }}
+                    onChange={(time) => setPicker(time)}
                   />
                 </FormGroup>
               </Col>
               <Col sm="6">
                 <FormGroup>
-                  <Label for="EmailVertical">Chuyên ngành</Label>
+                  <Label for="EmailVertical">Địa chỉ</Label>
                   <Input
                     type="text"
-                    name="content"
-                    value={object?.content}
+                    name="address"
+                    value={object?.address}
                     onChange={hanldChange}
-                    placeholder="Quà tặng"
+                    placeholder="Địa chỉ"
                   />
                 </FormGroup>
               </Col>
               <Col sm="6">
-                <FormGroup>
-                  <Label for="EmailVertical">Mục tiêu học</Label>
-                  <Input
-                    type="text"
-                    name="content"
-                    value={object?.content}
-                    onChange={hanldChange}
-                    placeholder="Quà tặng"
-                  />
-                </FormGroup>
-              </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="EmailVertical">Mục đích học</Label>
-                  <Input
-                    type="text"
-                    name="content"
-                    value={object?.content}
-                    onChange={hanldChange}
-                    placeholder="Quà tặng"
-                  />
-                </FormGroup>
-              </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="EmailVertical">Bạn biết odin thông qua kênh nào?</Label>
-                  <Input
-                    type="text"
-                    name="content"
-                    value={object?.content}
-                    onChange={hanldChange}
-                    placeholder="Quà tặng"
-                  />
-                </FormGroup>
-              </Col>
-              <Col sm="12">
-                <Label for="nameVertical">Vai trò</Label>
-                <Select
-                  isClearable={false}
-                  theme={selectThemeColors}
-                  name="colors"
-                  options={centerData}
-                  getOptionLabel={(option) => option.name}
-                  getOptionValue={(option) => option.id}
-                  className="react-select"
-                  classNamePrefix="select"
-                  placeholder="Chọn trung tâm"
-                />
-              </Col>  <Col sm="12">
                 <Label for="nameVertical">Trung tâm</Label>
                 <Select
                   isClearable={false}
                   theme={selectThemeColors}
-                  isMulti
                   name="colors"
                   options={centerData}
                   getOptionLabel={(option) => option.name}
@@ -329,37 +185,10 @@ function AddOrEditStudentModal(props) {
                   className="react-select"
                   classNamePrefix="select"
                   placeholder="Chọn trung tâm"
+                  value={center}
+                  onChange={(item) => setCenter(item)}
                 />
-              </Col>  <Col sm="12">
-                <Label for="nameVertical">Lớp học</Label>
-                <Select
-                  isClearable={false}
-                  theme={selectThemeColors}
-                  isMulti
-                  name="colors"
-                  options={centerData}
-                  getOptionLabel={(option) => option.name}
-                  getOptionValue={(option) => option.id}
-                  className="react-select"
-                  classNamePrefix="select"
-                  placeholder="Chọn trung tâm"
-                />
-              </Col>
-              <Col sm="12">
-                <Label for="nameVertical">Các quyền</Label>
-                <Select
-                  isClearable={false}
-                  theme={selectThemeColors}
-                  isMulti
-                  name="colors"
-                  options={centerData}
-                  getOptionLabel={(option) => option.name}
-                  getOptionValue={(option) => option.id}
-                  className="react-select"
-                  classNamePrefix="select"
-                  placeholder="Chọn trung tâm"
-                />
-              </Col>
+              </Col>{" "}
               <Col sm="12">
                 <FormGroup className="d-flex mt-2 mb-0 justify-content-end">
                   <Button.Ripple

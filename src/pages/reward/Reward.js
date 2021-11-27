@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useEffect, Fragment, useCallback } from "react";
+import React, { useState, useEffect, Fragment, useCallback } from "react";
 import { Link, withRouter } from "react-router-dom";
 
 // ** Third Party Components
@@ -196,8 +196,13 @@ const Reward = (props) => {
     {
       name: "Khóa học",
       selector: "course",
-      sortable: true,
-      cell: (row) => JSON.stringify(row?.course) || "---",
+      cell: (row) => (
+        <React.Fragment>
+          {row?.course.map((item) => (
+            <div style={{ width: '100%'}}> {item.name},</div>
+          ))}
+        </React.Fragment>
+      ),
     },
     {
       name: "Action",

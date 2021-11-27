@@ -181,7 +181,7 @@ function AddOrEditPaymentModal(props) {
                   <Label for="select-basic">Hình thức</Label>
                   <Input
                     type="select"
-                    value={renderCategory()}
+                    value={object.method}
                     name="method"
                     id="select-basic"
                     onChange={hanldChange}

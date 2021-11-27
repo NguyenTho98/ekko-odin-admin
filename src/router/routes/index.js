@@ -10,6 +10,7 @@ import UiElementRoutes from './UiElements'
 import ExtensionsRoutes from './Extensions'
 import PageLayoutsRoutes from './PageLayouts'
 import DashboardUsers from './DashboardUsers'
+import AppOdinRoutes from './AppOdin'
 
 // ** Document title
 const TemplateTitle = '%s - Odin React Admin Template'
@@ -30,6 +31,7 @@ const Routes = [
   ...TablesRoutes,
   ...ChartMapsRoutes,
   ...DashboardUsers,
+  ...AppOdinRoutes,
 ]
 
 export { DefaultRoute, TemplateTitle, Routes }

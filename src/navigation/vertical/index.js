@@ -9,7 +9,8 @@ import dashboardCenter from './dashboardCenter'
 import dashboardUsers from './dashboardUsers'
 import uiElements from './ui-elements'
 import chartsAndMaps from './charts-maps'
+import appOdin from './appOdin'
 
 // ** Merge & Export
-// export default [...dashboardCenter, ...dashboardUsers]
-export default [...dashboardCenter,  ...dashboardUsers, ...dashboards, ...apps, ...pages, ...uiElements, ...forms, ...tables, ...chartsAndMaps, ...others]
+// export default [...appOdin, ...dashboardCenter, ...dashboardUsers]
+export default [...appOdin, ...dashboardCenter,  ...dashboardUsers, ...dashboards, ...apps, ...pages, ...uiElements, ...forms, ...tables, ...chartsAndMaps, ...others]

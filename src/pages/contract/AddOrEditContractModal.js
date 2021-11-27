@@ -24,6 +24,9 @@ import "@styles/react/libs/flatpickr/flatpickr.scss";
 import { getRewardList } from "../reward/RewardAction";
 import { getUserList } from "../users/UsersAction";
 import moment from "moment";
+import { getPaymentList } from "../payment/PaymentAction";
+import { getCourseList } from "../course/CourseAction";
+import { getClassesList } from "../classes/ClassesAction";
 function AddOrEditContractModal(props) {
   const { visible, onCancel, item = {} } = props;
   const [contract_date, setContract_date] = useState(new Date());
@@ -32,27 +35,73 @@ function AddOrEditContractModal(props) {
   const [object, setObject] = useState({
     title: "",
   });
-  const [rewardData, setRewardData] = useState([]);
+  const [classesData, setClassesData] = useState([]);
+  const [courseData, setCourseData] = useState([]);
+  const [paymentData, setPaymentData] = useState([]);
+  const [centerData, setCenterData] = useState([]);
   const [usersData, setUsersData] = useState([]);
-  const [reward, setReward] = useState({});
-  const [payer, setPayer] = useState({});
-  const [cashier, setCashier] = useState({});
+  const [classes, setClasses] = useState([]);
+  const [course, setCourse] = useState([]);
+  const [payment, setPayment] = useState(item?.payment || {});
+  const [center, setCenter] = useState(item?.center || {});
+  const [customer, setCustomers] = useState(item?.customers || {});
+  const [saler, setSaler] = useState(item?.saler || {});
+  const [consultant, setConsultant] = useState(item?.consultant || {});
   useEffect(() => {
     if (item && item.id) {
       setObject(item);
     }
   }, [item]);
 
-
   useEffect(() => {
-    handleFetchRewardData();
     handleFetchUsersData();
+    handleFetchCenterData();
+    handleFetchPaymentData();
+    handleFetchClassesData();
+    handleFetchCourseData();
   }, [item]);
 
-  const handleFetchRewardData = async () => {
+  const onChangeMulCourse = (value) => {
+    let tmp = null;
+    if (value && value.length > 0) {
+     tmp = value.map((item) => item.id);
+    }
+    setCourse(tmp);
+  }
+
+  const onChangeMulClasses = (value) => {
+    let tmp = null;
+    if (value && value.length > 0) {
+     tmp = value.map((item) => item.id);
+    }
+    setClasses(tmp);
+  }
+  const handleFetchCourseData = async () => {
     try {
-      const { data } = await getRewardList();
-      setRewardData(data?.results || []);
+      const { data } = await getCourseList();
+      setCourseData(data?.results || []);
+    } catch (error) {}
+  };
+
+
+  const handleFetchCenterData = async () => {
+    try {
+      const { data } = await getCenterList();
+      setCenterData(data?.results || []);
+    } catch (error) {}
+  };
+
+  const handleFetchClassesData = async () => {
+    try {
+      const { data } = await getClassesList();
+      setClassesData(data?.results || []);
+    } catch (error) {}
+  };
+
+  const handleFetchPaymentData = async () => {
+    try {
+      const { data } = await getPaymentList();
+      setPaymentData(data?.results || []);
     } catch (error) {}
   };
 
@@ -67,16 +116,16 @@ function AddOrEditContractModal(props) {
     const { name, value } = e.target;
     setObject({ ...object, [name]: value });
   };
- console.log("object", object);
+  console.log("object", object);
   const onSummit = async () => {
     const data = {
-        ...object,
-        payer: payer?.id,
-        reward: reward?.id,
-        cashier: cashier?.id,
-        contract_date: moment(new Date(contract_date)).format("YYYY-MM-DD"),
-        plan_date: moment(new Date(plan_date)).format("YYYY-MM-DD"),
-      }
+      ...object,
+      payer: payer?.id,
+      reward: reward?.id,
+      cashier: cashier?.id,
+      contract_date: moment(new Date(contract_date)).format("YYYY-MM-DD"),
+      plan_date: moment(new Date(plan_date)).format("YYYY-MM-DD"),
+    };
     if (isAddNew) {
       await actionAddContract(data);
       toastSuccess("Thêm mới hợp đồng thành công");
@@ -85,22 +134,6 @@ function AddOrEditContractModal(props) {
       toastSuccess("Cập nhật hợp đồng thành công");
     }
     onCancel(true);
-  };
-  const renderCategory = () => {
-    if (object.method === "Chuyển tiền") {
-      return 1;
-    }
-    return 0;
-  };
-
-  const renderState = () => {
-    if (object.state === "Chờ") {
-      return 2;
-    }
-    if (object.state === "Từ chối") {
-      return 3;
-    }
-    return 1;
   };
   return (
     <div>
@@ -125,147 +158,136 @@ function AddOrEditContractModal(props) {
               </Col>
               <Col sm="6">
                 <FormGroup>
-                  <Label for="nameVertical">Số tiền đóng</Label>
+                  <Label for="nameVertical">Số lần đóng tiền</Label>
                   <Input
                     type="number"
-                    name="pay_amount"
-                    value={object?.pay_amount}
+                    name="times"
+                    value={object?.times}
                     onChange={hanldChange}
-                    placeholder="Số tiền đóng"
+                    placeholder="Số lần đóng tiền"
                   />
                 </FormGroup>
               </Col>
               <Col sm="6">
                 <FormGroup>
-                  <Label for="nameVertical">Số còn nợ</Label>
-                  <Input
-                    type="number"
-                    name="rest_amount"
-                    value={object?.rest_amount}
-                    onChange={hanldChange}
-                    placeholder="Số còn nợ"
-                  />
-                </FormGroup>
-              </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="default-picker">Ngày nộp</Label>
-                  <Flatpickr
-                    className="form-control"
-                    value={contract_date}
-                    onChange={(date) => setContract_date(date)}
-                    id="default-picker"
-                    options={{
-                      dateFormat: "Y-m-d h:m:i",
-                    }}
-                  />
-                </FormGroup>
-              </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="default-picker">Ngày hẹn nộp hoàn thành</Label>
-                  <Flatpickr
-                    className="form-control"
-                    value={plan_date}
-                    onChange={(date) => setPlan_date(date)}
-                    id="default-picker"
-                    options={{
-                      dateFormat: "Y-m-d h:m:i",
-                    }}
-                  />
-                </FormGroup>
-              </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="select-basic">Hình thức</Label>
+                  <Label for="select-basic">Tình trạng hợp đồng</Label>
                   <Input
                     type="select"
-                    value={renderCategory()}
-                    name="method"
-                    id="select-basic"
-                    onChange={hanldChange}
-                  >
-                    <option value="0">Tiền mặt</option>
-                    <option value="1">Chuyển tiền</option>
-                  </Input>
-                </FormGroup>
-              </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="select-basic">Trạng thái</Label>
-                  <Input
-                    type="select"
-                    value={renderState()}
+                    value={object.state}
                     name="state"
                     id="select-basic"
                     onChange={hanldChange}
                   >
-                    <option value="1">Đồng ý</option>
-                    <option value="2">Chờ</option>
-                    <option value="2">Từ chối</option>
+                    <option value="1">Cam kết</option>
+                    <option value="2">Mất cam kết</option>
+                    <option value="3">Cảnh cáo</option>
+                    <option value="4">Thanh lý hợp đồng</option>
                   </Input>
                 </FormGroup>
               </Col>
-             
-              <Col sm="12">
-                <Label for="nameVertical">Người nộp</Label>
-                <Select
-                  isClearable={false}
-                  theme={selectThemeColors}
-                  name="colors"
-                  options={usersData}
-                  getOptionLabel={(option) => option.username}
-                  getOptionValue={(option) => option.id}
-                  className="react-select"
-                  classNamePrefix="select"
-                  placeholder="Chọn người nộp"
-                  value={payer}
-                  onChange={(item) => setPayer(item) }
-                />
-              </Col>
-              <Col sm="12">
-                <Label for="nameVertical">Người thu</Label>
-                <Select
-                  isClearable={false}
-                  theme={selectThemeColors}
-                  name="colors"
-                  options={usersData}
-                  getOptionLabel={(option) => option.username}
-                  getOptionValue={(option) => option.id}
-                  className="react-select"
-                  classNamePrefix="select"
-                  placeholder="Chọn người thu"
-                  value={cashier}
-                  onChange={(item) => setCashier(item) }
-                />
-              </Col>
-              <Col sm="12">
-                <Label for="nameVertical">Ưu đãi</Label>
-                <Select
-                  isClearable={false}
-                  theme={selectThemeColors}
-                  name="colors"
-                  options={rewardData}
-                  getOptionLabel={(option) => option.title}
-                  getOptionValue={(option) => option.id}
-                  className="react-select"
-                  classNamePrefix="select"
-                  placeholder="Chọn ưu đãi"
-                  value={reward}
-                  onChange={(item) => setReward(item) }
-                />
-              </Col>
-              <Col sm="12">
+              <Col sm="6">
                 <FormGroup>
-                  <Label for="nameVertical">Ghi chú</Label>
-                  <Input
-                    type="textarea"
-                    name="note"
-                    value={object?.note}
-                    onChange={hanldChange}
-                    placeholder="Ghi chú"
+                  <Label for="nameVertical">Khách hàng</Label>
+                  <Select
+                    isClearable={false}
+                    theme={selectThemeColors}
+                    name="colors"
+                    options={usersData}
+                    getOptionLabel={(option) => option.username}
+                    getOptionValue={(option) => option.id}
+                    className="react-select"
+                    classNamePrefix="select"
+                    placeholder="Chọn khách hàng"
+                    value={customer}
+                    onChange={(item) => setCustomers(item)}
                   />
                 </FormGroup>
+              </Col>
+              <Col sm="6">
+                <FormGroup>
+                  <Label for="nameVertical">Trung tâm</Label>
+                  <Select
+                    isClearable={false}
+                    theme={selectThemeColors}
+                    name="colors"
+                    options={centerData}
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                    className="react-select"
+                    classNamePrefix="select"
+                    placeholder="Chọn trung tâm"
+                    value={center}
+                    onChange={(item) => setCenter(item)}
+                  />
+                </FormGroup>
+              </Col>
+              <Col sm="6">
+                <FormGroup>
+                  <Label for="nameVertical">Hóa đơn</Label>
+                  <Select
+                    isClearable={false}
+                    theme={selectThemeColors}
+                    name="colors"
+                    options={paymentData}
+                    getOptionLabel={(option) => option.title}
+                    getOptionValue={(option) => option.id}
+                    className="react-select"
+                    classNamePrefix="select"
+                    placeholder="Chọn hóa đơn"
+                    value={payment}
+                    onChange={(item) => setPayment(item)}
+                  />
+                </FormGroup>
+              </Col>
+              <Col sm="6">
+                <Label for="nameVertical">Tư vấn viên</Label>
+                <Select
+                  isClearable={false}
+                  theme={selectThemeColors}
+                  name="colors"
+                  options={usersData}
+                  getOptionLabel={(option) => option.username}
+                  getOptionValue={(option) => option.id}
+                  className="react-select"
+                  classNamePrefix="select"
+                  placeholder="Chọn tư vấn viên"
+                  value={consultant}
+                  onChange={(item) => setConsultant(item)}
+                />
+              </Col>
+              <Col sm="12">
+                <Label for="nameVertical">Lớp học</Label>
+                <Select
+                  isClearable={false}
+                  theme={selectThemeColors}
+                  name="colors"
+                  options={classesData}
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                  className="react-select"
+                  classNamePrefix="select"
+                  isMulti
+                  placeholder="Chọn lớp học"
+                  value={classes}
+                  onChange={(item) => onChangeMulClasses(item)}
+                />
+              </Col>
+              <Col sm="12">
+                <Label for="nameVertical">Khóa học</Label>
+                <Select
+                  isClearable={false}
+                  theme={selectThemeColors}
+                  name="colors"
+                  options={courseData}
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                  className="react-select"
+                  isMulti
+                  classNamePrefix="select"
+                  placeholder="Chọn khóa học"
+                  value={course}
+                  onChange={(item) => onChangeMulCourse(item)}
+                />
               </Col>
               <Col sm="12">
                 <FormGroup className="d-flex mt-2 mb-0 justify-content-end">

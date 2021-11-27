@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useEffect, Fragment, useCallback } from "react";
+import React, { useState, useEffect, Fragment, useCallback } from "react";
 import { Link, withRouter } from "react-router-dom";
 
 // ** Third Party Components
@@ -148,6 +148,7 @@ const Contract = (props) => {
       name: "Tiêu đề",
       selector: "title",
       sortable: true,
+      minWidth: "150px",
       cell: (row) => <span>{row.title || "---"}</span>,
     },
     {
@@ -169,52 +170,66 @@ const Contract = (props) => {
       selector: "customers",
       minWidth: "150px",
       sortable: true,
-      cell: (row) => row?.customers || "---",
+      cell: (row) => row?.customers?.username || "---",
     },
     {
       name: "Trung tâm",
       selector: "centre",
       sortable: true,
       minWidth: "200px",
-      cell: (row) => row?.centre || "---",
+      cell: (row) => row?.centre?.name || "---",
     },
     {
       name: "Lớp học",
       selector: "classes",
       sortable: true,
-      cell: (row) => row.classes || "---",
+      minWidth: "150px",
+      cell: (row) => (
+        <React.Fragment>
+          {
+            row?.classes?.length > 0 ? 
+            row?.classes.map((item) => (
+              <div style={{ width: "100%" }}> {item.name},</div>
+            )) : "---"
+          }
+        </React.Fragment>
+      ),
     },
     {
       name: "Khóa học",
       selector: "course",
       sortable: true,
-      cell: (row) => row?.course || "---",
-    },
-    {
-      name: "Hợp đồng",
-      selector: "payment",
-      sortable: true,
       minWidth: "150px",
-      cell: (row) => row?.payment || "---",
+      cell: (row) => (
+        <React.Fragment>
+          {row?.course?.length > 0
+            ? row?.course.map((item) => (
+                <div style={{ width: "100%" }}> {item.name},</div>
+              ))
+            : "---"}
+        </React.Fragment>
+      ),
     },
     {
       name: "Nhân viên kinh doanh",
       selector: "saler",
       sortable: true,
-      cell: (row) => row?.saler || "---",
+      minWidth: "150px",
+      cell: (row) => row?.saler?.username || "---",
     },
     {
       name: "Tư vấn viên",
       selector: "consultant",
+      minWidth: "150px",
       sortable: true,
-      cell: (row) => row?.consultant || "---",
+      cell: (row) => row?.consultant?.username || "---",
     },
     {
-        name: "Ghi chú",
-        selector: "note",
-        sortable: true,
-        cell: (row) => row?.note || "---",
-      },
+      name: "Ghi chú",
+      selector: "note",
+      sortable: true,
+      cell: (row) => row?.note || "---",
+    },
     {
       name: "Action",
       minWidth: "110px",

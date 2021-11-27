@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Container, Row, Col, Table } from "reactstrap";
 function PrintContract(props) {
+  useEffect(() => window.print(), []);
   return (
     <div className="print-contract-wrapper" style={{ color: "black" }}>
       <Container>
