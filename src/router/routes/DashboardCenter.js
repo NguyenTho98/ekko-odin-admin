@@ -57,7 +57,7 @@ const DashboardCenterRoutes = [
     component: lazy(() => import('../../pages/print/PrintPayment'))
   },
   {
-    path: '/contract/print/',
+    path: '/contract/print/:id',
     layout: 'BlankLayout',
     component: lazy(() => import('../../pages/print/PrintContract'))
   },

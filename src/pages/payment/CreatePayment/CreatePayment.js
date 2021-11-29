@@ -35,6 +35,10 @@ import moment from "moment";
 import { actionAddPayment } from "../PaymentAction";
 import { actionAddContract } from "../../contract/ContractAction";
 import { toastSuccess } from "../../../utility/common/toastify";
+
+import Cleave from "cleave.js/react";
+
+const options = { numeral: true, numeralThousandsGroupStyle: "thousand" };
 function CreatePayment(props) {
   const { item } = props;
   const [student, setStudent] = useState("");
@@ -56,10 +60,9 @@ function CreatePayment(props) {
   const [centerData, setCenterData] = useState([]);
   const [classes, setClasses] = useState([]);
   const [course, setCourse] = useState([]);
-  const [center, setCenter] = useState(item?.center);
-  const [saler, setSaler] = useState(item?.saler);
-  const [studentcare, setStudentcare] = useState(item?.saler);
-  const [receptionist, setReceptionist] = useState(item?.saler);
+  const [center, setCenter] = useState();
+  const [studentcare, setStudentcare] = useState();
+  const [receptionist, setReceptionist] = useState();
   const [salerData, setSalerData] = useState([]);
   const [studentcareData, setStudentcareData] = useState([]);
   const [receptionistData, setReceptionistData] = useState([]);
@@ -152,39 +155,38 @@ function CreatePayment(props) {
   };
 
   const onSummit = async () => {
-    const idCourse = course.length > 0 ? course.map(item => item.id) : []
-    const idClasses = course.length > 0 ? classes.map(item => item.id) : []
+    const idCourse = course.length > 0 ? course.map((item) => item.id) : [];
+    const idClasses = course.length > 0 ? classes.map((item) => item.id) : [];
     const dataPayment = {
-        title: "",
-        pay_amount: object?.pay_amount,
-        rest_amount: object?.rest_amount,
-        payment_date: moment(new Date(payment_date)).format("YYYY-MM-DD"),
-        plan_date: moment(new Date(plan_date)).format("YYYY-MM-DD"),
-        method,
-        state: 1,
-        note: "",
-        payer: student?.id,
-        cashier: receptionist?.id,
-        reward: reward?.id
+      title: "",
+      pay_amount: object?.pay_amount,
+      rest_amount: object?.rest_amount,
+      payment_date: moment(new Date(payment_date)).format("YYYY-MM-DD"),
+      plan_date: moment(new Date(plan_date)).format("YYYY-MM-DD"),
+      method,
+      state: 1,
+      note: "",
+      payer: student?.id,
+      cashier: receptionist?.id,
+      reward: reward?.id,
     };
-  
-    const res =  await actionAddPayment(dataPayment)
+
+    const res = await actionAddPayment(dataPayment);
     if (res && res.data) {
-        const dataContract = {
-            title: object?.title,
-            times: object?.times,
-            state: object?.state,
-            note: object?.note,
-            customers: student?.id,
-            centre: center?.id,
-            payment: res?.data?.id,
-            saler: saler?.id,
-            classes: idClasses,
-            consultant: studentcare?.id,
-            course: idCourse,
-        };
-        await actionAddContract(dataContract);
-        toastSuccess("Thêm mới hợp đồng thành công");
+      const dataContract = {
+        title: object?.title,
+        times: object?.times,
+        state: object?.state,
+        note: object?.note,
+        customers: student?.id,
+        centre: center?.id,
+        payment: res?.data?.id,
+        classes: idClasses,
+        consultant: studentcare?.id,
+        course: idCourse,
+      };
+      await actionAddContract(dataContract);
+      toastSuccess("Thêm mới hợp đồng thành công");
     }
   };
 
@@ -196,7 +198,7 @@ function CreatePayment(props) {
         total += schedule === "1" ? element.night_cost : element.daytime_cost;
       }
     }
-    total = reward ? (reward.discount * total) / 100 : total
+    total = reward ? (reward.discount * total) / 100 : total;
     return total;
   };
   const renderLesson = () => {
@@ -351,12 +353,7 @@ function CreatePayment(props) {
                   </div>
                 )}
                 <Row style={{ padding: "30px 0px 20px 0px" }}>
-                  <Col md="6">
-
-                    {
-                      reward ? reward.gift : ""
-                    }
-                  </Col>
+                  <Col md="6">{reward ? reward.gift : ""}</Col>
                   <Col md="6">
                     <div className="d-flex justify-content-between">
                       <div>Học phí({renderLesson} buổi)</div>
@@ -407,7 +404,7 @@ function CreatePayment(props) {
                           type="radio"
                           id="exampleCustomRadio"
                           name="method"
-                          onChange={e => setMethod(1)}
+                          onChange={(e) => setMethod(1)}
                           checked={method === 1}
                           inline
                           label="Tiền mặt"
@@ -416,7 +413,7 @@ function CreatePayment(props) {
                           type="radio"
                           id="exampleCustomRadio2"
                           name="method"
-                          onChange={e => setMethod(2)}
+                          onChange={(e) => setMethod(2)}
                           checked={method === 2}
                           inline
                           label="Chuyển khoản"
@@ -501,32 +498,39 @@ function CreatePayment(props) {
                 </FormGroup>
                 <FormGroup>
                   <Label for="nameVertical">Số lần đóng tiền</Label>
-                  <Input
-                    type="number"
+                  <Cleave
                     name="times"
                     value={object?.times}
+                    className="form-control"
                     onChange={hanldChange}
                     placeholder="Số lần đóng tiền"
+                    options={options}
+                    id="numeral-formatting"
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="nameVertical">Số tiền đóng</Label>
-                  <Input
-                    type="number"
+                  <Cleave
                     name="pay_amount"
                     value={object?.pay_amount}
                     onChange={hanldChange}
                     placeholder="Số tiền đóng"
+                    className="form-control"
+                    options={options}
+                    id="numeral-formatting"
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="nameVertical">Số tiền còn nợ</Label>
-                  <Input
-                    type="number"
+
+                  <Cleave
                     name="rest_amount"
                     value={object?.rest_amount}
                     onChange={hanldChange}
                     placeholder="Số tiền còn nợ"
+                    className="form-control"
+                    options={options}
+                    id="numeral-formatting"
                   />
                 </FormGroup>
                 <FormGroup>
@@ -569,23 +573,6 @@ function CreatePayment(props) {
                     <option value="3">Cảnh cáo</option>
                     <option value="4">Thanh lý hợp đồng</option>
                   </Input>
-                </FormGroup>
-
-                <FormGroup>
-                  <Label for="nameVertical">Nhân viên kinh doanh</Label>
-                  <Select
-                    isClearable={false}
-                    theme={selectThemeColors}
-                    name="colors"
-                    options={salerData}
-                    getOptionLabel={(option) => option.username}
-                    getOptionValue={(option) => option.id}
-                    className="react-select"
-                    classNamePrefix="select"
-                    placeholder="Chọn nhân viên kinh doanh"
-                    value={saler}
-                    onChange={(item) => setSaler(item)}
-                  />
                 </FormGroup>
 
                 <FormGroup>

@@ -30,18 +30,18 @@ const ProfileHeader = ({ data }) => {
             <div className='profile-tabs d-flex justify-content-between flex-wrap mt-1 mt-md-0'>
               <Nav className='mb-0' pills>
                 <NavItem>
-                  <NavLink className='font-weight-bold' active>
-                    <span className='d-none d-md-block'>Feed</span>
+                  <NavLink className='font-weight-bold'>
+                    <span className='d-none d-md-block'>Thông tin</span>
                     <Rss className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink className='font-weight-bold'>
-                    <span className='d-none d-md-block'>About</span>
+                  <NavLink className='font-weight-bold' active>
+                    <span className='d-none d-md-block'>Đổi mật khẩu</span>
                     <Info className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
-                <NavItem>
+                {/* <NavItem>
                   <NavLink className='font-weight-bold'>
                     <span className='d-none d-md-block'>Photos</span>
                     <Image className='d-block d-md-none' size={14} />
@@ -52,12 +52,12 @@ const ProfileHeader = ({ data }) => {
                     <span className='d-none d-md-block'>Friends</span>
                     <Users className='d-block d-md-none' size={14} />
                   </NavLink>
-                </NavItem>
+                </NavItem> */}
               </Nav>
-              <Button color='primary'>
+              {/* <Button color='primary'>
                 <Edit className='d-block d-md-none' size={14} />
                 <span className='font-weight-bold d-none d-md-block'>Edit</span>
-              </Button>
+              </Button> */}
             </div>
           </Collapse>
         </Navbar>

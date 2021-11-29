@@ -18,13 +18,6 @@ const Profile = () => {
   const [data, setData] = useState(null)
   const [block, setBlock] = useState(false)
 
-  const handleBlock = () => {
-    setBlock(true)
-    setTimeout(() => {
-      setBlock(false)
-    }, 2000)
-  }
-
   useEffect(() => {
     axios.get('/profile/data').then(response => setData(response.data))
   }, [])

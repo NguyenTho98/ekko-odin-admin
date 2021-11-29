@@ -34,7 +34,7 @@ const Sales = props => {
       },
       dataLabels: {
         background: {
-          foreColor: ['#ebe9f1']
+          foreColor: ['#dfdfdf']
         }
       },
       legend: { show: false },
@@ -42,7 +42,7 @@ const Sales = props => {
       plotOptions: {
         radar: {
           polygons: {
-            strokeColors: ['#ebe9f1', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+            strokeColors: ['#dfdfdf', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
             connectorColors: 'transparent'
           }
         }

@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import "./DetailPayment.scss";
 import Select, { components } from "react-select";
 import Breadcrumbs from "@components/breadcrumbs";
-import StudentModal from "./StudentModal.js";
+import StudentModal from "./../CreatePayment/StudentModal";
 import NumberFormat from "react-number-format";
 import {
   Button,
@@ -21,7 +21,7 @@ import {
 } from "reactstrap";
 import { getStudentList } from "../../student/StudentAction";
 import { selectThemeColors } from "@utils";
-import { Edit, Plus, Save } from "react-feather";
+import { Edit, Plus, Printer, Save } from "react-feather";
 import { getCourseList } from "../../course/CourseAction";
 import { getRewardList } from "../../reward/RewardAction";
 import Flatpickr from "react-flatpickr";
@@ -32,11 +32,20 @@ import { getReceptionistList } from "../../receptionist/ReceptionistAction";
 import { getClassesList } from "../../classes/ClassesAction";
 import { getCenterList } from "../../center/CenterAction";
 import moment from "moment";
-import { actionAddPayment } from "../PaymentAction";
-import { actionAddContract } from "../../contract/ContractAction";
+import { actionAddPayment, actionEditPayment } from "../PaymentAction";
+import {
+  actionAddContract,
+  actionEditContract,
+  getContractDetail,
+} from "../../contract/ContractAction";
 import { toastSuccess } from "../../../utility/common/toastify";
+import { useParams, withRouter } from "react-router-dom";
+import Cleave from "cleave.js/react";
+
+const options = { numeral: true, numeralThousandsGroupStyle: "thousand" };
 function DetailPayment(props) {
   const { item } = props;
+  const { id } = useParams();
   const [student, setStudent] = useState("");
   const [schedule, setSchedule] = useState("1");
   const [method, setMethod] = useState(1);
@@ -54,23 +63,46 @@ function DetailPayment(props) {
   const [centerData, setCenterData] = useState([]);
   const [classes, setClasses] = useState([]);
   const [course, setCourse] = useState([]);
-  const [center, setCenter] = useState(item?.center);
-  const [saler, setSaler] = useState(item?.saler);
-  const [studentcare, setStudentcare] = useState(item?.saler);
-  const [receptionist, setReceptionist] = useState(item?.saler);
+  const [center, setCenter] = useState();
+  const [studentcare, setStudentcare] = useState();
+  const [receptionist, setReceptionist] = useState();
   const [salerData, setSalerData] = useState([]);
   const [studentcareData, setStudentcareData] = useState([]);
   const [receptionistData, setReceptionistData] = useState([]);
-  
-  useEffect(() => {
-    handleFetchCourseData();
-    handleFetchStudentData();
-    handleFetchRewardData();
-    handleFetchSalerData();
-    handleFetchStudentcareData();
-    handleFetchReceptionistData();
-    handleFetchCenterData();
-    handleFetchClassesData();
+
+  useEffect(async () => {
+    await handleFetchCourseData();
+    await handleFetchStudentData();
+    await handleFetchRewardData();
+    await handleFetchSalerData();
+    await handleFetchStudentcareData();
+    await handleFetchReceptionistData();
+    await handleFetchCenterData();
+    await handleFetchClassesData();
+    const res = await getContractDetail(id).then((res) => {
+      setStudent(res?.data?.customers);
+      setCourse(res?.data?.course);
+      setClasses(res?.data?.classes);
+      setReceptionist(res?.data?.payment?.cashier);
+      setStudentcare(res?.data?.consultant);
+      setCenter(res?.data?.centre);
+      setReward(res?.data?.payment?.reward);
+      setMethod(res?.data?.payment?.method);
+      setPlan_date(res?.data?.payment?.plan_date);
+      setPayment_date(res?.data?.payment?.payment_date);
+      setMethod(res?.data?.payment?.method);
+      const data = {
+        ...res.data,
+        pay_amount: res?.data?.payment?.pay_amount,
+        rest_amount: res?.data?.payment?.rest_amount,
+        state: 1,
+        title: res?.data?.title,
+        times: res?.data?.times,
+        state: res?.data?.state,
+        note: res?.data?.note,
+      };
+      setObject(data);
+    });
   }, []);
 
   const onChangeStudent = (item) => {
@@ -150,39 +182,38 @@ function DetailPayment(props) {
   };
 
   const onSummit = async () => {
-    const idCourse = course.length > 0 ? course.map(item => item.id) : []
-    const idClasses = course.length > 0 ? classes.map(item => item.id) : []
+    const idCourse = course.length > 0 ? course.map((item) => item.id) : [];
+    const idClasses = course.length > 0 ? classes.map((item) => item.id) : [];
     const dataPayment = {
-        title: "",
-        pay_amount: object?.pay_amount,
-        rest_amount: object?.rest_amount,
-        payment_date: moment(new Date(payment_date)).format("YYYY-MM-DD"),
-        plan_date: moment(new Date(plan_date)).format("YYYY-MM-DD"),
-        method,
-        state: 1,
-        note: "",
-        payer: student?.id,
-        cashier: receptionist?.id,
-        reward: reward?.id
+      title: "",
+      pay_amount: object?.pay_amount,
+      rest_amount: object?.rest_amount,
+      payment_date: moment(new Date(payment_date)).format("YYYY-MM-DD"),
+      plan_date: moment(new Date(plan_date)).format("YYYY-MM-DD"),
+      method,
+      state: 2,
+      note: "",
+      payer: student?.id,
+      cashier: receptionist?.id,
+      reward: reward?.id,
     };
-  
-    const res =  await actionAddPayment(dataPayment)
+
+    const res = await actionEditPayment(dataPayment, object?.payment?.id);
     if (res && res.data) {
-        const dataContract = {
-            title: object?.title,
-            times: object?.times,
-            state: object?.state,
-            note: object?.note,
-            customers: student?.id,
-            centre: center?.id,
-            payment: res?.data?.id,
-            saler: saler?.id,
-            classes: idClasses,
-            consultant: studentcare?.id,
-            course: idCourse,
-        };
-        await actionAddContract(dataContract);
-        toastSuccess("Thêm mới hợp đồng thành công");
+      const dataContract = {
+        title: object?.title,
+        times: object?.times,
+        state: object?.state,
+        note: object?.note,
+        customers: student?.id,
+        centre: center?.id,
+        payment: res?.data?.id,
+        classes: idClasses,
+        consultant: studentcare?.id,
+        course: idCourse,
+      };
+      await actionEditContract(dataContract, object?.id);
+      toastSuccess("Chỉnh sửa hợp đồng thành công");
     }
   };
 
@@ -194,7 +225,7 @@ function DetailPayment(props) {
         total += schedule === "1" ? element.night_cost : element.daytime_cost;
       }
     }
-    total = reward ? (reward.discount * total) / 100 : total
+    total = reward ? (reward.discount * total) / 100 : total;
     return total;
   };
   const renderLesson = () => {
@@ -214,10 +245,22 @@ function DetailPayment(props) {
           className="d-flex justify-content-between"
           style={{ marginBottom: 20 }}
         >
-          <div style={{ width: "calc((100% - 300px))" }}>
+          <div style={{ width: "calc((100% - 450px))" }}>
             <Breadcrumbs breadCrumbTitle="Chi tiết hợp đồng" />
           </div>
           <div style={{ marginRight: 5 }}>
+            <Button.Ripple color="primary" onClick={onSummit}>
+              <Printer size={18} />
+              <span className="align-middle ml-25">In hợp đồng</span>
+            </Button.Ripple>
+            <Button.Ripple
+              color="primary"
+              onClick={onSummit}
+              style={{ margin: "0px 5px" }}
+            >
+              <Printer size={18} />
+              <span className="align-middle ml-25">In hóa đơn</span>
+            </Button.Ripple>
             <Button.Ripple color="primary" onClick={onSummit}>
               <Save size={18} />
               <span className="align-middle ml-25">Lưu</span>
@@ -349,12 +392,7 @@ function DetailPayment(props) {
                   </div>
                 )}
                 <Row style={{ padding: "30px 0px 20px 0px" }}>
-                  <Col md="6">
-
-                    {
-                      reward ? reward.gift : ""
-                    }
-                  </Col>
+                  <Col md="6">{reward ? reward.gift : ""}</Col>
                   <Col md="6">
                     <div className="d-flex justify-content-between">
                       <div>Học phí({renderLesson} buổi)</div>
@@ -405,7 +443,7 @@ function DetailPayment(props) {
                           type="radio"
                           id="exampleCustomRadio"
                           name="method"
-                          onChange={e => setMethod(1)}
+                          onChange={(e) => setMethod(1)}
                           checked={method === 1}
                           inline
                           label="Tiền mặt"
@@ -414,7 +452,7 @@ function DetailPayment(props) {
                           type="radio"
                           id="exampleCustomRadio2"
                           name="method"
-                          onChange={e => setMethod(2)}
+                          onChange={(e) => setMethod(2)}
                           checked={method === 2}
                           inline
                           label="Chuyển khoản"
@@ -499,32 +537,39 @@ function DetailPayment(props) {
                 </FormGroup>
                 <FormGroup>
                   <Label for="nameVertical">Số lần đóng tiền</Label>
-                  <Input
-                    type="number"
+                  <Cleave
                     name="times"
                     value={object?.times}
+                    className="form-control"
                     onChange={hanldChange}
                     placeholder="Số lần đóng tiền"
+                    options={options}
+                    id="numeral-formatting"
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="nameVertical">Số tiền đóng</Label>
-                  <Input
-                    type="number"
+                  <Cleave
                     name="pay_amount"
                     value={object?.pay_amount}
                     onChange={hanldChange}
                     placeholder="Số tiền đóng"
+                    className="form-control"
+                    options={options}
+                    id="numeral-formatting"
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="nameVertical">Số tiền còn nợ</Label>
-                  <Input
-                    type="number"
+
+                  <Cleave
                     name="rest_amount"
                     value={object?.rest_amount}
                     onChange={hanldChange}
                     placeholder="Số tiền còn nợ"
+                    className="form-control"
+                    options={options}
+                    id="numeral-formatting"
                   />
                 </FormGroup>
                 <FormGroup>
@@ -567,23 +612,6 @@ function DetailPayment(props) {
                     <option value="3">Cảnh cáo</option>
                     <option value="4">Thanh lý hợp đồng</option>
                   </Input>
-                </FormGroup>
-
-                <FormGroup>
-                  <Label for="nameVertical">Nhân viên kinh doanh</Label>
-                  <Select
-                    isClearable={false}
-                    theme={selectThemeColors}
-                    name="colors"
-                    options={salerData}
-                    getOptionLabel={(option) => option.username}
-                    getOptionValue={(option) => option.id}
-                    className="react-select"
-                    classNamePrefix="select"
-                    placeholder="Chọn nhân viên kinh doanh"
-                    value={saler}
-                    onChange={(item) => setSaler(item)}
-                  />
                 </FormGroup>
 
                 <FormGroup>
@@ -670,7 +698,7 @@ function DetailPayment(props) {
   );
 }
 
-export default DetailPayment;
+export default withRouter(DetailPayment);
 
 export const SvgCourese = () => {
   return (

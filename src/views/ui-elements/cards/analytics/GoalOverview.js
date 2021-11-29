@@ -34,7 +34,7 @@ const GoalOverview = props => {
             size: '77%'
           },
           track: {
-            background: '#ebe9f1',
+            background: '#dfdfdf',
             strokeWidth: '50%'
           },
           dataLabels: {

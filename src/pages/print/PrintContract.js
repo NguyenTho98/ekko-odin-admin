@@ -1,7 +1,20 @@
-import React, { useEffect } from "react";
+import { map } from "jquery";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Container, Row, Col, Table } from "reactstrap";
+import { getContractDetail } from "../contract/ContractAction";
 function PrintContract(props) {
-  useEffect(() => window.print(), []);
+  const { id } = useParams();
+  const [contract, setContract] = useState({});
+  console.log("contract", contract);
+  useEffect(() => {
+    if (id) {
+      getContractDetail(id).then((res) => {
+        setContract(res.data);
+      });
+    }
+  }, []);
   return (
     <div className="print-contract-wrapper" style={{ color: "black" }}>
       <Container>
@@ -47,26 +60,30 @@ function PrintContract(props) {
             <div>- Căn cứ vào Hoá đơn số: ĐT-O-2107-745-001 </div>
             <div>- Căn cứ vào nhu cầu của Quý Học Viên, Quý Khách hàng. </div>
             <div>
-              Hôm nay, Thứ Ba, 23 tháng 11, 2021<span>chúng tôi gồm:</span>{" "}
+              Hôm nay, {moment(contract.created_at).format("dddd")},{" "}
+              {moment(contract.created_at).get("date")} tháng{" "}
+              {moment(contract.created_at).get("month")},{" "}
+              {moment(contract.created_at).get("year")}
+              <span> chúng tôi gồm:</span>{" "}
             </div>
           </Col>
           <Col>
             <div style={{ fontWeight: 600 }}>Bên A:</div>
             <div className="d-flex" style={{ marginBottom: 6 }}>
               <div style={{ width: 170 }}>Họ và tên:</div>
-              <div>Trần Tiến Thành</div>
+              <div>{contract?.customers?.full_name}</div>
             </div>
             <div className="d-flex" style={{ marginBottom: 6 }}>
               <div style={{ width: 170 }}>Ngày sinh :</div>
-              <div>Thứ Sáu, 1 tháng 8, 1997</div>
+              <div>{contract?.customers?.birth_day}</div>
             </div>
             <div className="d-flex" style={{ marginBottom: 6 }}>
               <div style={{ width: 170 }}>Số điện thoại :</div>
-              <div>0397364538</div>
+              <div>{contract?.customers?.phone}</div>
             </div>
             <div className="d-flex" style={{ marginBottom: 6 }}>
               <div style={{ width: 170 }}>Email :</div>
-              <div>thanh@gmail.com</div>
+              <div>{contract?.customers?.email}</div>
             </div>
             <div>(Sau đây được gọi là “Bên A” hoặc “Học Viên”)</div>
             <div style={{ fontWeight: 600 }}>
@@ -176,66 +193,27 @@ function PrintContract(props) {
                 <tr>
                   <th>Các khóa học Bên B</th>
                   <th>Số Lượng buổi học</th>
-                  <th>Các khóa học bên A đăng ký</th>
                   <th>Học phí (đơn vị: VNĐ) </th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">*BBST</th>
-                  <td>25</td>
-                  <td>ok</td>
-                  <td>4.600.000</td>
-                </tr>
-                <tr>
-                  <th scope="row">*Giao tiếp</th>
-                  <td>25</td>
-                  <td>ok</td>
-                  <td>4.600.000</td>
-                </tr>
-                <tr>
-                  <th scope="row">*TOEIC 450</th>
-                  <td>25</td>
-                  <td>ok</td>
-                  <td>4.600.000</td>
-                </tr>
-                <tr>
-                  <th scope="row">*TOEIC 750</th>
-                  <td>25</td>
-                  <td>ok</td>
-                  <td>4.600.000</td>
-                </tr>
-                <tr>
-                  <th scope="row">*IE1</th>
-                  <td>25</td>
-                  <td>ok</td>
-                  <td>4.600.000</td>
-                </tr>
-                <tr>
-                  <th scope="row">*IE2</th>
-                  <td>35</td>
-                  <td>ok</td>
-                  <td>4.600.000</td>
-                </tr>
-                <tr>
-                  <th scope="row">*IE3</th>
-                  <td>35</td>
-                  <td>ok</td>
-                  <td>4.600.000</td>
-                </tr>
-                <tr>
-                  <th scope="row">*IE4</th>
-                  <td>35</td>
-                  <td>ok</td>
-                  <td>4.600.000</td>
-                </tr>
+                {contract?.course?.length > 0
+                  ? contract?.course?.map((item) => (
+                      <tr>
+                        <th scope="row">*{item.name}</th>
+                        <td>{item.study_shift_count}</td>
+                        <td>4.600.000</td>
+                      </tr>
+                    ))
+                  : ""}
+
                 <tr>
                   <th scope="row">Giá trị giảm giá (nếu có)</th>
-                  <td colspan="3">15,00% </td>
+                  <td colspan="2">{contract?.payment?.reward?.discount}% </td>
                 </tr>
                 <tr>
                   <th scope="row">Giá trị quà tặng (nếu có)</th>
-                  <td colspan="3">Máy ảnh film Instax Mini </td>
+                  <td colspan="2">{contract?.payment?.reward?.gift} </td>
                 </tr>
                 <tr>
                   <th scope="row" rowspan="2">
@@ -246,15 +224,15 @@ function PrintContract(props) {
                 </tr>
                 <tr>
                   <td>Bằng chữ</td>
-                  <td colspan="2"> hai ba </td>
+                  <td colspan="2"> </td>
                 </tr>
                 <tr>
                   <th scope="row">Tổng số buổi học</th>
-                  <td colspan="3">110 </td>
+                  <td colspan="2">110 </td>
                 </tr>
                 <tr>
                   <th scope="row">Thời gian hoàn thành học phí</th>
-                  <td colspan="3">02/01/2022 </td>
+                  <td colspan="2">{contract?.payment?.plan_date} </td>
                 </tr>
               </tbody>
             </Table>

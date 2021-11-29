@@ -17,6 +17,12 @@ export const actionGetContracts =
       dispatch({ type: actionType.FETCHING_PAYMENT, payload: false });
     }
   };
+export const getContractDetail = (id) => {
+  return api({
+    method: "get",
+    url: `/contract/${id}`
+  });
+};
 export const getContractList = (params = {}) => {
   return api({
     method: "get",

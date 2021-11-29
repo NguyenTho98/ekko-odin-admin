@@ -22,7 +22,7 @@ const Sales2 = props => {
         width: 4
       },
       grid: {
-        borderColor: '#ebe9f1',
+        borderColor: '#dfdfdf',
         padding: {
           top: -20,
           bottom: 5,

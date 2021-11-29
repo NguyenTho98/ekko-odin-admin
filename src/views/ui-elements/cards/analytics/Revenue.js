@@ -26,13 +26,13 @@ const Revenue = props => {
       legend: {
         show: false
       },
-      colors: ['#d0ccff', '#ebe9f1'],
+      colors: ['#d0ccff', '#dfdfdf'],
       fill: {
         type: 'gradient',
         gradient: {
           shade: 'dark',
           inverseColors: false,
-          gradientToColors: [props.primary, '#ebe9f1'],
+          gradientToColors: [props.primary, '#dfdfdf'],
           shadeIntensity: 1,
           type: 'horizontal',
           opacityFrom: 1,
