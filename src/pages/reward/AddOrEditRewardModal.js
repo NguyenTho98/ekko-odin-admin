@@ -17,7 +17,7 @@ import { selectThemeColors } from "@utils";
 import { toastSuccess } from "../../utility/common/toastify";
 import { isEmpty } from "../../utility/Utils";
 import { actionAddReward, actionEditReward } from "./RewardAction";
-import { getCenterList } from "../center/CenterAction";
+import { getCourseList } from "../course/CourseAction";
 import Select, { components } from "react-select";
 import Flatpickr from "react-flatpickr";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
@@ -33,14 +33,10 @@ function AddOrEditRewardModal(props) {
     state: 1,
   });
   const [centerData, setCenterData] = useState([]);
-  const [center, setCenter] = useState([]);
+  const [center, setCenter] = useState(item?.course);
   const onChangeMulCenter = (value) => {
-    let tmp = null;
-    if (value && value.length > 0) {
-     tmp = value.map((item) => item.id);
-    }
-    setCenter(tmp);
-  }
+    setCenter(value);
+  };
   useEffect(() => {
     if (item && item.id) {
       setObject(item);
@@ -49,7 +45,7 @@ function AddOrEditRewardModal(props) {
 
   const handleFetchCenterData = async () => {
     try {
-      const { data } = await getCenterList();
+      const { data } = await getCourseList();
       setCenterData(data?.results || []);
     } catch (error) {}
   };
@@ -63,13 +59,13 @@ function AddOrEditRewardModal(props) {
     setObject({ ...object, [name]: value });
   };
   const onSummit = async () => {
+    const data = {
+      ...object,
+      course: center.length > 0 ? center.map((item) => item.id) : [],
+      start_date: moment(new Date(picker[0])).format("YYYY-MM-DD"),
+      end_date: moment(new Date(picker[1])).format("YYYY-MM-DD"),
+    };
     if (isAddNew) {
-      const data = {
-        ...object,
-        course: center,
-        start_date: moment(new Date(picker[0])).format("YYYY-MM-DD"),
-        end_date: moment(new Date(picker[1])).format("YYYY-MM-DD"),
-      }
       await actionAddReward(data);
       toastSuccess("Thêm mới ưu đãi thành công");
     } else {
@@ -173,6 +169,25 @@ function AddOrEditRewardModal(props) {
               </Col>
               <Col sm="12">
                 <FormGroup>
+                  <Label for="nameVertical">Khóa học</Label>
+                  <Select
+                    isClearable={false}
+                    theme={selectThemeColors}
+                    isMulti
+                    name="colors"
+                    options={centerData}
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                    className="react-select"
+                    classNamePrefix="select"
+                    onChange={onChangeMulCenter}
+                    value={center}
+                    placeholder="Chọn trung tâm"
+                  />
+                </FormGroup>
+              </Col>
+              <Col sm="12">
+                <FormGroup>
                   <Label for="nameVertical">Ghi chú</Label>
                   <Input
                     type="textarea"
@@ -183,22 +198,7 @@ function AddOrEditRewardModal(props) {
                   />
                 </FormGroup>
               </Col>
-              <Col sm="12">
-                <Label for="nameVertical">Trung tâm</Label>
-                <Select
-                  isClearable={false}
-                  theme={selectThemeColors}
-                  isMulti
-                  name="colors"
-                  options={centerData}
-                  getOptionLabel={(option) => option.name}
-                  getOptionValue={(option) => option.id}
-                  className="react-select"
-                  classNamePrefix="select"
-                  onChange={onChangeMulCenter}
-                  placeholder="Chọn trung tâm"
-                />
-              </Col>
+
               <Col sm="12">
                 <FormGroup className="d-flex mt-2 mb-0 justify-content-end">
                   <Button.Ripple

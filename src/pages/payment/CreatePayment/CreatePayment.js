@@ -26,7 +26,6 @@ import { getCourseList } from "../../course/CourseAction";
 import { getRewardList } from "../../reward/RewardAction";
 import Flatpickr from "react-flatpickr";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
-import { getBussinessemployeeList } from "../../bussinessemployee/BussinessemployeeAction";
 import { getStudentcareList } from "../../studentcare/StudentcareAction";
 import { getReceptionistList } from "../../receptionist/ReceptionistAction";
 import { getClassesList } from "../../classes/ClassesAction";
@@ -37,18 +36,17 @@ import { actionAddContract } from "../../contract/ContractAction";
 import { toastSuccess } from "../../../utility/common/toastify";
 
 import Cleave from "cleave.js/react";
+import { useHistory } from "react-router-dom";
 
 const options = { numeral: true, numeralThousandsGroupStyle: "thousand" };
 function CreatePayment(props) {
-  const { item } = props;
+  const history = useHistory();
   const [student, setStudent] = useState("");
   const [schedule, setSchedule] = useState("1");
   const [method, setMethod] = useState(1);
   const [payment_date, setPayment_date] = useState(new Date());
   const [plan_date, setPlan_date] = useState(new Date());
   const [studentData, setStudentData] = useState({});
-
-  ///
   const [object, setObject] = useState({
     state: 1,
   });
@@ -63,7 +61,6 @@ function CreatePayment(props) {
   const [center, setCenter] = useState();
   const [studentcare, setStudentcare] = useState();
   const [receptionist, setReceptionist] = useState();
-  const [salerData, setSalerData] = useState([]);
   const [studentcareData, setStudentcareData] = useState([]);
   const [receptionistData, setReceptionistData] = useState([]);
 
@@ -71,7 +68,6 @@ function CreatePayment(props) {
     handleFetchCourseData();
     handleFetchStudentData();
     handleFetchRewardData();
-    handleFetchSalerData();
     handleFetchStudentcareData();
     handleFetchReceptionistData();
     handleFetchCenterData();
@@ -93,11 +89,7 @@ function CreatePayment(props) {
   };
 
   const onChangeMulClasses = (value) => {
-    let tmp = null;
-    if (value && value.length > 0) {
-      tmp = value.map((item) => item.id);
-    }
-    setClasses(tmp);
+    setClasses(value);
   };
   const handleFetchCourseData = async () => {
     try {
@@ -126,13 +118,6 @@ function CreatePayment(props) {
     } catch (error) {}
   };
 
-  const handleFetchSalerData = async () => {
-    try {
-      const { data } = await getBussinessemployeeList();
-      setSalerData(data?.results || []);
-    } catch (error) {}
-  };
-
   const handleFetchStudentcareData = async () => {
     try {
       const { data } = await getStudentcareList();
@@ -149,23 +134,22 @@ function CreatePayment(props) {
 
   const hanldChange = (e) => {
     const { name, value } = e.target;
-    console.log("name", name);
-    console.log("value", value);
     setObject({ ...object, [name]: value });
   };
-
+  function numberWithCommas(x) {
+    return  x.replaceAll(",", "");
+ }
   const onSummit = async () => {
     const idCourse = course.length > 0 ? course.map((item) => item.id) : [];
-    const idClasses = course.length > 0 ? classes.map((item) => item.id) : [];
+    const idClasses = classes.length > 0 ? classes.map((item) => item.id) : [];
     const dataPayment = {
-      title: "",
-      pay_amount: object?.pay_amount,
-      rest_amount: object?.rest_amount,
+      pay_amount: parseInt(numberWithCommas(object?.pay_amount)),
+      rest_amount: parseInt(numberWithCommas(object?.rest_amount)),
       payment_date: moment(new Date(payment_date)).format("YYYY-MM-DD"),
       plan_date: moment(new Date(plan_date)).format("YYYY-MM-DD"),
       method,
-      state: 1,
-      note: "",
+      state: 2,
+      center: center?.id,
       payer: student?.id,
       cashier: receptionist?.id,
       reward: reward?.id,
@@ -179,14 +163,18 @@ function CreatePayment(props) {
         state: object?.state,
         note: object?.note,
         customers: student?.id,
-        centre: center?.id,
+        center: center?.id,
         payment: res?.data?.id,
         classes: idClasses,
         consultant: studentcare?.id,
         course: idCourse,
+        shift: method,
       };
-      await actionAddContract(dataContract);
-      toastSuccess("Thêm mới hợp đồng thành công");
+      const res1 = await actionAddContract(dataContract);
+      if (res1 && res1.data?.id) {
+        history.push(`/contract-edit/${res1.data.id}`)
+        toastSuccess("Thêm mới hợp đồng thành công");
+      }
     }
   };
 
@@ -198,7 +186,7 @@ function CreatePayment(props) {
         total += schedule === "1" ? element.night_cost : element.daytime_cost;
       }
     }
-    total = reward ? (reward.discount * total) / 100 : total;
+    total = reward ? (total - ((reward.discount * total) / 100)) : total;
     return total;
   };
   const renderLesson = () => {
@@ -372,7 +360,7 @@ function CreatePayment(props) {
                       style={{ margin: "10px 0px" }}
                     >
                       <div>Chiếu khấu</div>
-                      <div>0%</div>
+                      <div>{reward?.discount || 0}%</div>
                     </div>
                     <div className="d-flex justify-content-between">
                       <div>Học viên phải đóng</div>

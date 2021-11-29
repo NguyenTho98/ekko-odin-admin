@@ -8,9 +8,9 @@ export default [
     navLink: '/dashboard'
   },
   {
-    id: 'payment-create',
+    id: 'contract-create',
     title: 'Tạo hợp đồng',
     icon: <FileText size={20} />,
-    navLink: '/payment-create'
+    navLink: '/contract-create'
   },
 ]

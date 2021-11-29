@@ -187,13 +187,6 @@ const Reward = (props) => {
       cell: (row) => row?.end_date || "---",
     },
     {
-      name: "Ghi chú",
-      selector: "note",
-      sortable: true,
-      minWidth: "200px",
-      cell: (row) => row?.note || "---",
-    },
-    {
       name: "Khóa học",
       selector: "course",
       cell: (row) => (
@@ -203,6 +196,13 @@ const Reward = (props) => {
           ))}
         </React.Fragment>
       ),
+    },
+    {
+      name: "Ghi chú",
+      selector: "note",
+      sortable: true,
+      minWidth: "200px",
+      cell: (row) => row?.note || "---",
     },
     {
       name: "Action",

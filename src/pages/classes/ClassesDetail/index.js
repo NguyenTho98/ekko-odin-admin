@@ -71,16 +71,6 @@ function Classes(props) {
               Tổng kết
             </NavLink>
           </NavItem>
-          <NavItem>
-            <NavLink
-              active={active === "4"}
-              onClick={() => {
-                toggle("4");
-              }}
-            >
-              Đánh giá của học viên
-            </NavLink>
-          </NavItem>
         </Nav>
         <Card className="class-wrapper-content">
           <TabContent className="py-50" activeTab={active}>

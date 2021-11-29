@@ -119,7 +119,6 @@ const Contract = (props) => {
 
   useEffect(() => {
     if (!isEmpty(profile)) {
-      console.log("contracts", contracts);
       handleFetchContract(params);
     }
   }, [profile]);
@@ -142,7 +141,7 @@ const Contract = (props) => {
     {
       name: "#",
       selector: "id",
-      cell: (row) => <span>{`#${row.id}`}</span>,
+      cell: (row) => <Link to={`/contract-edit/${row.id}`}>{`#${row.id}`}</Link>,
     },
     {
       name: "Tiêu đề",

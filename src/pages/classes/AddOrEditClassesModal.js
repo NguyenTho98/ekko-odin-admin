@@ -48,8 +48,6 @@ function AddOrEditClassesModal(props) {
     course: 0,
     classroom: 0,
   });
-
-  const [teachersData, setTeachersData] = useState([]);
   const [picker, setPicker] = useState(new Date());
   useEffect(() => {
     if (item && item.id) {

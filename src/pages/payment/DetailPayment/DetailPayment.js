@@ -85,12 +85,13 @@ function DetailPayment(props) {
       setClasses(res?.data?.classes);
       setReceptionist(res?.data?.payment?.cashier);
       setStudentcare(res?.data?.consultant);
-      setCenter(res?.data?.centre);
+      setCenter(res?.data?.center);
       setReward(res?.data?.payment?.reward);
       setMethod(res?.data?.payment?.method);
       setPlan_date(res?.data?.payment?.plan_date);
       setPayment_date(res?.data?.payment?.payment_date);
       setMethod(res?.data?.payment?.method);
+      setSchedule(res?.data?.shift)
       const data = {
         ...res.data,
         pay_amount: res?.data?.payment?.pay_amount,
@@ -176,23 +177,22 @@ function DetailPayment(props) {
 
   const hanldChange = (e) => {
     const { name, value } = e.target;
-    console.log("name", name);
-    console.log("value", value);
     setObject({ ...object, [name]: value });
   };
-
+  function numberWithCommas(x) {
+    return x.toString().replaceAll(",", "");
+  }
   const onSummit = async () => {
     const idCourse = course.length > 0 ? course.map((item) => item.id) : [];
     const idClasses = course.length > 0 ? classes.map((item) => item.id) : [];
     const dataPayment = {
-      title: "",
-      pay_amount: object?.pay_amount,
-      rest_amount: object?.rest_amount,
+      pay_amount: parseInt(numberWithCommas(object?.pay_amount)),
+      rest_amount: parseInt(numberWithCommas(object?.rest_amount)),
       payment_date: moment(new Date(payment_date)).format("YYYY-MM-DD"),
       plan_date: moment(new Date(plan_date)).format("YYYY-MM-DD"),
       method,
       state: 2,
-      note: "",
+      center: center?.id,
       payer: student?.id,
       cashier: receptionist?.id,
       reward: reward?.id,
@@ -206,11 +206,12 @@ function DetailPayment(props) {
         state: object?.state,
         note: object?.note,
         customers: student?.id,
-        centre: center?.id,
+        center: center?.id,
         payment: res?.data?.id,
         classes: idClasses,
         consultant: studentcare?.id,
         course: idCourse,
+        shift: method,
       };
       await actionEditContract(dataContract, object?.id);
       toastSuccess("Chỉnh sửa hợp đồng thành công");
@@ -225,7 +226,7 @@ function DetailPayment(props) {
         total += schedule === "1" ? element.night_cost : element.daytime_cost;
       }
     }
-    total = reward ? (reward.discount * total) / 100 : total;
+    total = reward ? (total - ((reward.discount * total) / 100)) : total;
     return total;
   };
   const renderLesson = () => {
@@ -411,7 +412,7 @@ function DetailPayment(props) {
                       style={{ margin: "10px 0px" }}
                     >
                       <div>Chiếu khấu</div>
-                      <div>0%</div>
+                      <div>{reward?.discount || 0}%</div>
                     </div>
                     <div className="d-flex justify-content-between">
                       <div>Học viên phải đóng</div>

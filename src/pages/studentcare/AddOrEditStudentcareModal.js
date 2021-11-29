@@ -24,14 +24,14 @@ import "@styles/react/libs/flatpickr/flatpickr.scss";
 import moment from "moment";
 function AddOrEditStudentcareModal(props) {
   const { visible, onCancel, item = {} } = props;
-  const [picker, setPicker] = useState(new Date(item?.birth_day) || new Date());
+  const [picker, setPicker] = useState(item?.birth_day ? new Date(item?.birth_day) : '');
  
   const isAddNew = isEmpty(item);
   const [object, setObject] = useState({
     gender: 1,
    });
   const [centerData, setCenterData] = useState([]);
-  const [center, setCenter] = useState({});
+  const [center, setCenter] = useState();
   useEffect(() => {
     if (item && item.id) {
       setObject(item);
@@ -158,6 +158,7 @@ function AddOrEditStudentcareModal(props) {
                       dateFormat: "Y-m-d",
                     }}
                     onChange={(time) => setPicker(time)}
+                    placeholder="Ngày sinh"
                   />
                 </FormGroup>
               </Col>

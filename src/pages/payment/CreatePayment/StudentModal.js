@@ -24,12 +24,12 @@ import "@styles/react/libs/flatpickr/flatpickr.scss";
 import moment from "moment";
 function StudentModal(props) {
   const { visible, onCancel, setStudent, item = {} } = props;
-  const [picker, setPicker] = useState(new Date(item?.birth_day) || new Date());
+  const [picker, setPicker] = useState(item?.birth_day ? new Date(item?.birth_day) : '');
  
   const isAddNew = isEmpty(item);
   const [object, setObject] = useState({  });
   const [centerData, setCenterData] = useState([]);
-  const [center, setCenter] = useState({});
+  const [center, setCenter] = useState();
 
   const handleFetchCenterData = async () => {
     try {
@@ -155,6 +155,7 @@ function StudentModal(props) {
                       dateFormat: "Y-m-d",
                     }}
                     onChange={(time) => setPicker(time)}
+                    placeholder="Ngày sinh"
                   />
                 </FormGroup>
               </Col>

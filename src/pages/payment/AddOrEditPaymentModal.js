@@ -34,9 +34,9 @@ function AddOrEditPaymentModal(props) {
   });
   const [rewardData, setRewardData] = useState([]);
   const [usersData, setUsersData] = useState([]);
-  const [reward, setReward] = useState(item?.reward || {});
-  const [payer, setPayer] = useState(item?.payer || {});
-  const [cashier, setCashier] = useState(item?.cashier || {});
+  const [reward, setReward] = useState(item?.reward);
+  const [payer, setPayer] = useState(item?.payer);
+  const [cashier, setCashier] = useState(item?.cashier);
   useEffect(() => {
     if (item && item.id) {
       setObject(item);
@@ -65,10 +65,8 @@ function AddOrEditPaymentModal(props) {
 
   const hanldChange = (e) => {
     const { name, value } = e.target;
-    console.log("e", e);
     setObject({ ...object, [name]: value });
   };
- console.log("object", object);
   const onSummit = async () => {
     const data = {
         ...object,
@@ -82,7 +80,7 @@ function AddOrEditPaymentModal(props) {
       await actionAddPayment(data);
       toastSuccess("Thêm mới hóa đơn thành công");
     } else {
-      await actionEditPayment(object, item?.id);
+      await actionEditPayment(data, item?.id);
       toastSuccess("Cập nhật hóa đơn thành công");
     }
     onCancel(true);

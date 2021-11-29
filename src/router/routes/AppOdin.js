@@ -1,16 +1,16 @@
 import { lazy } from 'react'
 const AppOdinRoutes = [
   {
-    path: '/payment-create',
+    path: '/contract-create',
     exact: true,
     component: lazy(() => import('../../pages/payment/CreatePayment/CreatePayment'))
   },
   {
-    path: '/payment-edit/:id',
+    path: '/contract-edit/:id',
     exact: true,
     component: lazy(() => import('../../pages/payment/DetailPayment/DetailPayment')),
     meta: {
-      navLink: '/payment-edit'
+      navLink: '/contract-edit'
     }
   },
   {
