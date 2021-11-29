@@ -39,13 +39,14 @@ import {
   getContractDetail,
 } from "../../contract/ContractAction";
 import { toastSuccess } from "../../../utility/common/toastify";
-import { useParams, withRouter } from "react-router-dom";
+import { useParams, withRouter, useHistory, Link } from "react-router-dom";
 import Cleave from "cleave.js/react";
 
 const options = { numeral: true, numeralThousandsGroupStyle: "thousand" };
 function DetailPayment(props) {
   const { item } = props;
   const { id } = useParams();
+  const history = useHistory();
   const [student, setStudent] = useState("");
   const [schedule, setSchedule] = useState("1");
   const [method, setMethod] = useState(1);
@@ -91,9 +92,10 @@ function DetailPayment(props) {
       setPlan_date(res?.data?.payment?.plan_date);
       setPayment_date(res?.data?.payment?.payment_date);
       setMethod(res?.data?.payment?.method);
-      setSchedule(res?.data?.shift)
+      setSchedule(res?.data?.shift);
       const data = {
         ...res.data,
+        id: res?.data?.id,
         pay_amount: res?.data?.payment?.pay_amount,
         rest_amount: res?.data?.payment?.rest_amount,
         state: 1,
@@ -250,18 +252,30 @@ function DetailPayment(props) {
             <Breadcrumbs breadCrumbTitle="Chi tiết hợp đồng" />
           </div>
           <div style={{ marginRight: 5 }}>
-            <Button.Ripple color="primary" onClick={onSummit}>
-              <Printer size={18} />
-              <span className="align-middle ml-25">In hợp đồng</span>
-            </Button.Ripple>
-            <Button.Ripple
-              color="primary"
-              onClick={onSummit}
-              style={{ margin: "0px 5px" }}
-            >
-              <Printer size={18} />
-              <span className="align-middle ml-25">In hóa đơn</span>
-            </Button.Ripple>
+           { id ? (
+                <Button.Ripple
+                color="primary"
+                tag={Link}
+                to={`/contract/print/${id}`}
+                target="_blank"
+              >
+                <Printer size={18} />
+                <span className="align-middle ml-25">In hợp đồng</span>
+              </Button.Ripple>
+            ) : ""}
+           {
+               object?.payment?.id ? 
+                <Button.Ripple
+                color="primary"
+                tag={Link}
+                to={`/payment/print/${object?.payment?.id}`}
+                target="_blank"
+                style={{ margin: "0px 5px" }}
+              >
+                <Printer size={18} />
+                <span className="align-middle ml-25">In hóa đơn</span>
+              </Button.Ripple> : ""
+           }
             <Button.Ripple color="primary" onClick={onSummit}>
               <Save size={18} />
               <span className="align-middle ml-25">Lưu</span>

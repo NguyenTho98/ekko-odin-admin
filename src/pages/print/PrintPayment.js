@@ -2,20 +2,22 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "reactstrap";
 import "./PrintPayment.scss";
 import { useParams, useHistory } from "react-router-dom";
-import { getPaymentDetail } from './../payment/PaymentAction'
+import { getPaymentDetail } from "./../payment/PaymentAction";
 import moment from "moment";
-moment.lang('vi')
+import NumberFormat from "react-number-format";
+moment.lang("vi");
 function PrintPayment(props) {
-    const { id } = useParams();
-    const [payment, setpayment] = useState({});
-    console.log("payment", payment);
-    useEffect(() => {
-      if (id) {
-        getPaymentDetail(id).then((res) => {
-            setpayment(res.data);
-        });
-      }
-    }, []);
+  const { id } = useParams();
+  const [payment, setpayment] = useState({});
+  console.log("payment", payment);
+  useEffect(() => {
+    if (id) {
+      getPaymentDetail(id).then((res) => {
+        setpayment(res.data);
+        setTimeout(() =>  window.print(), 1000)
+      });
+    }
+  }, []);
   return (
     <div className="print-payment-wrapper">
       <Container>
@@ -33,9 +35,17 @@ function PrintPayment(props) {
         <Row>
           <Col md="12">
             <div className="title-payment">PHIẾU THU</div>
-            <div style={{textAlign:"center"}}>{moment(payment.created_at).format('dddd')}, {moment(payment.created_at).get("date")} tháng {moment(payment.created_at).get("month")}, {moment(payment.created_at).get("year")}</div>
-            <div style={{textAlign:"center"}}>
-              Hóa đơn số :<span style={{marginLeft: 7, fontWeight: 600}}>TĐN-O-2111-001-001</span>
+            <div style={{ textAlign: "center" }}>
+              {moment(payment.created_at).format("dddd")},{" "}
+              {moment(payment.created_at).get("date")} tháng{" "}
+              {moment(payment.created_at).get("month")},{" "}
+              {moment(payment.created_at).get("year")}
+            </div>
+            <div style={{ textAlign: "center" }}>
+              Hóa đơn số :
+              <span style={{ marginLeft: 7, fontWeight: 600 }}>
+                {payment?.code}
+              </span>
             </div>
           </Col>
           <Col md="6">
@@ -43,62 +53,109 @@ function PrintPayment(props) {
               <div style={{ width: 170 }}>Họ và tên: </div>
               <div>{payment?.payer?.full_name}</div>
             </div>
-            <div className="d-flex"  style={{ marginBottom: 6 }}>
+            <div className="d-flex" style={{ marginBottom: 6 }}>
               <div style={{ width: 170 }}>Email:</div>
               <div>{payment?.payer?.email}</div>
             </div>
           </Col>
 
           <Col md="6">
-            <div className="d-flex justify-content-end" style={{ marginBottom: 6 }} >
+            <div
+              className="d-flex justify-content-end"
+              style={{ marginBottom: 6 }}
+            >
               <div style={{ width: 170 }}>Số điện thoại:</div>
-              <div style={{ minWidth: 120, textAlign: "right" }}>{payment?.payer?.phone}</div>
+              <div style={{ minWidth: 120, textAlign: "right" }}>
+                {payment?.payer?.phone}
+              </div>
             </div>
-            <div className="d-flex  justify-content-end"  style={{ marginBottom: 6 }} >
+            <div
+              className="d-flex  justify-content-end"
+              style={{ marginBottom: 6 }}
+            >
               <div style={{ width: 170 }}>Ngày sinh:</div>
-              <div style={{ minWidth: 120, textAlign: "right" }}>{payment?.payer?.birth_day}</div>
+              <div style={{ minWidth: 120, textAlign: "right" }}>
+                {payment?.payer?.birth_day}
+              </div>
             </div>
           </Col>
           <Col md="12">
-            <div className="d-flex"  style={{ marginBottom: 6 }}>
+            <div className="d-flex" style={{ marginBottom: 6 }}>
               <div style={{ width: 170 }}>Lộ trình:</div>
               <div> </div>
             </div>
           </Col>
           <Col md="6">
-            <div className="d-flex"  style={{ marginBottom: 6 }}>
+            <div className="d-flex" style={{ marginBottom: 6 }}>
               <div style={{ width: 170 }}>Học phí:</div>
-              <div > {payment?.pay_amount + payment?.rest_amount}đ</div>
+              <div>
+                {" "}
+                <NumberFormat
+                  value={payment?.pay_amount + payment?.rest_amount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                />{" "}
+                đ
+              </div>
             </div>
-            <div className="d-flex"  style={{ marginBottom: 6 }}>
+            <div className="d-flex" style={{ marginBottom: 6 }}>
               <div style={{ width: 170 }}>Số tiền nộp:</div>
               <div style={{ fontWeight: 600 }}>
-               {payment?.pay_amount}đ
-              </div> <span style={{ marginLeft: 10}}> Tiền mặt</span>
+                <NumberFormat
+                  value={payment?.pay_amount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                />{" "}
+                đ
+              </div>{" "}
+              <span style={{ marginLeft: 10 }}> Tiền mặt</span>
             </div>
           </Col>
 
           <Col md="6">
-            <div className="d-flex justify-content-end"  style={{ marginBottom: 6 }}>
-              <div style={{ width: 170 }} >Ngày hẹn hoàn thành:</div>
-              <div style={{ minWidth: 120, textAlign: "right" }}>{payment?.plan_date}</div>
+            <div
+              className="d-flex justify-content-end"
+              style={{ marginBottom: 6 }}
+            >
+              <div style={{ width: 170 }}>Ngày hẹn hoàn thành:</div>
+              <div style={{ minWidth: 120, textAlign: "right" }}>
+                {payment?.plan_date}
+              </div>
             </div>
-            <div className="d-flex justify-content-end"  style={{textAlign: "left"}}>
+            <div
+              className="d-flex justify-content-end"
+              style={{ textAlign: "left" }}
+            >
               <div style={{ width: 170 }}>Còn lại:</div>
-              <div style={{ minWidth: 120, textAlign: "right" }}>  {payment?.rest_amount} đ</div>
+              <div style={{ minWidth: 120, textAlign: "right" }}>
+                {" "}
+                <NumberFormat
+                  value={payment?.rest_amount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                />{" "}
+                đ
+              </div>
             </div>
           </Col>
-          <Col md="6" style={{textAlign: "center", marginTop: 30}}>
-            <div className="" style={{ fontWeight: 600 }}>Người nộp tiền </div>
+          <Col md="6" style={{ textAlign: "center", marginTop: 30 }}>
+            <div className="" style={{ fontWeight: 600 }}>
+              Người nộp tiền{" "}
+            </div>
             <div className="">(Ký & ghi rõ họ tên) </div>
           </Col>
-          <Col md="6"  style={{textAlign: "center", marginTop: 30}}>
-            <div className="" style={{ fontWeight: 600 }}>Người thu tiền </div>
+          <Col md="6" style={{ textAlign: "center", marginTop: 30 }}>
+            <div className="" style={{ fontWeight: 600 }}>
+              Người thu tiền{" "}
+            </div>
             <div className="">(Ký & ghi rõ họ tên) </div>
-            <div className="" style={{ marginTop: 70 }}> {payment?.cashier?.full_name}</div>
+            <div className="" style={{ marginTop: 70 }}>
+              {" "}
+              {payment?.cashier?.full_name}
+            </div>
           </Col>
-          <Col md="12" style={{ marginTop: 30}}>
-           <div> LƯU Ý:</div>
+          <Col md="12" style={{ marginTop: 30 }}>
+            <div> LƯU Ý:</div>
             <div>
               1. Phiếu thu là một phần đính kèm không thể tách rời của hợp đồng,
               HV cần lưu lại phiếu thu gốc để được giải quyết mọi trường hợp .

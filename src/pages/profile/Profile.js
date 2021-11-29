@@ -11,7 +11,7 @@ import ProfileLatestPhotos from './ProfileLatestPhotos'
 import ProfileSuggestedPages from './ProfileSuggestedPages'
 import ProfileFriendsSuggestions from './ProfileFriendsSuggestions'
 import Breadcrumbs from '@components/breadcrumbs'
-
+import { Route } from "react-router-dom";
 import '@styles/react/pages/page-profile.scss'
 
 const Profile = () => {
@@ -33,9 +33,8 @@ const Profile = () => {
           </Row>
           <section id='profile-info'>
             <Row>
-              <Col lg={{ size: 6 }} sm={{ size: 6 }}>
-                <ProfileAbout data={data.userAbout} />
-              </Col>
+              <Route path={"/profile/info"} component={ () => <ProfileAbout data={data.userAbout} /> }/>
+              <Route path={"/profile/change-password"} component={ProfilePosts} />
             </Row>
            
           </section>

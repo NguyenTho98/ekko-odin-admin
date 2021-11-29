@@ -7,14 +7,42 @@ import { getContractDetail } from "../contract/ContractAction";
 function PrintContract(props) {
   const { id } = useParams();
   const [contract, setContract] = useState({});
-  console.log("contract", contract);
+  const [course, setCourse] = useState([]);
   useEffect(() => {
     if (id) {
       getContractDetail(id).then((res) => {
         setContract(res.data);
+        setCourse(res?.data?.course);
+       
+        setTimeout(() =>  window.print(), 1000)
       });
     }
   }, []);
+  const renderTotal = () => {
+    let total = 0;
+    if (course?.length > 0) {
+      console.log("zzooo");
+      for (let index = 0; index < contract.course?.length; index++) {
+        const element = contract.course[index];
+        total +=
+          contract.shift === 1 ? element.night_cost : element.daytime_cost;
+      }
+    }
+    total = contract?.reward
+      ? (total - ((contract?.reward.discount * total) / 100))
+      : total;
+    return total;
+  };
+  const renderLesson = () => {
+    let total = 0;
+    if (course?.length > 0) {
+      for (let index = 0; index < contract?.course?.length; index++) {
+        const element = contract?.course[index];
+        total += element.study_shift_count;
+      }
+    }
+    return total;
+  };
   return (
     <div className="print-contract-wrapper" style={{ color: "black" }}>
       <Container>
@@ -44,12 +72,12 @@ function PrintContract(props) {
               HỢP ĐỒNG CAM KẾT KHÓA HỌC 2021{" "}
             </div>
             <div style={{ textAlign: "center", fontWeight: 600 }}>
-              Mã Hợp Đồng: TĐN-O-2111-001{" "}
+              Mã Hợp Đồng: {contract?.code}{" "}
             </div>
             <div
               style={{ textAlign: "center", fontWeight: 600, marginBottom: 20 }}
             >
-              Khóa học: <span> BBST+Giao Tiếp+IE1+IE2 </span>{" "}
+              {/* Khóa học: <span> BBST+Giao Tiếp+IE1+IE2 </span>{" "} */}
             </div>
           </Col>
           <Col md="12">
@@ -192,6 +220,7 @@ function PrintContract(props) {
               <thead>
                 <tr>
                   <th>Các khóa học Bên B</th>
+                  <th>Ca học</th>
                   <th>Số Lượng buổi học</th>
                   <th>Học phí (đơn vị: VNĐ) </th>
                 </tr>
@@ -201,38 +230,45 @@ function PrintContract(props) {
                   ? contract?.course?.map((item) => (
                       <tr>
                         <th scope="row">*{item.name}</th>
+                        <td scope="row">
+                          {contract?.shift === 1 ? "Ca ngày" : "Ca tối"}
+                        </td>
                         <td>{item.study_shift_count}</td>
-                        <td>4.600.000</td>
+                        <td>
+                          {contract?.shift === 1
+                            ? item.night_cost
+                            : item.daytime_cost}
+                          đ
+                        </td>
                       </tr>
                     ))
                   : ""}
-
                 <tr>
                   <th scope="row">Giá trị giảm giá (nếu có)</th>
-                  <td colspan="2">{contract?.payment?.reward?.discount}% </td>
+                  <td colspan="3">{contract?.payment?.reward?.discount}% </td>
                 </tr>
                 <tr>
                   <th scope="row">Giá trị quà tặng (nếu có)</th>
-                  <td colspan="2">{contract?.payment?.reward?.gift} </td>
+                  <td colspan="3">{contract?.payment?.reward?.gift} </td>
                 </tr>
                 <tr>
                   <th scope="row" rowspan="2">
                     Tổng học phí
                   </th>
                   <td>Bằng số</td>
-                  <td colspan="2"> 23.205.000 </td>
+                  <td colspan="3"> {renderTotal()} đ</td>
                 </tr>
                 <tr>
                   <td>Bằng chữ</td>
-                  <td colspan="2"> </td>
+                  <td colspan="3"> </td>
                 </tr>
                 <tr>
                   <th scope="row">Tổng số buổi học</th>
-                  <td colspan="2">110 </td>
+                  <td colspan="3">{renderLesson()} </td>
                 </tr>
                 <tr>
                   <th scope="row">Thời gian hoàn thành học phí</th>
-                  <td colspan="2">{contract?.payment?.plan_date} </td>
+                  <td colspan="3">{contract?.payment?.plan_date} </td>
                 </tr>
               </tbody>
             </Table>
@@ -292,58 +328,25 @@ function PrintContract(props) {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>*BBST</td>
-                  <td>
-                    Nắm được tối thiểu 85% kiến thức phát âm và ngữ pháp cơ bản.
-                    Đạt tối thiểu 65% điểm đầu ra cuối khoá học. Có thể trao đổi
-                    về các chủ đề quen thuộc với người nước ngoài.
-                  </td>
-                  <td rowspan="8">
-                    "Khi tham gia khoá học, Bên A phải cam kết đảm bảo thực hiện
-                    đúng nghĩa vụ tại Điều 3 của Hợp đồng này. Nếu vi phạm trách
-                    nhiệm tại Điều 3 của Hợp đồng này, Bên B không có trách
-                    nhiệm đảm bảo đầu ra cho Bên A sau khi hoàn thành khóa học
-                    như cam kết. "
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Giao tiếp</td>
-                  <td>Đạt tối thiểu 65% điểm đầu ra cuối khoá học.</td>
-                </tr>
-
-                <tr>
-                  <th scope="row">3</th>
-                  <td>*IE1</td>
-                  <td>IELTS 3.5 </td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>*IE2</td>
-                  <td>IELTS 5.0</td>
-                </tr>
-                <tr>
-                  <th scope="row">5</th>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th scope="row">6</th>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th scope="row">7</th>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th scope="row">8</th>
-                  <td></td>
-                  <td></td>
-                </tr>
+               
+                {contract?.course?.length > 0
+                  ? contract?.course?.map((item, index) => (
+                      <tr>
+                        <th scope="row">{index + 1}</th>
+                        <td>*{item.name}</td>
+                        <td>{item.commited}</td>
+                        {index === 0 ? (
+                          <td rowspan="8">
+                            "Khi tham gia khoá học, Bên A phải cam kết đảm bảo
+                            thực hiện đúng nghĩa vụ tại Điều 3 của Hợp đồng này.
+                            Nếu vi phạm trách nhiệm tại Điều 3 của Hợp đồng này,
+                            Bên B không có trách nhiệm đảm bảo đầu ra cho Bên A
+                            sau khi hoàn thành khóa học như cam kết. "
+                          </td>
+                        ) : null}
+                      </tr>
+                    ))
+                  : ""}
               </tbody>
             </Table>
             <div>

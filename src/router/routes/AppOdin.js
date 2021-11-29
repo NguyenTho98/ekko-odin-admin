@@ -18,6 +18,19 @@ const AppOdinRoutes = [
     exact: true,
     component: lazy(() => import('../../pages/dashboard/Dashboard'))
   },
+  {
+    path: '/profile',
+    component: lazy(() => import('../../pages/profile/Profile')),
+    exact: true
+  },
+  {
+    path: '/profile/info',
+    component: lazy(() => import('../../pages/profile/Profile')),
+  },
+  {
+    path: '/profile/change-password',
+    component: lazy(() => import('../../pages/profile/Profile')),
+  },
 ]
 
 export default AppOdinRoutes
