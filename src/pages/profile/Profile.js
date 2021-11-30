@@ -3,6 +3,7 @@ import axios from 'axios'
 import UILoader from '@components/ui-loader'
 import ProfilePoll from './ProfilePolls'
 import ProfileAbout from './ProfileAbout'
+import ProfileChangePassword from './ProfileChangePassword'
 import ProfilePosts from './ProfilePosts'
 import ProfileHeader from './ProfileHeader'
 import { Row, Col, Button } from 'reactstrap'
@@ -23,9 +24,10 @@ const Profile = () => {
   }, [])
   return (
     <Fragment>
-      <Breadcrumbs breadCrumbTitle='Thông tin tài khoản'  />
+      
       {data !== null ? (
         <div id='user-profile'>
+          <Breadcrumbs breadCrumbTitle='Thông tin tài khoản'  />
           <Row>
             <Col sm='12'>
               <ProfileHeader data={data.header} />
@@ -33,10 +35,9 @@ const Profile = () => {
           </Row>
           <section id='profile-info'>
             <Row>
-              <Route path={"/profile/info"} component={ () => <ProfileAbout data={data.userAbout} /> }/>
-              <Route path={"/profile/change-password"} component={ProfilePosts} />
+              <Route path={"/profile/info"} component={ () => <ProfileAbout /> }/>
+              <Route path={"/profile/change-password"} component={ProfileChangePassword} />
             </Row>
-           
           </section>
         </div>
       ) : null}

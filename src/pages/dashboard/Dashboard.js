@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Row, Col } from 'reactstrap'
+import { Row, Col, Card } from 'reactstrap'
 import CompanyTable from './CompanyTable'
 import { ThemeColors } from '@src/utility/context/ThemeColors'
 import Earnings from '@src/views/ui-elements/cards/analytics/Earnings'
@@ -15,13 +15,16 @@ import CardBrowserStates from '@src/views/ui-elements/cards/advance/CardBrowserS
 
 import '@styles/react/libs/charts/apex-charts.scss'
 import '@styles/base/pages/dashboard-ecommerce.scss'
-
+import './Dashboard.scss'
 const Dashboard = () => {
   const { colors } = useContext(ThemeColors),
     trackBgColor = '#e9ecef'
 
   return (
     <div id='dashboard-ecommerce'>
+      <Card className="nav-header-top">
+        a
+      </Card>
       <Row className='match-height'>
         <Col xl='4' md='6' xs='12'>
           <CardMedal />

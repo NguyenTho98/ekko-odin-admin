@@ -47,7 +47,7 @@ const UserDropdown = (props) => {
         <Avatar img={userAvatar} imgHeight='40' imgWidth='40' status='online' />
       </DropdownToggle>
       <DropdownMenu right>
-        <DropdownItem tag={Link} to='/profile'>
+        <DropdownItem tag={Link} to='/profile/info'>
           <User size={14} className='mr-75' />
           <span className='align-middle'>Thông tin</span>
         </DropdownItem>
