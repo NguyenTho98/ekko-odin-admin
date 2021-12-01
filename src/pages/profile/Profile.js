@@ -15,7 +15,7 @@ import Breadcrumbs from '@components/breadcrumbs'
 import { Route } from "react-router-dom";
 import '@styles/react/pages/page-profile.scss'
 
-const Profile = () => {
+const Profile = (props) => {
   const [data, setData] = useState(null)
   const [block, setBlock] = useState(false)
 
@@ -30,7 +30,7 @@ const Profile = () => {
           <Breadcrumbs breadCrumbTitle='Thông tin tài khoản'  />
           <Row>
             <Col sm='12'>
-              <ProfileHeader data={data.header} />
+              <ProfileHeader data={data.header} location={props.location} />
             </Col>
           </Row>
           <section id='profile-info'>

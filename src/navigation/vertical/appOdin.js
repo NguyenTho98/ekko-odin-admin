@@ -5,7 +5,7 @@ export default [
     id: 'dashboard',
     title: 'Trang chủ',
     icon: <Home size={20} />,
-    navLink: '/dashboard'
+    navLink: '/dashboard/classes'
   },
   {
     id: 'contract-create',

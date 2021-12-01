@@ -12,9 +12,9 @@ import {
   Button,
 } from "reactstrap";
 
-const ProfileHeader = ({ data }) => {
+const ProfileHeader = ({ data, location }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  console.log("active", location);
   const toggle = () => setIsOpen(!isOpen);
 
   return (
@@ -49,7 +49,7 @@ const ProfileHeader = ({ data }) => {
               <Nav className="mb-0" pills>
                 <NavItem>
                   <Link to="/profile/info">
-                    <NavLink className="font-weight-bold" active>
+                    <NavLink className={`font-weight-bold ${location?.pathname?.includes("/profile/info") ? 'active' : ""}`}>
                       <span className="d-none d-md-block">
                         Thông tin tài khoản
                       </span>
@@ -59,7 +59,7 @@ const ProfileHeader = ({ data }) => {
                 </NavItem>
                 <NavItem>
                   <Link to="/profile/change-password">
-                    <NavLink className="font-weight-bold" >
+                    <NavLink className={`font-weight-bold ${location?.pathname?.includes("/profile/change-password") ? 'active' : ""}`}>
                       <span className="d-none d-md-block">Đổi mật khẩu</span>
                       <Info className="d-block d-md-none" size={14} />
                     </NavLink>

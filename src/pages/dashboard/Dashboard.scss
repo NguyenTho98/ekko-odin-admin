@@ -1,9 +1,37 @@
 #dashboard-ecommerce{
     .nav-header-top{
-        height: 40px;
-        background: #fff;
+        height: 45px;
+        background: #fff !important;
         width: 100%;
         margin-bottom: 10px;
-        border-radius: 5px;
+        position: absolute;
+        top: 62px;
+        left: 0px;
+        z-index: 99;
+        .content-header{
+            height: 45px;
+            a{
+                color: #6e6b7b;
+                height: 100%;
+            }
+            .item{
+                width: 120px;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                &:hover{
+                    background-color: rgba(115, 103, 240, 0.12);
+                    font-weight: 500;
+                    color: #7367f0;
+                }
+            }
+            .active{
+                border-bottom: 2px solid #7367f0;
+                font-weight: 500;
+                color: #7367f0;
+            }
+        }
     }
 }
