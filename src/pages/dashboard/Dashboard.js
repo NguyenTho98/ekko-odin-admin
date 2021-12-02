@@ -21,12 +21,25 @@ import Students from "./students/Students";
 import Teachers from "./teachers/Teachers";
 import Classes from "./classes/Classes";
 import Filter from "./Filter/Filter";
+import Overview from "./overview/Overview";
 const Dashboard = (props) => {
   const { location } = props;
   return (
     <div id="dashboard-ecommerce">
       <Card className="nav-header-top">
         <div className="d-flex align-items-center content-header">
+        <Link to="/dashboard/overview">
+            {" "}
+            <div
+              className={`item ${
+                location?.pathname?.includes("/dashboard/overview")
+                  ? "active"
+                  : ""
+              }`}
+            >
+              Tổng quan
+            </div>
+          </Link>
           <Link to="/dashboard/classes">
             {" "}
             <div
@@ -68,6 +81,7 @@ const Dashboard = (props) => {
       <div id="dashboard-ecommerce" style={{paddingTop: 30}}>
         <Filter />
         <Route path={"/dashboard/classes"} component={() => <Classes />} />
+        <Route path={"/dashboard/overview"} component={() => <Overview />} />
         <Route path={"/dashboard/students"} component={() => <Students />} />
         <Route path={"/dashboard/teachers"} component={() => <Teachers />} />
       </div>

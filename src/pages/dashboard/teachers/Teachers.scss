@@ -1,0 +1,26 @@
+.report-teachers-wrapper{
+    .card-01-body{
+        padding-bottom: 0px;
+        .item{
+            padding: 30px 20px;
+            .icon{
+                margin-right: 10px;
+            }
+            .item-content{
+                .title{
+                    font-weight: 500;
+                }
+                .sub-title{
+                    font-weight: 500;
+                    margin-top: 5px;
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+    .card-02{
+        .card-02-body{
+            padding: 0px;
+        }
+    }
+}

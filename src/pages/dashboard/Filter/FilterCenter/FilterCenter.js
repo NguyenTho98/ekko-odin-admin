@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { getCenterList } from "../../../center/CenterAction";
 
 import "./styles.scss";
 
@@ -16,7 +17,17 @@ function GroupBy(props) {
   const { search } = history.location;
   const searchParams = new URLSearchParams(search);
   const group = searchParams.get("group");
-
+  const [centerData, setCenterData] = useState([]);
+  const [center, setCenter] = useState();
+  useEffect(() => {
+    handleFetchCenterData();
+  }, []);
+  const handleFetchCenterData = async () => {
+    try {
+      const { data } = await getCenterList();
+      setCenterData(data?.results || []);
+    } catch (error) {}
+  };
   const convertToIndex = () => {
     switch (group) {
       case "day":
@@ -48,7 +59,7 @@ function GroupBy(props) {
   };
 
   useEffect(() => {
-    if (currentShow !== "centerby") {
+    if (currentShow !== "groupby") {
       setShow(false);
     }
   }, [currentShow]);
@@ -65,7 +76,7 @@ function GroupBy(props) {
   };
 
   const handleClick = (e) => {
-    setCurrentShow("centerby");
+    setCurrentShow("groupby");
     e.stopPropagation();
   };
 
@@ -77,20 +88,20 @@ function GroupBy(props) {
   };
 
   const onClick = () => {
-    if (currentShow === "centerby") {
+    if (currentShow === "groupby") {
       setShow(!show);
     }
-    setCurrentShow("centerby");
+    setCurrentShow("groupby");
   };
 
   return (
     <div
-      className="position-relative report-filter-group-by"
+      className="position-relative report-filter-center"
       onClick={handleClick}
-      onMouseDown={() => setCurrentShow("centerby")}
+      onMouseDown={() => setCurrentShow("groupby")}
     >
       <div
-        className="d-flex align-items-center report-group-by"
+        className="d-flex align-items-center report-center"
         onClick={onClick}
       >
         <svg
@@ -101,13 +112,21 @@ function GroupBy(props) {
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M16.6972 8.93412L13.0156 7.23492V2.36635C13.0139 2.26421 12.983 2.16471 12.9265 2.07971C12.87 1.99471 12.7903 1.9278 12.6969 1.88696L8.71249 0.0492587C8.64256 0.0168082 8.56643 0 8.48937 0C8.41231 0 8.33618 0.0168082 8.26624 0.0492587L4.28187 1.88696C4.18966 1.92975 4.11162 1.99815 4.057 2.08407C4.00239 2.16998 3.9735 2.2698 3.97375 2.37168V7.24025L0.308126 8.93412C0.215912 8.97691 0.137871 9.04532 0.0832576 9.13124C0.0286444 9.21715 -0.000249807 9.31697 1.62708e-06 9.41885V14.6283C-0.000249807 14.7302 0.0286444 14.83 0.0832576 14.9159C0.137871 15.0018 0.215912 15.0703 0.308126 15.113L4.2925 16.9507C4.36243 16.9832 4.43857 17 4.51562 17C4.59268 17 4.66882 16.9832 4.73875 16.9507L8.5 15.2142L12.2612 16.9507C12.3312 16.9832 12.4073 17 12.4844 17C12.5614 17 12.6376 16.9832 12.7075 16.9507L16.6919 15.113C16.7841 15.0703 16.8621 15.0018 16.9167 14.9159C16.9713 14.83 17.0002 14.7302 17 14.6283V9.41885C17.0007 9.31754 16.9726 9.21813 16.919 9.13228C16.8653 9.04642 16.7884 8.97768 16.6972 8.93412ZM15.2044 9.41885L12.4897 10.66L9.77499 9.41885L12.4897 8.16708L15.2044 9.41885ZM8.5 1.11459L11.2147 2.36635L8.5 3.61812L5.79062 2.36635L8.5 1.11459ZM4.51562 8.16176L7.23031 9.41352L4.51562 10.66L1.80094 9.41885L4.51562 8.16176ZM7.96875 14.2821L4.51562 15.8801L1.0625 14.2821V10.2498L4.2925 11.7253C4.36099 11.7562 4.43522 11.7721 4.51031 11.7721C4.5854 11.7721 4.65964 11.7562 4.72812 11.7253L7.95812 10.2338L7.96875 14.2821ZM5.04687 7.23492V3.20264L8.27687 4.6941C8.3468 4.72655 8.42294 4.74336 8.5 4.74336C8.57705 4.74336 8.65319 4.72655 8.72312 4.6941L11.9531 3.20264V7.24025L8.5 8.83824L5.04687 7.23492ZM15.9428 14.2874L12.4897 15.8854L9.03125 14.2874V10.2445L12.2666 11.7253C12.3343 11.7554 12.4076 11.7709 12.4817 11.7709C12.5558 11.7709 12.6291 11.7554 12.6969 11.7253L15.9269 10.2338L15.9428 14.2874Z"
-            fill="#939597"
+            d="M14.875 7.08301C14.875 12.0413 8.5 16.2913 8.5 16.2913C8.5 16.2913 2.125 12.0413 2.125 7.08301C2.125 5.39225 2.79665 3.77075 3.99219 2.5752C5.18774 1.37966 6.80924 0.708008 8.5 0.708008C10.1908 0.708008 11.8123 1.37966 13.0078 2.5752C14.2033 3.77075 14.875 5.39225 14.875 7.08301Z"
+            stroke="#7B7B7B"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M8.5 9.20801C9.6736 9.20801 10.625 8.25661 10.625 7.08301C10.625 5.9094 9.6736 4.95801 8.5 4.95801C7.32639 4.95801 6.375 5.9094 6.375 7.08301C6.375 8.25661 7.32639 9.20801 8.5 9.20801Z"
+            stroke="#7B7B7B"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           />
         </svg>
         <div className="content">
-          Gộp theo:
-          <span>&nbsp;{arr[convertToIndex()]}</span>
+          Tất cả cơ sở học
+          {/* <span>&nbsp;{arr[convertToIndex()]}</span> */}
         </div>
         <svg
           width="12"
@@ -125,16 +144,16 @@ function GroupBy(props) {
           />
         </svg>
       </div>
-      {show && currentShow === "centerby" ? (
+      {show && currentShow === "groupby" ? (
         <div className="position-absolute select-time-type">
-          {arr.map((item, index) => {
+          {centerData.map((item, index) => {
             return (
               <div
-                className="d-flex align-items-center justify-content-between group-by-item"
+                className="d-flex align-items-center justify-content-between center-item"
                 key={index}
                 onClick={() => handleSelect(index)}
               >
-                <span>{item}</span>
+                <span>{item.name}</span>
                 {convertToIndex() === index ? (
                   <svg
                     width="15"

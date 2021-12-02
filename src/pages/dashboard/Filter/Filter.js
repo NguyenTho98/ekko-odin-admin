@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import FilterByDate from "./FilterByDate/FilterByDate";
 import GroupBy from "./GroupBy/GroupBy";
+import FilterCenter from "./FilterCenter/FilterCenter";
 import { useHistory } from "react-router-dom";
 
 function Filter() {
@@ -14,6 +15,7 @@ function Filter() {
     <div className="d-flex flex-wrap align-items-center">
       <GroupBy currentShow={currentShow} setCurrentShow={setCurrentShow} />
       <FilterByDate />
+      <FilterCenter currentShow={currentShow} setCurrentShow={setCurrentShow}/>
     </div>
   );
 }

@@ -1,0 +1,40 @@
+.report-filter-center {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 10px;
+    margin-left: 25px;
+    .report-center {
+      background-color: #FFF;
+      position: relative;
+      display: flex;
+      align-items: center;
+      border: 1px solid #EAEAEA;
+      border-radius: 32px;
+      padding: 9.5px 15px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      .content {
+        margin: 0 7px;
+      }
+    }
+    .select-time-type {
+      border-radius: 4px;
+      background-color: #FFF;
+      border: 1px solid #EAEAEA;
+      width: 100%;
+      top: 50px;
+      padding: 5px 10px;
+      z-index: 1;
+      .center-item {
+        padding: 5px;
+        cursor: pointer;
+        &:hover {
+          background-color: #EBF6FF;
+        }
+      }
+    }
+  }
+  

@@ -14,6 +14,11 @@ const AppOdinRoutes = [
     }
   },
   {
+    path: '/dashboard/overview',
+    exact: true,
+    component: lazy(() => import('../../pages/dashboard/Dashboard'))
+  },
+  {
     path: '/dashboard/classes',
     exact: true,
     component: lazy(() => import('../../pages/dashboard/Dashboard'))

@@ -18,42 +18,13 @@ import { Edit } from "react-feather";
 import CustomInput from "reactstrap/lib/CustomInput";
 import "./Classes.scss";
 const Classes = () => {
-  const [centerData, setCenterData] = useState([]);
-  const [center, setCenter] = useState();
-  useEffect(() => {
-    handleFetchCenterData();
-  }, []);
-  const handleFetchCenterData = async () => {
-    try {
-      const { data } = await getCenterList();
-      setCenterData(data?.results || []);
-    } catch (error) {}
-  };
-  console.log("center", center);
+  
   return (
     <Row className="report-classes-wrapper match-height">
       <Col xl="12" md="12" xs="12">
         <Card className="card-01">
           <CardHeader className="card-01-header border-bottom">
             <CardTitle tag="h4">Tổng quan tình trạng lớp học</CardTitle>
-            <CardText className="card-text mr-25 mb-0">
-              <div style={{ width: 200 }}>
-                <Select
-                  isClearable={false}
-                  theme={selectThemeColors}
-                  name="colors"
-                  options={centerData}
-                  getOptionLabel={(option) => option.name}
-                  getOptionValue={(option) => option.id}
-                  className="react-select"
-                  classNamePrefix="select"
-                  placeholder="Tất cả các cơ sở học"
-                  value={center}
-                  isClearable
-                  onChange={(item) => setCenter(item)}
-                />
-              </div>
-            </CardText>
           </CardHeader>
           <CardBody className="card-01-body">
             <Row>
