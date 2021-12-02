@@ -18,7 +18,7 @@ export const getUserInfo = (history) => async (dispatch) => {
     dispatch({ type: actionType.FETCH_PROFILE, payload: data });
     // dispatch(actionToggleLoading(false));
     if (history) {
-      history.push("/center");
+      history.push("/dashboard/classes");
     }
   } catch (error) {
     console.log(error);

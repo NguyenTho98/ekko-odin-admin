@@ -20,8 +20,7 @@ const Teachers = () => {
     trackBgColor = '#e9ecef'
 
   return (
-    <div id='dashboard-ecommerce'>
-      <Row className='pt-4 match-height'>
+      <Row className='match-height'>
         <Col lg='8' xs='12'>
           <CompanyTable />
         </Col>
@@ -38,7 +37,6 @@ const Teachers = () => {
           <CardTransactions />
         </Col>
       </Row>
-    </div>
   )
 }
 

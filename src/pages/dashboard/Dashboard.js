@@ -20,20 +20,57 @@ import { Link, Route } from "react-router-dom";
 import Students from "./students/Students";
 import Teachers from "./teachers/Teachers";
 import Classes from "./classes/Classes";
+import Filter from "./Filter/Filter";
 const Dashboard = (props) => {
   const { location } = props;
   return (
     <div id="dashboard-ecommerce">
       <Card className="nav-header-top">
         <div className="d-flex align-items-center content-header">
-          <Link to="/dashboard/classes"> <div className={`item ${location?.pathname?.includes("/dashboard/classes") ? 'active' : ""}`}>Lớp học</div></Link>
-          <Link to="/dashboard/students"> <div className={`item ${location?.pathname?.includes("/dashboard/students") ? 'active' : ""}`}>Học viên</div></Link>
-          <Link to="/dashboard/teachers"> <div className={`item ${location?.pathname?.includes("/dashboard/teachers") ? 'active' : ""}`}>Giảng viên</div></Link>
+          <Link to="/dashboard/classes">
+            {" "}
+            <div
+              className={`item ${
+                location?.pathname?.includes("/dashboard/classes")
+                  ? "active"
+                  : ""
+              }`}
+            >
+              Lớp học
+            </div>
+          </Link>
+          <Link to="/dashboard/students">
+            {" "}
+            <div
+              className={`item ${
+                location?.pathname?.includes("/dashboard/students")
+                  ? "active"
+                  : ""
+              }`}
+            >
+              Học viên
+            </div>
+          </Link>
+          <Link to="/dashboard/teachers">
+            {" "}
+            <div
+              className={`item ${
+                location?.pathname?.includes("/dashboard/teachers")
+                  ? "active"
+                  : ""
+              }`}
+            >
+              Giảng viên
+            </div>
+          </Link>
         </div>
       </Card>
-      <Route path={"/dashboard/classes"} component={() => <Classes />} />
-      <Route path={"/dashboard/students"} component={() => <Students />} />
-      <Route path={"/dashboard/teachers"} component={() => <Teachers />} />
+      <div id="dashboard-ecommerce" style={{paddingTop: 30}}>
+        <Filter />
+        <Route path={"/dashboard/classes"} component={() => <Classes />} />
+        <Route path={"/dashboard/students"} component={() => <Students />} />
+        <Route path={"/dashboard/teachers"} component={() => <Teachers />} />
+      </div>
     </div>
   );
 };

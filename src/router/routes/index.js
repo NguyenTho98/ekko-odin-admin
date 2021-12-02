@@ -16,7 +16,7 @@ import AppOdinRoutes from './AppOdin'
 const TemplateTitle = '%s - Odin React Admin Template'
 
 // ** Default Route
-const DefaultRoute = '/center'
+const DefaultRoute = '/dashboard/classes'
 
 // ** Merge Routes
 const Routes = [

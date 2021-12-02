@@ -14,11 +14,12 @@ import {
   Row,
 } from "reactstrap";
 import { selectThemeColors } from "@utils";
+import Select, { components } from "react-select";
 import { toastSuccess } from "../../utility/common/toastify";
 import { isEmpty } from "../../utility/Utils";
 import { actionAddManagers, actionEditManagers } from "./ManagersAction";
 import { getCenterList } from "../center/CenterAction";
-import Select, { components } from "react-select";
+
 import Flatpickr from "react-flatpickr";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
 import moment from "moment";
