@@ -34,8 +34,8 @@ const Teachers = () => {
                     <IconsLeft />
                   </div>
                   <div className="item-content">
-                    <div className="title">Lớp đang dạy</div>
-                    <div className="sub-title">10</div>
+                    <div className="title">Tổng số giảng viên</div>
+                    <div className="sub-title">60</div>
                   </div>
                 </div>
               </Col>
@@ -45,7 +45,7 @@ const Teachers = () => {
                     <IconsCenter />
                   </div>
                   <div className="item-content">
-                    <div className="title">Lớp sắp mở</div>
+                    <div className="title">Tổng số trợ giảng</div>
                     <div className="sub-title">10</div>
                   </div>
                 </div>
@@ -56,7 +56,7 @@ const Teachers = () => {
                     <IconsRight />
                   </div>
                   <div className="item-content">
-                    <div className="title">Lớp đã kết thúc</div>
+                    <div className="title">Tổng số CTV</div>
                     <div className="sub-title">10</div>
                   </div>
                 </div>
@@ -72,158 +72,54 @@ const Teachers = () => {
             <Table striped responsive>
               <thead>
                 <tr>
-                  <th style={{ borderBottom: "0px solid " }}>Trung tâm</th>
-                  <th style={{ borderBottom: "0px solid " }}>Tên lớp</th>
-                  <th style={{ borderBottom: "0px solid " }}>Giáo viên</th>
-                  <th style={{ borderBottom: "0px solid " }}>Trạng thái</th>
-                  <th style={{ borderBottom: "0px solid " }}>Ngày bắt đầu</th>
-                  <th style={{ borderBottom: "0px solid " }}>Ngày kết thúc</th>
-                  <th style={{ borderBottom: "0px solid " }}>Số học viên</th>
-                  <th style={{ borderBottom: "0px solid " }}>Số buổi đã học</th>
+                  <th style={{ borderBottom: "0px solid " }}>Họ và tên</th>
+                  <th style={{ borderBottom: "0px solid " }}>Email</th>
+                  <th style={{ borderBottom: "0px solid " }}>Số điện thoại</th>
+                  <th style={{ borderBottom: "0px solid " }}>Tổng số lớp đang dạy</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Trần Đại Nghĩ</td>
-                  <td>BBST</td>
                   <td>Nguyễn Thị Hương</td>
-                  <td>
-                    <Badge color="light-primary" pill style={{ fontWeight: 400 }}>
-                      Đang dạy
-                    </Badge>
-                  </td>
-                  <td>20/11/2021</td>
-                  <td>20/11/2021</td>
+                  <td>nxtho0109@gmail.com</td>
+                  <td>0357004230</td>
                   <td>30</td>
-                  <td>10</td>
                 </tr>
                 <tr>
-                  <td>Trần Đại Nghĩ</td>
-                  <td>BBST</td>
                   <td>Nguyễn Thị Hương</td>
-                  <td>
-                    {" "}
-                    <Badge color="light-success" pill style={{ fontWeight: 400 }}>
-                      Sắp mở{" "}
-                    </Badge>
-                  </td>
-                  <td>20/11/2021</td>
-                  <td>20/11/2021</td>
+                  <td>nxtho0109@gmail.com</td>
+                  <td>0357004230</td>
                   <td>30</td>
-                  <td>10</td>
                 </tr>
                 <tr>
-                  <td>Trần Đại Nghĩ</td>
-                  <td>BBST</td>
                   <td>Nguyễn Thị Hương</td>
-                  <td>
-                    {" "}
-                    <Badge color="light-success" pill style={{ fontWeight: 400 }}>
-                      Sắp mở{" "}
-                    </Badge>
-                  </td>
-                  <td>20/11/2021</td>
-                  <td>20/11/2021</td>
+                  <td>nxtho0109@gmail.com</td>
+                  <td>0357004230</td>
                   <td>30</td>
-                  <td>10</td>
                 </tr>
                 <tr>
-                  <td>Trần Đại Nghĩ</td>
-                  <td>BBST</td>
                   <td>Nguyễn Thị Hương</td>
-                  <td>
-                    <Badge color="light-danger" pill style={{ fontWeight: 400 }}>
-                      Kết thúc
-                    </Badge>
-                  </td>
-                  <td>20/11/2021</td>
-                  <td>20/11/2021</td>
+                  <td>nxtho0109@gmail.com</td>
+                  <td>0357004230</td>
                   <td>30</td>
-                  <td>10</td>
                 </tr>
                 <tr>
-                  <td>Trần Đại Nghĩ</td>
-                  <td>BBST</td>
                   <td>Nguyễn Thị Hương</td>
-                  <td>
-                    <Badge color="light-danger" pill style={{ fontWeight: 400 }}>
-                      Kết thúc
-                    </Badge>
-                  </td>
-                  <td>20/11/2021</td>
-                  <td>20/11/2021</td>
+                  <td>nxtho0109@gmail.com</td>
+                  <td>0357004230</td>
                   <td>30</td>
-                  <td>10</td>
                 </tr>
                 <tr>
-                  <td>Trần Đại Nghĩ</td>
-                  <td>BBST</td>
                   <td>Nguyễn Thị Hương</td>
-                  <td>
-                    <Badge color="light-danger" pill style={{ fontWeight: 400 }}>
-                      Kết thúc
-                    </Badge>
-                  </td>
-                  <td>20/11/2021</td>
-                  <td>20/11/2021</td>
+                  <td>nxtho0109@gmail.com</td>
+                  <td>0357004230</td>
                   <td>30</td>
-                  <td>10</td>
                 </tr>
                 <tr>
-                  <td>Trần Đại Nghĩ</td>
-                  <td>BBST</td>
                   <td>Nguyễn Thị Hương</td>
-                  <td>
-                  <Badge color="light-success" pill style={{ fontWeight: 400 }}>
-                      Sắp mở{" "}
-                    </Badge>
-                  </td>
-                  <td>20/11/2021</td>
-                  <td>20/11/2021</td>
+                  <td>nxtho0109@gmail.com</td>
+                  <td>0357004230</td>
                   <td>30</td>
-                  <td>10</td>
-                </tr>
-                <tr>
-                  <td>Trần Đại Nghĩ</td>
-                  <td>BBST</td>
-                  <td>Nguyễn Thị Hương</td>
-                  <td>
-                  <Badge color="light-success" pill style={{ fontWeight: 400 }}>
-                      Sắp mở{" "}
-                    </Badge>
-                  </td>
-                  <td>20/11/2021</td>
-                  <td>20/11/2021</td>
-                  <td>30</td>
-                  <td>10</td>
-                </tr>
-                <tr>
-                  <td>Trần Đại Nghĩ</td>
-                  <td>BBST</td>
-                  <td>Nguyễn Thị Hương</td>
-                  <td>
-                  <Badge color="light-success" pill style={{ fontWeight: 400 }}>
-                      Sắp mở{" "}
-                    </Badge>
-                  </td>
-                  <td>20/11/2021</td>
-                  <td>20/11/2021</td>
-                  <td>30</td>
-                  <td>10</td>
-                </tr>
-                <tr>
-                  <td>Trần Đại Nghĩ</td>
-                  <td>BBST</td>
-                  <td>Nguyễn Thị Hương</td>
-                  <td>
-                  <Badge color="light-success" pill style={{ fontWeight: 400 }}>
-                      Sắp mở{" "}
-                    </Badge>
-                  </td>
-                  <td>20/11/2021</td>
-                  <td>20/11/2021</td>
-                  <td>30</td>
-                  <td>10</td>
                 </tr>
               </tbody>
             </Table>

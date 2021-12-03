@@ -90,7 +90,7 @@ const Overview = () => {
                 <Icons6 />
               </div>
               <div className="content-overview">
-                <div className="title">Tổng số lớp đang mở</div>
+                <div className="title">Tổng số lớp đã kết thúc</div>
                 <div className="sub-title">10</div>
               </div>
             </div>

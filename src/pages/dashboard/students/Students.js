@@ -97,49 +97,59 @@ const Students = () => {
                   <td>TĐN-E-2107-003</td>
                   <td>Nguyễn Thị Phương Thảo </td>
                   <td>20/11/2021</td>
-                  <td>
-                  919285387
-                  </td>
+                  <td>919285387</td>
                   <td>20/11/2021</td>
                   <td>Đã hoàn thành</td>
                   <td>TĐN-IE129</td>
-                  <td>Nhắc nhở</td>
+                  <td>
+                    {" "}
+                    <Badge color="light-primary" pill>
+                      Nhắc nhở
+                    </Badge>
+                  </td>
                 </tr>
                 <tr>
                   <td>TĐN-E-2107-003</td>
                   <td>Nguyễn Thị Phương Thảo </td>
                   <td>20/11/2021</td>
-                  <td>
-                  919285387
-                  </td>
+                  <td>919285387</td>
                   <td>20/11/2021</td>
                   <td>27,804,000</td>
                   <td>TĐN-IE129</td>
-                  <td>Bảo lưu</td>
+                  <td>
+                    {" "}
+                    <Badge color="light-success" pill>
+                      Bảo lưu
+                    </Badge>
+                  </td>
                 </tr>
                 <tr>
                   <td>TĐN-E-2107-003</td>
                   <td>Nguyễn Thị Phương Thảo </td>
                   <td>20/11/2021</td>
-                  <td>
-                  919285387
-                  </td>
+                  <td>919285387</td>
                   <td>20/11/2021</td>
                   <td>27,804,000</td>
                   <td>TĐN-IE129</td>
-                  <td>Thanh lý hợp đồng</td>
+                  <td>
+                    <Badge color="light-danger" pill>
+                      Thanh lý hợp đồng
+                    </Badge>
+                  </td>
                 </tr>
                 <tr>
                   <td>TĐN-E-2107-003</td>
                   <td>Nguyễn Thị Phương Thảo </td>
                   <td>20/11/2021</td>
-                  <td>
-                  919285387
-                  </td>
+                  <td>919285387</td>
                   <td>20/11/2021</td>
                   <td>27,804,000</td>
                   <td>TĐN-IE129</td>
-                  <td>Mất cam kết</td>
+                  <td>
+                    <Badge color="light-warning" pill>
+                      Mất cam kết
+                    </Badge>
+                  </td>
                 </tr>
               </tbody>
             </Table>
@@ -243,10 +253,28 @@ const Icons3 = () => {
 
 const Icons4 = () => {
   return (
-    <svg width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="31" cy="31" r="31" fill="#19D38B"/>
-<path d="M42.5834 29.3881V30.4998C42.5819 33.1055 41.7382 35.6409 40.178 37.7278C38.6179 39.8148 36.4249 41.3415 33.9261 42.0803C31.4274 42.8191 28.7568 42.7304 26.3126 41.8274C23.8684 40.9244 21.7815 39.2555 20.3633 37.0696C18.9451 34.8837 18.2715 32.2979 18.4429 29.6978C18.6144 27.0978 19.6217 24.6229 21.3147 22.6421C23.0076 20.6613 25.2955 19.2809 27.8371 18.7066C30.3788 18.1324 33.0379 18.3951 35.418 19.4556" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M42.5833 20.8335L30.5 32.9289L26.875 29.3039" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+    <svg
+      width="62"
+      height="62"
+      viewBox="0 0 62 62"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="31" cy="31" r="31" fill="#19D38B" />
+      <path
+        d="M42.5834 29.3881V30.4998C42.5819 33.1055 41.7382 35.6409 40.178 37.7278C38.6179 39.8148 36.4249 41.3415 33.9261 42.0803C31.4274 42.8191 28.7568 42.7304 26.3126 41.8274C23.8684 40.9244 21.7815 39.2555 20.3633 37.0696C18.9451 34.8837 18.2715 32.2979 18.4429 29.6978C18.6144 27.0978 19.6217 24.6229 21.3147 22.6421C23.0076 20.6613 25.2955 19.2809 27.8371 18.7066C30.3788 18.1324 33.0379 18.3951 35.418 19.4556"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M42.5833 20.8335L30.5 32.9289L26.875 29.3039"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
   );
 };
