@@ -46,6 +46,10 @@ const AppOdinRoutes = [
     path: '/profile/change-password',
     component: lazy(() => import('../../pages/profile/Profile')),
   },
+  {
+    path: '/email',
+    component: lazy(() => import('../../pages/emails/Emails')),
+  },
 ]
 
 export default AppOdinRoutes
