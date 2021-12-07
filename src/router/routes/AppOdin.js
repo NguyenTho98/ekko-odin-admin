@@ -48,6 +48,9 @@ const AppOdinRoutes = [
   },
   {
     path: '/email',
+    exact: true,
+    appLayout: true,
+    className: 'email-application',
     component: lazy(() => import('../../pages/emails/Emails')),
   },
 ]

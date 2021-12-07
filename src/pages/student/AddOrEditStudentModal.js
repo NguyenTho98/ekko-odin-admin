@@ -135,6 +135,18 @@ function AddOrEditStudentModal(props) {
               </Col>
               <Col sm="6">
                 <FormGroup>
+                  <Label for="nameVertical">Mật khẩu</Label>
+                  <Input
+                    type="text"
+                    name="password"
+                    value={object?.password}
+                    onChange={hanldChange}
+                    placeholder="Mật khẩu"
+                  />
+                </FormGroup>
+              </Col>
+              <Col sm="6">
+                <FormGroup>
                   <Label for="nameVertical">Số điện thoại</Label>
                   <Input
                     type="number"
