@@ -125,7 +125,7 @@ function GroupBy(props) {
           />
         </svg>
         <div className="content">
-          Tất cả cơ sở học
+          Tất cả cơ sở học 
           {/* <span>&nbsp;{arr[convertToIndex()]}</span> */}
         </div>
         <svg
