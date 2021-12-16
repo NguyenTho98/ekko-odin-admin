@@ -96,7 +96,7 @@ const CustomHeader = ({
 };
 let params = {
   offset: 0,
-  limit: 20,
+  limit: 25,
 };
 const Reward = (props) => {
   const { profile, actionGetRewards, rewards = {}, isFetching } = props;
@@ -107,25 +107,24 @@ const Reward = (props) => {
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [statusValue, setStatusValue] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(params.limit);
   useEffect(() => {
     return () => {
       params = {
         offset: 0,
-        limit: 10,
+        limit: 25,
       };
     };
   }, []);
 
   useEffect(() => {
     if (!isEmpty(profile)) {
-      console.log("rewards", rewards);
       handleFetchReward(params);
     }
   }, [profile]);
 
   const handleFetchReward = (params = {}) => {
-    actionGetRewards({ ...params, offset: params.offset - 1 });
+    actionGetRewards({ ...params });
   };
 
   const handleEditItem = (items = {}) => {
@@ -138,12 +137,18 @@ const Reward = (props) => {
     setVisibleModalDelete(true);
   };
 
+  const renderType = (value) => {
+    if (value === 2) {
+      return "Quà tặng"
+    }
+    return "Giảm giá"
+  }
   const columns = [
-    {
-      name: "#",
-      selector: "id",
-      cell: (row) => <span>{`#${row.id}`}</span>,
-    },
+    // {
+    //   name: "#",
+    //   selector: "id",
+    //   cell: (row) => <span>{`#${row.id}`}</span>,
+    // },
     {
       name: "Tiêu đề",
       selector: "title",
@@ -154,7 +159,7 @@ const Reward = (props) => {
       name: "Loại ưu đãi",
       selector: "type",
       sortable: true,
-      cell: (row) => row.type || "---",
+      cell: (row) => renderType(row.type) || "---",
     },
     {
       name: "Số lượng",
@@ -237,17 +242,6 @@ const Reward = (props) => {
       ),
     },
   ];
-  //   useEffect(() => {
-  //     dispatch(
-  //       getData({
-  //         page: currentPage,
-  //         perPage: rowsPerPage,
-  //         status: statusValue,
-  //         q: value,
-  //       })
-  //     );
-  //   }, [dispatch, store.data.length]);
-
   const handleFilter = (val) => {
     setValue(val);
     // dispatch(
@@ -269,6 +263,7 @@ const Reward = (props) => {
     //     q: value,
     //   })
     // );
+    actionGetRewards({ ...params, limit:e.target.value })
     setRowsPerPage(parseInt(e.target.value));
   };
 
@@ -285,14 +280,7 @@ const Reward = (props) => {
   };
 
   const handlePagination = (page) => {
-    // dispatch(
-    //   getData({
-    //     page: page.selected + 1,
-    //     perPage: rowsPerPage,
-    //     status: statusValue,
-    //     q: value,
-    //   })
-    // );
+    actionGetRewards({ ...params, limit: rowsPerPage, offset: (page.selected) * rowsPerPage })
     setCurrentPage(page.selected + 1);
   };
   const handleAddNew = useCallback(() => {

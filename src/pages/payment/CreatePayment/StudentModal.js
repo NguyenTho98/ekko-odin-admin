@@ -14,7 +14,7 @@ import {
   Row,
 } from "reactstrap";
 import { selectThemeColors } from "@utils";
-import { toastSuccess } from "../../../utility/common/toastify";
+import { toastError, toastSuccess } from "../../../utility/common/toastify";
 import { isEmpty } from "../../../utility/Utils";
 import { actionAddStudent, actionEditStudent } from "../../student/StudentAction";
 import { getCenterList } from "../../center/CenterAction";
@@ -23,9 +23,8 @@ import Flatpickr from "react-flatpickr";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
 import moment from "moment";
 function StudentModal(props) {
-  const { visible, onCancel, setStudent, item = {} } = props;
+  const { visible, onCancel, setStudent, item = {}, setStudentData, studentData, autoFocusCourse } = props;
   const [picker, setPicker] = useState(item?.birth_day ? new Date(item?.birth_day) : '');
- 
   const isAddNew = isEmpty(item);
   const [object, setObject] = useState({  });
   const [centerData, setCenterData] = useState([]);
@@ -48,6 +47,27 @@ function StudentModal(props) {
   };
   console.log("object", object);
   const onSummit = async () => {
+   
+    if (!object.full_name) {
+      toastError('Vui lòng nhập họ và tên')
+      return;
+    }
+    if (!object.username) {
+      toastError('Vui lòng nhập tên đăng nhập')
+      return;
+    }
+    if (!object.password) {
+      toastError('Vui lòng nhập tên password')
+      return;
+    }
+    if (!object.email) {
+      toastError('Vui lòng nhập email')
+      return;
+    }
+    if (!center) {
+      toastError('Vui lòng chọn trung tâm')
+      return;
+    }
     const data = {
       ...object,
       center: center.id,
@@ -56,9 +76,12 @@ function StudentModal(props) {
     if (isAddNew) {
       const res = await actionAddStudent(data);
       if (res && res.data) {
-          console.log("res", res.data);
           setStudent(res.data)
-      }
+          const tmp = [...studentData];
+          tmp.push(res.data)
+          setStudentData(tmp)
+          autoFocusCourse()
+      } 
       toastSuccess("Thêm mới học viên thành công");
     } else {
       await actionEditStudent(data, item?.id);
@@ -130,6 +153,22 @@ function StudentModal(props) {
                   />
                 </FormGroup>
               </Col>
+              {isAddNew ? (
+                <Col sm="6">
+                  <FormGroup>
+                    <Label for="nameVertical">Mật khẩu</Label>
+                    <Input
+                      type="text"
+                      name="password"
+                      value={object?.password}
+                      onChange={hanldChange}
+                      placeholder="Mật khẩu"
+                    />
+                  </FormGroup>
+                </Col>
+              ) : (
+                ""
+              )}
               <Col sm="6">
                 <FormGroup>
                   <Label for="nameVertical">Số điện thoại</Label>

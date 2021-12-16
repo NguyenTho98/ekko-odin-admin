@@ -86,8 +86,8 @@ const CustomHeader = ({
   );
 };
 let params = {
-    page: 1,
-    size: 20,
+    limit: 25,
+    offset: 0,
     query: "",
 };
 const Course = (props) => {
@@ -99,12 +99,12 @@ const Course = (props) => {
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [statusValue, setStatusValue] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(params.limit);
   useEffect(() => {
     return () => {
       params = {
-        page: 1,
-        size: 20,
+        limit: 25,
+        offset: 0,
         query: "",
       };
     };
@@ -118,7 +118,7 @@ const Course = (props) => {
   }, [profile]);
 
   const handleFetchCourse = (params = {}) => {
-    actionGetCourses({ ...params, page: params.page - 1 });
+    actionGetCourses({ ...params });
   };
 
   const handleEditItem = (items = {}) => {
@@ -132,12 +132,12 @@ const Course = (props) => {
   }
 
   const columns = [
-    {
-      name: '#',
-      minWidth: '107px',
-      selector: 'id',
-      cell: row => <span>{`#${row.id}`}</span>
-    },
+    // {
+    //   name: '#',
+    //   minWidth: '107px',
+    //   selector: 'id',
+    //   cell: row => <span>{`#${row.id}`}</span>
+    // },
     {
       name: 'Tên khóa học',
       selector: 'name',
@@ -195,17 +195,6 @@ const Course = (props) => {
       )
     }
   ]
-//   useEffect(() => {
-//     dispatch(
-//       getData({
-//         page: currentPage,
-//         perPage: rowsPerPage,
-//         status: statusValue,
-//         q: value,
-//       })
-//     );
-//   }, [dispatch, store.data.length]);
-
   const handleFilter = (val) => {
     setValue(val);
     // dispatch(
@@ -227,6 +216,7 @@ const Course = (props) => {
     //     q: value,
     //   })
     // );
+    actionGetCourses({ ...params, limit:e.target.value })
     setRowsPerPage(parseInt(e.target.value));
   };
 
@@ -243,14 +233,7 @@ const Course = (props) => {
   };
 
   const handlePagination = (page) => {
-    // dispatch(
-    //   getData({
-    //     page: page.selected + 1,
-    //     perPage: rowsPerPage,
-    //     status: statusValue,
-    //     q: value,
-    //   })
-    // );
+    actionGetCourses({ ...params, limit: rowsPerPage, offset: (page.selected) * rowsPerPage })
     setCurrentPage(page.selected + 1);
   };
   const handleAddNew = useCallback(() => {

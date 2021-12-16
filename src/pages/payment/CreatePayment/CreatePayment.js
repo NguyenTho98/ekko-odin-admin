@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import "./CreatePayment.scss";
 import Select, { components } from "react-select";
 import Breadcrumbs from "@components/breadcrumbs";
@@ -33,7 +33,7 @@ import { getCenterList } from "../../center/CenterAction";
 import moment from "moment";
 import { actionAddPayment } from "../PaymentAction";
 import { actionAddContract } from "../../contract/ContractAction";
-import { toastSuccess } from "../../../utility/common/toastify";
+import { toastSuccess, toastError } from "../../../utility/common/toastify";
 
 import Cleave from "cleave.js/react";
 import { useHistory } from "react-router-dom";
@@ -46,7 +46,7 @@ function CreatePayment(props) {
   const [method, setMethod] = useState(1);
   const [payment_date, setPayment_date] = useState(new Date());
   const [plan_date, setPlan_date] = useState(new Date());
-  const [studentData, setStudentData] = useState({});
+  const [studentData, setStudentData] = useState([]);
   const [object, setObject] = useState({
     state: 1,
   });
@@ -63,7 +63,7 @@ function CreatePayment(props) {
   const [receptionist, setReceptionist] = useState();
   const [studentcareData, setStudentcareData] = useState([]);
   const [receptionistData, setReceptionistData] = useState([]);
-
+  const courseRef = useRef()
   useEffect(() => {
     handleFetchCourseData();
     handleFetchStudentData();
@@ -73,7 +73,9 @@ function CreatePayment(props) {
     handleFetchCenterData();
     handleFetchClassesData();
   }, []);
-
+  const autoFocusCourse = () => {
+    courseRef.current.focus()
+  }
   const onChangeStudent = (item) => {
     setStudent(item);
   };
@@ -83,7 +85,7 @@ function CreatePayment(props) {
       setStudentData(data?.results || []);
     } catch (error) {}
   };
-
+  console.log("studentData", studentData);
   const onChangeMulCourse = (value) => {
     setCourse(value);
   };
@@ -134,12 +136,56 @@ function CreatePayment(props) {
 
   const hanldChange = (e) => {
     const { name, value } = e.target;
-    setObject({ ...object, [name]: value });
+    if (name === "times" && value > 1) {
+      setPlan_date(moment(new Date()).add(40, 'days').format('DD-MM-YYYY'))
+    } else {
+      setPlan_date(new Date())
+    }
+    if (name === "pay_amount") {
+      const tmp = renderTotal() - parseInt(numberWithCommas(value));
+      setObject({ ...object, [name]: value, rest_amount: tmp });
+    } else {
+      setObject({ ...object, [name]: value });
+    }
+    
   };
   function numberWithCommas(x) {
     return  x.replaceAll(",", "");
  }
   const onSummit = async () => {
+    if (!student) {
+      toastError('Vui lòng chọn học viên')
+      return;
+    }
+    if (course.length === 0) {
+      toastError('Vui lòng chọn khóa học')
+      return;
+    }
+    if (!receptionist) {
+      toastError('Vui lòng chọn nhân viên thu tiền')
+      return;
+    }
+    if (!receptionist) {
+      toastError('Vui lòng chọn nhân viên thu tiền')
+      return;
+    }
+    if (!center) {
+      toastError('Vui lòng chọn trung tâm')
+      return;
+    }
+    if (!object.times) {
+      toastError('Vui nhập số lần đóng tiền')
+      return;
+    }
+    if (!object.pay_amount) {
+      toastError('Vui nhập số tiền đóng')
+      return;
+    }
+    if (object.rest_amount < 0) {
+      toastError('Vui nhập lại số tiền đóng cho đúng')
+      return;
+    }
+  
     const idCourse = course.length > 0 ? course.map((item) => item.id) : [];
     const idClasses = classes.length > 0 ? classes.map((item) => item.id) : [];
     const dataPayment = {
@@ -279,6 +325,7 @@ function CreatePayment(props) {
                   placeholder="Chọn học khóa học"
                   value={course}
                   onChange={(item) => onChangeMulCourse(item)}
+                  ref={courseRef}
                 />
                 <Table striped responsive style={{ marginTop: 20 }}>
                   <thead>
@@ -506,17 +553,18 @@ function CreatePayment(props) {
                     className="form-control"
                     options={options}
                     id="numeral-formatting"
+                    disabled={course.length === 0}
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="nameVertical">Số tiền còn nợ</Label>
-
                   <Cleave
                     name="rest_amount"
                     value={object?.rest_amount}
                     onChange={hanldChange}
                     placeholder="Số tiền còn nợ"
                     className="form-control"
+                    disabled
                     options={options}
                     id="numeral-formatting"
                   />
@@ -529,7 +577,7 @@ function CreatePayment(props) {
                     onChange={(date) => setPayment_date(date)}
                     id="default-picker"
                     options={{
-                      dateFormat: "Y-m-d h:m:i",
+                      dateFormat: "d-m-Y",
                     }}
                   />
                 </FormGroup>
@@ -539,10 +587,11 @@ function CreatePayment(props) {
                     <Flatpickr
                       className="form-control"
                       value={plan_date}
+                      disabled
                       onChange={(date) => setPlan_date(date)}
                       id="default-picker"
                       options={{
-                        dateFormat: "Y-m-d h:m:i",
+                        dateFormat: "d-m-Y",
                       }}
                     />
                   </FormGroup>
@@ -640,6 +689,9 @@ function CreatePayment(props) {
               setVisibleModal(false);
             }}
             setStudent={setStudent}
+            setStudentData={setStudentData}
+            studentData={studentData}
+            autoFocusCourse={autoFocusCourse}
           />
         )}
       </div>

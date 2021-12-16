@@ -96,7 +96,7 @@ const CustomHeader = ({
 };
 let params = {
   offset: 0,
-  limit: 20,
+  limit: 25,
 };
 const Contract = (props) => {
   const { profile, actionGetContracts, contracts = {}, isFetching } = props;
@@ -107,12 +107,12 @@ const Contract = (props) => {
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [statusValue, setStatusValue] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(params.limit);
   useEffect(() => {
     return () => {
       params = {
         offset: 0,
-        limit: 10,
+        limit: 25,
       };
     };
   }, []);
@@ -124,7 +124,7 @@ const Contract = (props) => {
   }, [profile]);
 
   const handleFetchContract = (params = {}) => {
-    actionGetContracts({ ...params, offset: params.offset - 1 });
+    actionGetContracts({ ...params });
   };
 
   const handleEditItem = (items = {}) => {
@@ -136,19 +136,32 @@ const Contract = (props) => {
     setSelectedItemDelete(items);
     setVisibleModalDelete(true);
   };
-
+  const renderState = (value) => {
+    if (value === 2) {
+      return "Mất cam kết"
+    }
+    if (value === 3) {
+      return "Cảnh cáo"
+    }
+    if (value === 3) {
+      return "Thanh lý hợp đồng"
+    }
+    return "Cam kết"
+  }
   const columns = [
     {
-      name: "#",
-      selector: "id",
-      cell: (row) => <Link to={`/contract-edit/${row.id}`}>{`#${row.id}`}</Link>,
-    },
-    {
-      name: "Tiêu đề",
-      selector: "title",
+      name: "Mã hợp đồng",
+      selector: "code",
       sortable: true,
       minWidth: "150px",
-      cell: (row) => <span>{row.title || "---"}</span>,
+      cell: (row) => <Link to={`/contract-edit/${row.id}`}>{`${row.code}`}</Link>,
+    },
+    {
+      name: "Tên học viên",
+      selector: "name",
+      minWidth: "150px",
+      sortable: true,
+      cell: (row) => row?.customers?.full_name || "---",
     },
     {
       name: "Số lần đóng",
@@ -158,11 +171,11 @@ const Contract = (props) => {
       cell: (row) => row.times || "---",
     },
     {
-      name: "Tình trạng hợp đồng",
+      name: "Loại hợp đồng",
       minWidth: "150px",
       selector: "state",
       sortable: true,
-      cell: (row) => row.state || "---",
+      cell: (row) => renderState(row.state) || "---",
     },
     {
       name: "Khách hàng",
@@ -176,7 +189,7 @@ const Contract = (props) => {
       selector: "centre",
       sortable: true,
       minWidth: "200px",
-      cell: (row) => row?.centre?.name || "---",
+      cell: (row) => row?.center?.name || "---",
     },
     {
       name: "Lớp học",
@@ -208,13 +221,6 @@ const Contract = (props) => {
             : "---"}
         </React.Fragment>
       ),
-    },
-    {
-      name: "Nhân viên kinh doanh",
-      selector: "saler",
-      sortable: true,
-      minWidth: "150px",
-      cell: (row) => row?.saler?.username || "---",
     },
     {
       name: "Tư vấn viên",
@@ -262,17 +268,6 @@ const Contract = (props) => {
       ),
     },
   ];
-  //   useEffect(() => {
-  //     dispatch(
-  //       getData({
-  //         page: currentPage,
-  //         perPage: rowsPerPage,
-  //         status: statusValue,
-  //         q: value,
-  //       })
-  //     );
-  //   }, [dispatch, store.data.length]);
-
   const handleFilter = (val) => {
     setValue(val);
     // dispatch(
@@ -294,6 +289,7 @@ const Contract = (props) => {
     //     q: value,
     //   })
     // );
+    actionGetContracts({ ...params, limit:e.target.value })
     setRowsPerPage(parseInt(e.target.value));
   };
 
@@ -310,14 +306,7 @@ const Contract = (props) => {
   };
 
   const handlePagination = (page) => {
-    // dispatch(
-    //   getData({
-    //     page: page.selected + 1,
-    //     perPage: rowsPerPage,
-    //     status: statusValue,
-    //     q: value,
-    //   })
-    // );
+    actionGetContracts({ ...params, limit: rowsPerPage, offset: (page.selected) * rowsPerPage })
     setCurrentPage(page.selected + 1);
   };
   const handleAddNew = useCallback(() => {

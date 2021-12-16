@@ -29,6 +29,7 @@ const Mails = props => {
   const {
     query,
     store,
+    emailss,
     setQuery,
     dispatch,
     selectMail,
@@ -43,10 +44,10 @@ const Mails = props => {
     selectCurrentMail
   } = props
 
-  const { mails, selectedMails } = store
 
   // ** States
   const [openMail, setOpenMail] = useState(false)
+  const [mailDetail, setMailDetail] = useState({})
 
   // ** Variables
   const labelColors = {
@@ -58,7 +59,13 @@ const Mails = props => {
 
   // ** Handles Update Functions
   const handleMailClick = id => {
-    dispatch(selectCurrentMail(id))
+    // dispatch(selectCurrentMail(id))
+    if (emailss?.length > 0) {
+      const tmp = emailss.find((item) => item.id === id);
+      if (tmp) {
+        setMailDetail(tmp);
+      }
+    }
     setOpenMail(true)
   }
 
@@ -70,14 +77,14 @@ const Mails = props => {
   /*eslint-disable */
 
   // ** Handles Folder Update
-  const handleFolderUpdate = (e, folder, ids = selectedMails) => {
+  const handleFolderUpdate = (e, folder, ids ) => {
     e.preventDefault()
     dispatch(updateMails(ids, { folder }))
     dispatch(resetSelectedMail())
   }
 
   // ** Handles Label Update
-  const handleLabelsUpdate = (e, label, ids = selectedMails) => {
+  const handleLabelsUpdate = (e, label, ids ) => {
     e.preventDefault()
     dispatch(updateMailLabel(ids, label))
     dispatch(resetSelectedMail())
@@ -98,8 +105,8 @@ const Mails = props => {
 
   // ** Renders Mail
   const renderMails = () => {
-    if (mails.length) {
-      return mails.map((mail, index) => {
+    if (emailss.length) {
+      return emailss.map((mail, index) => {
         return (
           <MailCard
             mail={mail}
@@ -108,7 +115,6 @@ const Mails = props => {
             selectMail={selectMail}
             updateMails={updateMails}
             labelColors={labelColors}
-            selectedMails={selectedMails}
             handleMailClick={handleMailClick}
             handleMailReadUpdate={handleMailReadUpdate}
             formatDateToMonthShort={formatDateToMonthShort}
@@ -251,7 +257,7 @@ const Mails = props => {
         </div>
 
         <PerfectScrollbar className='email-user-list' options={{ wheelPropagation: false }}>
-          {mails.length ? (
+          {emailss?.length ? (
             <ul className='email-media-list'>{renderMails()}</ul>
           ) : (
             <div className='no-results d-block'>
@@ -263,7 +269,7 @@ const Mails = props => {
       <MailDetails
         openMail={openMail}
         dispatch={dispatch}
-        mail={store.currentMail}
+        mail={mailDetail}
         labelColors={labelColors}
         setOpenMail={setOpenMail}
         updateMails={updateMails}

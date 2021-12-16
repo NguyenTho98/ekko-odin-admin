@@ -24,23 +24,31 @@ import { selectThemeColors } from "@utils";
 import { getCenterList } from "../center/CenterAction";
 import Select from "react-select";
 import { getCourseList } from "../course/CourseAction";
+import { getTeachersList } from "../teachers/TeachersAction";
 import { getClassRoomList } from "../classRoom/ClassRoomAction";
 import Flatpickr from "react-flatpickr";
 
 import "@styles/react/libs/flatpickr/flatpickr.scss";
 import moment from "moment";
+import { getStudentList } from "../student/StudentAction";
 function AddOrEditClassesModal(props) {
   const { visible, onCancel, item = {} } = props;
-  console.log("item", item);
   const isAddNew = isEmpty(item);
   const [centerData, setCenterData] = useState([]);
+  const [center, setCenter] = useState(item?.center);
   const [courseData, setCourseData] = useState([]);
+  const [course, setCourse] = useState(item?.course);
   const [classRoomData, setClassRoomData] = useState([]);
+  const [classRoom, setClassRoom] = useState(item?.classroom);
+  const [studentData, setStudentData] = useState([]);
+  const [student, setStudent] = useState(item?.students || []);
+  const [teacherData, setTeacherData] = useState([]);
+  const [teacher, setTeacher] = useState(item?.teachers || []);
   const [object, setObject] = useState({
     name: "",
     status_classes: "1",
-    available: '',
-    capacity: '',
+    available: "",
+    capacity: "",
     start_date: null,
     schedule: "1",
     time: "1",
@@ -58,6 +66,8 @@ function AddOrEditClassesModal(props) {
     await handleFetchCenterData();
     await handleFetchCourseData();
     await handleFetchClassRoomData();
+    await handleFetchStudentData();
+    await handleFetchTeacherData();
   }, [item]);
 
   const handleFetchCenterData = async (field, value) => {
@@ -109,11 +119,17 @@ function AddOrEditClassesModal(props) {
     setObject({ ...object, [name]: value });
   };
   const onSummit = async () => {
+    const idTeachers = teacher.length > 0 ? teacher.map((item) => item.id) : [];
+    const idStudents = student.length > 0 ? student.map((item) => item.id) : [];
     const data = {
       ...object,
+      students: idStudents,
+      teachers: idTeachers,
+      center: center?.id,
+      course: course?.id,
+      classroom: classRoom?.id,
       start_date: moment(new Date(picker)).format("YYYY-MM-DD[T]HH:mm:ss"),
-    }
-    console.log("data", data);
+    };
     if (isAddNew) {
       await actionAddClasses(data);
       toastSuccess("Thêm mới lớp học thành công");
@@ -124,6 +140,25 @@ function AddOrEditClassesModal(props) {
     onCancel(true);
   };
 
+  const onChangeStudent = (item) => {
+    setStudent(item);
+  };
+  const handleFetchStudentData = async () => {
+    try {
+      const { data } = await getStudentList();
+      setStudentData(data?.results || []);
+    } catch (error) {}
+  };
+  const onChangeTeacher = (item) => {
+    setTeacher(item);
+  };
+  const handleFetchTeacherData = async () => {
+    try {
+      const { data } = await getTeachersList();
+      setTeacherData(data?.results || []);
+    } catch (error) {}
+  };
+
   const renderSchedule = () => {
     if (object.schedule === "Thứ 3-6") {
       return 2;
@@ -132,7 +167,7 @@ function AddOrEditClassesModal(props) {
       return 3;
     }
     return 1;
-  }
+  };
   const renderTime = () => {
     if (object.time === "Ca 2 (14h-15h30)") {
       return 2;
@@ -144,7 +179,7 @@ function AddOrEditClassesModal(props) {
       return 3;
     }
     return 1;
-  }
+  };
 
   const renderStatusClasses = () => {
     if (object.status_classes === "Đang diễn ra") {
@@ -154,7 +189,7 @@ function AddOrEditClassesModal(props) {
       return 3;
     }
     return 1;
-  }
+  };
 
   return (
     <div>
@@ -177,7 +212,7 @@ function AddOrEditClassesModal(props) {
                   />
                 </FormGroup>
               </Col>
-              <Col sm="6">
+              {/* <Col sm="6">
                 <FormGroup>
                   <Label for="EmailVertical">Trạng thái lớp học</Label>
                   <Input
@@ -192,7 +227,7 @@ function AddOrEditClassesModal(props) {
                     <option value="3">Đã kết thúc</option>
                   </Input>
                 </FormGroup>
-              </Col>
+              </Col> */}
               <Col sm="6">
                 <FormGroup>
                   <Label for="EmailVertical">Số buổi học</Label>
@@ -217,7 +252,7 @@ function AddOrEditClassesModal(props) {
                   />
                 </FormGroup>
               </Col>
-              <Col sm="12">
+              <Col sm="6">
                 <FormGroup>
                   <Label for="default-picker">Thời gian bắt đầu</Label>
                   <Flatpickr
@@ -231,8 +266,7 @@ function AddOrEditClassesModal(props) {
                   />
                 </FormGroup>
               </Col>
-
-              <Col sm="12">
+              <Col sm="6">
                 <FormGroup>
                   <Label for="select-basic">Lịch học</Label>
                   <Input
@@ -248,7 +282,7 @@ function AddOrEditClassesModal(props) {
                   </Input>
                 </FormGroup>
               </Col>
-              <Col sm="12">
+              <Col sm="6">
                 <FormGroup>
                   <Label for="select-basic">Thời gian</Label>
                   <Input
@@ -265,61 +299,96 @@ function AddOrEditClassesModal(props) {
                   </Input>
                 </FormGroup>
               </Col>
-              <Col sm="12">
+              <Col sm="6">
                 <FormGroup>
                   <Label>Trung tâm</Label>
-                  <Input
-                    type="select"
-                    name="center"
-                    id="select-basic"
-                    onChange={hanldChange}
-                    value={object?.center?.id}
-                  >
-                    <option value={0}>Chọn trung tâm</option>
-                    {centerData.map((item, index) => (
-                      <option key={index} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </Input>
+                  <Select
+                    isClearable={false}
+                    theme={selectThemeColors}
+                    name="colors"
+                    options={centerData}
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                    className="react-select"
+                    classNamePrefix="select"
+                    placeholder="Chọn trung tâm"
+                    value={center}
+                    onChange={(item) => setCenter(item)}
+                  />
                 </FormGroup>
               </Col>
               <Col sm="12">
                 <FormGroup>
                   <Label>Khóa học</Label>
-                  <Input
-                    type="select"
-                    name="course"
-                    id="select-basic"
-                    onChange={hanldChange}
-                    value={object?.course?.id}
-                  >
-                    <option value={0}>Chọn khóa học</option>
-                    {courseData.map((item, index) => (
-                      <option key={index} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </Input>
+                  <Select
+                    isClearable={false}
+                    theme={selectThemeColors}
+                    name="colors"
+                    options={courseData}
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                    className="react-select"
+                    classNamePrefix="select"
+                    placeholder="Chọn khóa học"
+                    value={course}
+                    onChange={(item) => setCourse(item)}
+                  />
                 </FormGroup>
               </Col>
               <Col sm="12">
                 <FormGroup>
                   <Label>Lớp học</Label>
-                  <Input
-                    type="select"
-                    name="classroom"
-                    id="select-basic"
-                    onChange={hanldChange}
-                    value={object?.classroom?.id}
-                  >
-                    <option value={0}>Chọn lớp học</option>
-                    {classRoomData.map((item, index) => (
-                      <option key={index} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </Input>
+                  <Select
+                    isClearable={false}
+                    theme={selectThemeColors}
+                    name="colors"
+                    options={classRoomData}
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                    className="react-select"
+                    classNamePrefix="select"
+                    placeholder="Chọn lớp học"
+                    value={classRoom}
+                    onChange={(item) => setClassRoom(item)}
+                  />
+                </FormGroup>
+              </Col>
+              <Col sm="12">
+                <FormGroup>
+                  <Label>Học viên</Label>
+                  <Select
+                    isClearable={false}
+                    theme={selectThemeColors}
+                    name="colors"
+                    options={studentData}
+                    getOptionLabel={(option) => option.username}
+                    getOptionValue={(option) => option.id}
+                    className="react-select"
+                    classNamePrefix="select"
+                    placeholder="Chọn học viên"
+                    value={student}
+                    isMulti
+                    onChange={(item) => onChangeStudent(item)}
+                  />
+                </FormGroup>
+              </Col>
+              <Col sm="12">
+                <FormGroup>
+                  <Label>Giáo viên</Label>
+                  <Select
+                    isClearable={false}
+                    theme={selectThemeColors}
+                    name="colors"
+                    options={teacherData}
+                    getOptionLabel={(option) => option.username}
+                    getOptionValue={(option) => option.id}
+                    className="react-select"
+                    classNamePrefix="select"
+                    placeholder="Chọn giáo viên"
+                    value={teacher}
+                    isMulti
+                    onChange={(item) => onChangeTeacher(item)}
+                  />
                 </FormGroup>
               </Col>
               <Col sm="12">

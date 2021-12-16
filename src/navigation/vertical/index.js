@@ -12,5 +12,5 @@ import chartsAndMaps from './charts-maps'
 import appOdin from './appOdin'
 
 // ** Merge & Export
-// export default [...appOdin, ...dashboardCenter, ...dashboardUsers]
-export default [...appOdin, ...dashboardCenter,  ...dashboardUsers, ...dashboards, ...apps, ...pages, ...uiElements, ...forms, ...tables, ...chartsAndMaps, ...others]
+export default [...appOdin, ...dashboardCenter, ...dashboardUsers]
+// export default [...appOdin, ...dashboardCenter,  ...dashboardUsers, ...dashboards, ...apps, ...pages, ...uiElements, ...forms, ...tables, ...chartsAndMaps, ...others]

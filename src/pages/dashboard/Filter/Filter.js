@@ -13,9 +13,10 @@ function Filter() {
 
   return (
     <div className="d-flex flex-wrap align-items-center">
-      <GroupBy currentShow={currentShow} setCurrentShow={setCurrentShow} />
-      <FilterByDate />
+      {/* <GroupBy currentShow={currentShow} setCurrentShow={setCurrentShow} /> */}
       <FilterCenter currentShow={currentShow} setCurrentShow={setCurrentShow}/>
+      <FilterByDate />
+      
     </div>
   );
 }

@@ -28,6 +28,7 @@ import managers from "../../pages/managers/ManagersReducer";
 import receptionist from "../../pages/receptionist/ReceptionistReducer";
 import studentcare from "../../pages/studentcare/StudentcareReducer";
 import teachers from "../../pages/teachers/TeachersReducer";
+import emails from "../../pages/emails/EmailsReducer";
 const rootReducer = combineReducers({
   auth,
   todo,
@@ -55,6 +56,7 @@ const rootReducer = combineReducers({
   receptionist,
   studentcare,
   teachers,
+  emails,
 })
 
 export default rootReducer

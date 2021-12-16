@@ -66,7 +66,7 @@ const AddCard = () => {
     // ** Get Invoices & Set Invoice Number
     axios
       .get('/apps/invoice/invoices', {
-        page: 1,
+        limit: 25,
         perPage: 10,
         status: '',
         q: ''

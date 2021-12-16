@@ -16,6 +16,7 @@ import {
 import { getShiftList } from "../../../shift/ShiftAction";
 import AddPoint from "../components/AddPoint";
 import CancelShiftModal from "../components/CancelShiftModal";
+import AttendantModal from "../components/AttendantModal";
 import TablePoint from "../components/TablePoint";
 import "./PointList.scss";
 const PointList = (props) => {
@@ -23,18 +24,21 @@ const PointList = (props) => {
   const { id } = useParams();
   const [active, setActive] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [visible1, setVisible1] = useState(false);
   const [pointList, setPointList] = useState([]);
+  
   useEffect(() => {
     getShiftList(id).then((res) => {
       setPointList(res?.data?.results);
     });
   }, []);
+
   const toggle = (tab) => {
     if (active !== tab) {
       setActive(tab);
     }
   };
-  console.log("pointList", pointList);
+
   return (
     <div className="point-list-wrapper nav-vertical">
       <Nav tabs className="nav-left">
@@ -121,6 +125,14 @@ const PointList = (props) => {
           visible={visible}
           onCancel={() => {
             setVisible(!visible);
+          }}
+        />
+      )}
+      {!visible1 && (
+        <AttendantModal
+          visible={!visible1}
+          onCancel={() => {
+            setVisible1(!visible1);
           }}
         />
       )}

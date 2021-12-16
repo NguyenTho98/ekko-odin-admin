@@ -31,12 +31,12 @@ export default [
         icon: <Circle size={12} />,
         navLink: '/classes'
       },
-      {
-        id: 'commentDashCenter',
-        title: 'Bình luận',
-        icon: <Circle size={12} />,
-        navLink: '/comment'
-      },
+      // {
+      //   id: 'commentDashCenter',
+      //   title: 'Bình luận',
+      //   icon: <Circle size={12} />,
+      //   navLink: '/comment'
+      // },
       {
         id: 'rewardDashCenter',
         title: 'Ưu đãi',

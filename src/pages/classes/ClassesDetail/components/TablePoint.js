@@ -1,252 +1,66 @@
-import AvatarGroup from "@components/avatar-group";
-import react from "@src/assets/images/icons/react.svg";
-import vuejs from "@src/assets/images/icons/vuejs.svg";
-import angular from "@src/assets/images/icons/angular.svg";
-import bootstrap from "@src/assets/images/icons/bootstrap.svg";
-import avatar1 from "@src/assets/images/portrait/small/avatar-s-5.jpg";
-import avatar2 from "@src/assets/images/portrait/small/avatar-s-6.jpg";
-import avatar3 from "@src/assets/images/portrait/small/avatar-s-7.jpg";
-import { MoreVertical, Edit, Trash } from "react-feather";
+import React, { useState, useEffect } from 'react';
 import {
   Table,
-  Badge,
-  UncontrolledDropdown,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-  UncontrolledTooltip,
 } from "reactstrap";
-import CustomInput from "reactstrap/lib/CustomInput";
+import { useParams, useHistory } from "react-router-dom";
 
-const TablePoint = () => {
+import { getAttendantList } from "../../../attendant/AttendantAction";
+
+const TablePoint = (props) => {
+  const { id } = useParams();
+  const [attendants, setAttendants] = useState([])
+  useEffect(() => {
+    if (id) {
+      getAttendantList(id).then((res) => {
+        // setAttendants(res?.data?.results);
+      });
+    }
+  }, []);
+  console.log("res,", attendants);
   return (
     <Table striped responsive>
       <thead>
         <tr>
           <th>Tên học viên</th>
-          <th style={{textAlign:"center"}}>Attendance</th>
-          <th>Participate</th>
-          <th>Comment</th>
+          <th style={{ textAlign: "center" }}>Điểm danh</th>
+          <th>Điểm trên lớp</th>
+          <th>Điểm bài tập</th>
+          <th>Lý do</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Nguyễn Xuân Thọ</td>
-          <td style={{textAlign: "center"}}>
-            <CustomInput
-              type="checkbox"
-              className="custom-control-Primary"
-              id="Primary"
-              defaultChecked
-              inline
-            />
-          </td>
-          <td>10</td>
-          <td>
-            nghỉ học k phép
-          </td>
-          <td>
-            <Edit
-              style={{ cursor: "pointer" }}
-              size={17}
-              className="mx-1"
-              id={`pw-tooltip-1`}
-            />
-            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
-              Edit
-            </UncontrolledTooltip>
-          </td>
-        </tr>
-        <tr>
-          <td>Nguyễn Xuân Thọ</td>
-          <td style={{textAlign: "center"}}>
-            <CustomInput
-              type="checkbox"
-              className="custom-control-Primary"
-              id="Primary"
-              defaultChecked
-              inline
-            />
-          </td>
-          <td>10</td>
-          <td>
-            nghỉ học k phép
-          </td>
-          <td>
-            <Edit
-              style={{ cursor: "pointer" }}
-              size={17}
-              className="mx-1"
-              id={`pw-tooltip-1`}
-            />
-            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
-              Edit
-            </UncontrolledTooltip>
-          </td>
-        </tr>
-        <tr>
-          <td>Nguyễn Xuân Thọ</td>
-          <td style={{textAlign: "center"}}>
-            <CustomInput
-              type="checkbox"
-              className="custom-control-Primary"
-              id="Primary"
-              defaultChecked
-              inline
-            />
-          </td>
-          <td>10</td>
-          <td>
-            nghỉ học k phép
-          </td>
-          <td>
-            <Edit
-              style={{ cursor: "pointer" }}
-              size={17}
-              className="mx-1"
-              id={`pw-tooltip-1`}
-            />
-            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
-              Edit
-            </UncontrolledTooltip>
-          </td>
-        </tr>
-        <tr>
-          <td>Nguyễn Xuân Thọ</td>
-          <td style={{textAlign: "center"}}>
-            <CustomInput
-              type="checkbox"
-              className="custom-control-Primary"
-              id="Primary"
-              defaultChecked
-              inline
-            />
-          </td>
-          <td>10</td>
-          <td>
-            nghỉ học k phép
-          </td>
-          <td>
-            <Edit
-              style={{ cursor: "pointer" }}
-              size={17}
-              className="mx-1"
-              id={`pw-tooltip-1`}
-            />
-            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
-              Edit
-            </UncontrolledTooltip>
-          </td>
-        </tr>
-        <tr>
-          <td>Nguyễn Xuân Thọ</td>
-          <td style={{textAlign: "center"}}>
-            <CustomInput
-              type="checkbox"
-              className="custom-control-Primary"
-              id="Primary"
-              defaultChecked
-              inline
-            />
-          </td>
-          <td>10</td>
-          <td>
-            nghỉ học k phép
-          </td>
-          <td>
-            <Edit
-              style={{ cursor: "pointer" }}
-              size={17}
-              className="mx-1"
-              id={`pw-tooltip-1`}
-            />
-            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
-              Edit
-            </UncontrolledTooltip>
-          </td>
-        </tr>
-        <tr>
-          <td>Nguyễn Xuân Thọ</td>
-          <td style={{textAlign: "center"}}>
-            <CustomInput
-              type="checkbox"
-              className="custom-control-Primary"
-              id="Primary"
-              defaultChecked
-              inline
-            />
-          </td>
-          <td>10</td>
-          <td>
-            nghỉ học k phép
-          </td>
-          <td>
-            <Edit
-              style={{ cursor: "pointer" }}
-              size={17}
-              className="mx-1"
-              id={`pw-tooltip-1`}
-            />
-            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
-              Edit
-            </UncontrolledTooltip>
-          </td>
-        </tr>
-        <tr>
-          <td>Nguyễn Xuân Thọ</td>
-          <td style={{textAlign: "center"}}>
-            <CustomInput
-              type="checkbox"
-              className="custom-control-Primary"
-              id="Primary"
-              defaultChecked
-              inline
-            />
-          </td>
-          <td>10</td>
-          <td>
-            nghỉ học k phép
-          </td>
-          <td>
-            <Edit
-              style={{ cursor: "pointer" }}
-              size={17}
-              className="mx-1"
-              id={`pw-tooltip-1`}
-            />
-            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
-              Edit
-            </UncontrolledTooltip>
-          </td>
-        </tr>
-        <tr>
-          <td>Nguyễn Xuân Thọ</td>
-          <td style={{textAlign: "center"}}>
-            <CustomInput
-              type="checkbox"
-              className="custom-control-Primary"
-              id="Primary"
-              defaultChecked
-              inline
-            />
-          </td>
-          <td>10</td>
-          <td>
-            nghỉ học k phép
-          </td>
-          <td>
-            <Edit
-              style={{ cursor: "pointer" }}
-              size={17}
-              className="mx-1"
-              id={`pw-tooltip-1`}
-            />
-            <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
-              Edit
-            </UncontrolledTooltip>
-          </td>
-        </tr>
+        {/* {attendants.length > 0 &&
+          attendants.map((item) => {
+            return (
+              <tr key={item.id}>
+                <td>{item?.users?.full_name}</td>
+                <td style={{ textAlign: "center" }}>
+                  <CustomInput
+                    type="checkbox"
+                    className="custom-control-Primary"
+                    id="Primary"
+                    checked={item?.absent}
+                    inline
+                  />
+                </td>
+                <td>{item?.score}</td>
+                <td>{item?.homework}</td>
+                <td>{item?.reason}</td>
+                <td>
+                  <Edit
+                    style={{ cursor: "pointer" }}
+                    size={17}
+                    className="mx-1"
+                    id={`pw-tooltip-1`}
+                  />
+                  <UncontrolledTooltip placement="top" target={`pw-tooltip-1`}>
+                    Edit
+                  </UncontrolledTooltip>
+                </td>
+              </tr>
+            );
+          })} */}
       </tbody>
     </Table>
   );

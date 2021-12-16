@@ -86,8 +86,8 @@ const CustomHeader = ({
   );
 };
 let params = {
-    page: 1,
-    size: 20,
+    limit: 25,
+    offset: 0,
     query: "",
 };
 const Studentcare = (props) => {
@@ -99,14 +99,14 @@ const Studentcare = (props) => {
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [statusValue, setStatusValue] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(params.limit);
   useEffect(() => {
     return () => {
       params = {
-        page: 1,
-        size: 20,
-        query: "",
-      };
+    limit: 25,
+    offset: 0,
+    query: "",
+};
     };
   }, []);
 
@@ -117,7 +117,7 @@ const Studentcare = (props) => {
   }, [profile]);
 
   const handleFetchStudentcare = (params = {}) => {
-    actionGetStudentcares({ ...params, page: params.page - 1 });
+    actionGetStudentcares({ ...params });
   };
 
   const handleEditItem = (items = {}) => {
@@ -131,12 +131,12 @@ const Studentcare = (props) => {
   }
 
   const columns = [
-    {
-      name: '#',
-      minWidth: '107px',
-      selector: 'id',
-      cell: row => <span>{`#${row.id}`}</span>
-    },
+    // {
+    //   name: '#',
+    //   minWidth: '107px',
+    //   selector: 'id',
+    //   cell: row => <span>{`#${row.id}`}</span>
+    // },
     {
       name: 'Họ và tên',
       selector: 'full_name',
@@ -212,17 +212,6 @@ const Studentcare = (props) => {
       )
     }
   ]
-//   useEffect(() => {
-//     dispatch(
-//       getData({
-//         page: currentPage,
-//         perPage: rowsPerPage,
-//         status: statusValue,
-//         q: value,
-//       })
-//     );
-//   }, [dispatch, store.data.length]);
-
   const handleFilter = (val) => {
     setValue(val);
     // dispatch(
@@ -244,6 +233,7 @@ const Studentcare = (props) => {
     //     q: value,
     //   })
     // );
+    actionGetStudentcares({ ...params, limit:e.target.value })
     setRowsPerPage(parseInt(e.target.value));
   };
 
@@ -260,14 +250,7 @@ const Studentcare = (props) => {
   };
 
   const handlePagination = (page) => {
-    // dispatch(
-    //   getData({
-    //     page: page.selected + 1,
-    //     perPage: rowsPerPage,
-    //     status: statusValue,
-    //     q: value,
-    //   })
-    // );
+    actionGetStudentcares({ ...params, limit: rowsPerPage, offset: (page.selected) * rowsPerPage })
     setCurrentPage(page.selected + 1);
   };
   const handleAddNew = useCallback(() => {

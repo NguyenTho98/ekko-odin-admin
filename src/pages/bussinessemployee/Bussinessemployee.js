@@ -1,24 +1,33 @@
 // ** React Imports
-import { useState, useEffect, Fragment, useCallback } from "react"
-import { Link, withRouter } from "react-router-dom"
+import { useState, useEffect, Fragment, useCallback } from "react";
+import { Link, withRouter } from "react-router-dom";
 
 // ** Third Party Components
-import ReactPaginate from "react-paginate"
-import { ChevronDown, Edit, Plus, Trash} from "react-feather"
-import DataTable from "react-data-table-component"
-import { Button, Label, Input, CustomInput, Row, Col, Card, UncontrolledTooltip } from "reactstrap"
+import ReactPaginate from "react-paginate";
+import { ChevronDown, Edit, Plus, Trash } from "react-feather";
+import DataTable from "react-data-table-component";
+import {
+  Button,
+  Label,
+  Input,
+  CustomInput,
+  Row,
+  Col,
+  Card,
+  UncontrolledTooltip,
+} from "reactstrap";
 
 // ** Store & Actions
-import { connect } from "react-redux"
+import { connect } from "react-redux";
 import { actionGetBussinessemployees } from "./BussinessemployeeAction";
 // ** Styles
-import "@styles/react/apps/app-invoice.scss"
-import "@styles/react/libs/tables/react-dataTable-component.scss"
+import "@styles/react/apps/app-invoice.scss";
+import "@styles/react/libs/tables/react-dataTable-component.scss";
 // ** Custom Components
-import Breadcrumbs from "@components/breadcrumbs"
-import { isEmpty } from "../../utility/Utils"
-import AddOrEditBussinessemployeeModal from "./AddOrEditBussinessemployeeModal"
-import DeleteBussinessemployeeModal from "./DeleteBussinessemployeeModal"
+import Breadcrumbs from "@components/breadcrumbs";
+import { isEmpty } from "../../utility/Utils";
+import AddOrEditBussinessemployeeModal from "./AddOrEditBussinessemployeeModal";
+import DeleteBussinessemployeeModal from "./DeleteBussinessemployeeModal";
 const CustomHeader = ({
   handleFilter,
   value,
@@ -31,7 +40,10 @@ const CustomHeader = ({
   return (
     <div className="invoice-list-table-header w-100 py-2">
       <Row>
-        <Col lg="6" className="d-flex align-items-bussinessemployee px-0 px-lg-1">
+        <Col
+          lg="6"
+          className="d-flex align-items-bussinessemployee px-0 px-lg-1"
+        >
           <div className="d-flex align-items-bussinessemployee mr-2">
             <Label for="rows-per-page">Hiện thị</Label>
             <CustomInput
@@ -41,7 +53,6 @@ const CustomHeader = ({
               value={rowsPerPage}
               onChange={handlePerPage}
             >
-              <option value="10">10</option>
               <option value="25">25</option>
               <option value="50">50</option>
             </CustomInput>
@@ -86,12 +97,17 @@ const CustomHeader = ({
   );
 };
 let params = {
-    page: 1,
-    size: 20,
-    query: "",
+  limit: 25,
+  offset: 0,
+  query: "",
 };
 const Bussinessemployee = (props) => {
-  const { profile, actionGetBussinessemployees, bussinessemployees = {}, isFetching } = props;
+  const {
+    profile,
+    actionGetBussinessemployees,
+    bussinessemployees = {},
+    isFetching,
+  } = props;
   const [visibleModal, setVisibleModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
@@ -99,12 +115,12 @@ const Bussinessemployee = (props) => {
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [statusValue, setStatusValue] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(params.limit);
   useEffect(() => {
     return () => {
       params = {
-        page: 1,
-        size: 20,
+        limit: 25,
+        offset: 0,
         query: "",
       };
     };
@@ -117,7 +133,7 @@ const Bussinessemployee = (props) => {
   }, [profile]);
 
   const handleFetchBussinessemployee = (params = {}) => {
-    actionGetBussinessemployees({ ...params, page: params.page - 1 });
+    actionGetBussinessemployees({ ...params });
   };
 
   const handleEditItem = (items = {}) => {
@@ -128,100 +144,104 @@ const Bussinessemployee = (props) => {
   const handleEditItemDelete = (items = {}) => {
     setSelectedItemDelete(items);
     setVisibleModalDelete(true);
-  }
+  };
 
   const columns = [
+    // {
+    //   name: '#',
+    //   minWidth: '107px',
+    //   selector: 'id',
+    //   cell: row => <span>{`#${row.id}`}</span>
+    // },
     {
-      name: '#',
-      minWidth: '107px',
-      selector: 'id',
-      cell: row => <span>{`#${row.id}`}</span>
+      name: "Họ và tên",
+      selector: "full_name",
+      sortable: true,
+      minWidth: "150px",
+      cell: (row) => <span>{row.full_name || "---"}</span>,
     },
     {
-      name: 'Họ và tên',
-      selector: 'full_name',
+      name: "Tên đăng nhập",
+      selector: "addusernameress",
       sortable: true,
-      minWidth: '150px',
-      cell: row => <span>{row.full_name || "---"}</span>
+      minWidth: "200px",
+      cell: (row) => row.username || "---",
     },
     {
-      name: 'Tên đăng nhập',
-      selector: 'addusernameress',
+      name: "Email",
+      selector: "email",
       sortable: true,
-      minWidth: '200px',
-      cell: row => row.username || "---"
+      minWidth: "200px",
+      cell: (row) => row.email || "---",
     },
     {
-      name: 'Email',
-      selector: 'email',
+      name: "Số điện thoại",
+      selector: "phone",
       sortable: true,
-      minWidth: '200px',
-      cell: row => row.email || "---"
+      minWidth: "200px",
+      cell: (row) => row.phone || "---",
     },
     {
-      name: 'Số điện thoại',
-      selector: 'phone',
+      name: "Giới tính",
+      selector: "gender",
       sortable: true,
-      minWidth: '200px',
-      cell: row => row.phone || "---"
+      minWidth: "200px",
+      cell: (row) => row.gender || "---",
     },
     {
-      name: 'Giới tính',
-      selector: 'gender',
+      name: "Trung tâm",
+      selector: "center",
       sortable: true,
-      minWidth: '200px',
-      cell: row => row.gender || "---"
+      minWidth: "200px",
+      cell: (row) => row?.center?.name || "---",
     },
     {
-      name: 'Trung tâm',
-      selector: 'center',
+      name: "Địa chỉ",
+      selector: "address",
       sortable: true,
-      minWidth: '200px',
-      cell: row => row?.center?.name || "---"
+      minWidth: "200px",
+      cell: (row) => row.address || "---",
     },
     {
-      name: 'Địa chỉ',
-      selector: 'address',
+      name: "Ngày sinh",
+      selector: "birth_day",
       sortable: true,
-      minWidth: '200px',
-      cell: row => row.address || "---"
+      minWidth: "200px",
+      cell: (row) => row.birth_day || "---",
     },
     {
-      name: 'Ngày sinh',
-      selector: 'birth_day',
+      name: "Action",
+      minWidth: "110px",
+      selector: "",
       sortable: true,
-      minWidth: '200px',
-      cell: row => row.birth_day || "---"
-    },
-    {
-      name: 'Action',
-      minWidth: '110px',
-      selector: '',
-      sortable: true,
-      cell: row => (
-        <div className='column-action d-flex align-items-bussinessemployee'>
-          <Trash  style={{ cursor: "pointer" }} size={17} id={`send-tooltip-${row.id}`} onClick={() => handleEditItemDelete(row)} />
-          <UncontrolledTooltip placement='top' target={`send-tooltip-${row.id}`} >
+      cell: (row) => (
+        <div className="column-action d-flex align-items-bussinessemployee">
+          <Trash
+            style={{ cursor: "pointer" }}
+            size={17}
+            id={`send-tooltip-${row.id}`}
+            onClick={() => handleEditItemDelete(row)}
+          />
+          <UncontrolledTooltip
+            placement="top"
+            target={`send-tooltip-${row.id}`}
+          >
             Delete
           </UncontrolledTooltip>
-          <Edit style={{ cursor: "pointer" }} size={17} className='mx-1' id={`pw-tooltip-${row.id}`} onClick={() => handleEditItem(row)}/>
-          <UncontrolledTooltip placement='top' target={`pw-tooltip-${row.id}`}>
+          <Edit
+            style={{ cursor: "pointer" }}
+            size={17}
+            className="mx-1"
+            id={`pw-tooltip-${row.id}`}
+            onClick={() => handleEditItem(row)}
+          />
+          <UncontrolledTooltip placement="top" target={`pw-tooltip-${row.id}`}>
             Edit
           </UncontrolledTooltip>
         </div>
-      )
-    }
-  ]
-//   useEffect(() => {
-//     dispatch(
-//       getData({
-//         page: currentPage,
-//         perPage: rowsPerPage,
-//         status: statusValue,
-//         q: value,
-//       })
-//     );
-//   }, [dispatch, store.data.length]);
+      ),
+    },
+  ];
 
   const handleFilter = (val) => {
     setValue(val);
@@ -244,6 +264,7 @@ const Bussinessemployee = (props) => {
     //     q: value,
     //   })
     // );
+    actionGetBussinessemployees({ ...params, limit:e.target.value })
     setRowsPerPage(parseInt(e.target.value));
   };
 
@@ -260,14 +281,7 @@ const Bussinessemployee = (props) => {
   };
 
   const handlePagination = (page) => {
-    // dispatch(
-    //   getData({
-    //     page: page.selected + 1,
-    //     perPage: rowsPerPage,
-    //     status: statusValue,
-    //     q: value,
-    //   })
-    // );
+    actionGetBussinessemployees({ ...params, limit: rowsPerPage, offset: (page.selected) * rowsPerPage })
     setCurrentPage(page.selected + 1);
   };
   const handleAddNew = useCallback(() => {
@@ -351,7 +365,9 @@ const Bussinessemployee = (props) => {
             setSelectedItemDelete({});
             setVisibleModalDelete(false);
           }}
-          handleFetchBussinessemployee={() => handleFetchBussinessemployee(params)}
+          handleFetchBussinessemployee={() =>
+            handleFetchBussinessemployee(params)
+          }
           item={selectedItemDelete}
         />
       )}
@@ -360,10 +376,10 @@ const Bussinessemployee = (props) => {
 };
 
 export default connect(
-    (state) => ({
-      profile: state.system?.profile,
-      bussinessemployees: state.bussinessemployee?.bussinessemployees,
-      isFetching: state.bussinessemployee?.isFetching,
-    }),
-    { actionGetBussinessemployees }
-  )(withRouter(Bussinessemployee));
+  (state) => ({
+    profile: state.system?.profile,
+    bussinessemployees: state.bussinessemployee?.bussinessemployees,
+    isFetching: state.bussinessemployee?.isFetching,
+  }),
+  { actionGetBussinessemployees }
+)(withRouter(Bussinessemployee));

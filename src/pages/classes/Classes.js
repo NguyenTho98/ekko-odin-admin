@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useEffect, Fragment, useCallback } from "react";
+import React, { useState, useEffect, Fragment, useCallback } from "react";
 import { Link, withRouter } from "react-router-dom";
 
 // ** Third Party Components
@@ -28,6 +28,7 @@ import Breadcrumbs from "@components/breadcrumbs";
 import { isEmpty } from "../../utility/Utils";
 import AddOrEditClassesModal from "./AddOrEditClassesModal";
 import DeleteClassesModal from "./DeleteClassesModal";
+import moment from "moment";
 const CustomHeader = ({
   handleFilter,
   value,
@@ -95,8 +96,8 @@ const CustomHeader = ({
   );
 };
 let params = {
-  page: 1,
-  size: 20,
+  limit: 25,
+  offset: 0,
   query: "",
 };
 const Classes = (props) => {
@@ -108,12 +109,12 @@ const Classes = (props) => {
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [statusValue, setStatusValue] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(params.limit);
   useEffect(() => {
     return () => {
       params = {
-        page: 1,
-        size: 20,
+        limit: 25,
+        offset: 0,
         query: "",
       };
     };
@@ -127,7 +128,7 @@ const Classes = (props) => {
   }, [profile]);
 
   const handleFetchClasses = (params = {}) => {
-    actionGetClassess({ ...params, page: params.page - 1 });
+    actionGetClassess({ ...params });
   };
 
   const handleEditItem = (items = {}) => {
@@ -140,18 +141,45 @@ const Classes = (props) => {
     setVisibleModalDelete(true);
   };
 
+  const renderSchedule = (value) => {
+    if (value === 2) {
+      return "Thứ 3-6"
+    }
+    if (value === 3) {
+      return "Thứ 4-7"
+    }
+    return "Thứ 2-5"
+  }
+  const renderTime = (value) => {
+    if (value === 2) {
+      return "Ca 2 (14h-15h30)"
+    }
+    if (value === 3) {
+      return "Ca 3 (18h-19h30)"
+    }
+    if (value === 4) {
+      return "Ca 4 (19h30-21h)"
+    }
+    return "Ca 1 (9h-10h30)"
+  }
+  const renderStausCalsses = (value) => {
+    if (value === 2) {
+      return "Đang diễn ra"
+    }
+    if (value === 3) {
+      return "Đã kết thúc"
+    }
+    return "Comming Soon"
+  }
   const columns = [
-    {
-      name: "#",
-      selector: "id",
-      cell: (row) => <Link to={`/classes/edit/${row.id}`}>{`#${row.id}`}</Link>,
-    },
     {
       name: "Tên lớp học",
       selector: "name",
       sortable: true,
       minWidth: "150px",
-      cell: (row) => <span>{row.name || "---"}</span>,
+      cell: (row) => (
+        <Link to={`/classes/edit/${row.id}`}>{`${row.name}`}</Link>
+      ),
     },
 
     {
@@ -159,28 +187,32 @@ const Classes = (props) => {
       selector: "schedule",
       minWidth: "150px",
       sortable: true,
-      cell: (row) => row.schedule || "---",
+      cell: (row) => renderSchedule(row?.schedule) || "---",
     },
     {
       name: "Ngày kết thúc",
       selector: "end_date",
       minWidth: "150px",
       sortable: true,
-      cell: (row) => row?.end_date || "---",
+      cell: (row) => (
+        <React.Fragment>
+          {row?.end_date ? moment(row?.end_date).format("DD-MM-YYYY") : "---"}
+        </React.Fragment>
+      ),
     },
 
     {
       name: "Thời gian",
       selector: "time",
       sortable: true,
-      cell: (row) => row?.time || "---",
+      cell: (row) => renderTime(row?.time) || "---",
     },
     {
       name: "Trạng thái lớp học",
       selector: "status_classes",
       sortable: true,
       minWidth: "150px",
-      cell: (row) => row?.status_classes || "---",
+      cell: (row) => renderStausCalsses(row?.status_classes) || "---",
     },
 
     {
@@ -224,17 +256,6 @@ const Classes = (props) => {
       ),
     },
   ];
-  //   useEffect(() => {
-  //     dispatch(
-  //       getData({
-  //         page: currentPage,
-  //         perPage: rowsPerPage,
-  //         status: statusValue,
-  //         q: value,
-  //       })
-  //     );
-  //   }, [dispatch, store.data.length]);
-
   const handleFilter = (val) => {
     setValue(val);
     // dispatch(
@@ -256,6 +277,7 @@ const Classes = (props) => {
     //     q: value,
     //   })
     // );
+    actionGetClassess({ ...params, limit: e.target.value });
     setRowsPerPage(parseInt(e.target.value));
   };
 
@@ -272,14 +294,11 @@ const Classes = (props) => {
   };
 
   const handlePagination = (page) => {
-    // dispatch(
-    //   getData({
-    //     page: page.selected + 1,
-    //     perPage: rowsPerPage,
-    //     status: statusValue,
-    //     q: value,
-    //   })
-    // );
+    actionGetClassess({
+      ...params,
+      limit: rowsPerPage,
+      offset: page.selected * rowsPerPage,
+    });
     setCurrentPage(page.selected + 1);
   };
   const handleAddNew = useCallback(() => {

@@ -1,9 +1,12 @@
 import { map } from "jquery";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import NumberFormat from "react-number-format";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col, Table } from "reactstrap";
 import { getContractDetail } from "../contract/ContractAction";
+import 'moment/locale/vi';
+moment.locale('vi')
 function PrintContract(props) {
   const { id } = useParams();
   const [contract, setContract] = useState({});
@@ -134,7 +137,7 @@ function PrintContract(props) {
             </div>
             <div className="d-flex" style={{ marginBottom: 6 }}>
               <div style={{ width: 170 }}>Chức vụ:</div>
-              <div>Phó Giám Đốc Kinh Doanhg</div>
+              <div>Phó Giám Đốc Kinh Doanh</div>
             </div>
             <div className="d-flex" style={{ marginBottom: 6 }}>
               <div style={{ width: 170 }}>CMTND số: </div>
@@ -235,10 +238,13 @@ function PrintContract(props) {
                         </td>
                         <td>{item.study_shift_count}</td>
                         <td>
-                          {contract?.shift === 1
-                            ? item.night_cost
-                            : item.daytime_cost}
-                          đ
+                          <NumberFormat
+                              value={contract?.shift === 1
+                                ? item.night_cost
+                                : item.daytime_cost}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                            />đ
                         </td>
                       </tr>
                     ))
@@ -256,7 +262,11 @@ function PrintContract(props) {
                     Tổng học phí
                   </th>
                   <td>Bằng số</td>
-                  <td colspan="3"> {renderTotal()} đ</td>
+                  <td colspan="3"><NumberFormat
+                              value={renderTotal()}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                            />  đ</td>
                 </tr>
                 <tr>
                   <td>Bằng chữ</td>
@@ -268,7 +278,7 @@ function PrintContract(props) {
                 </tr>
                 <tr>
                   <th scope="row">Thời gian hoàn thành học phí</th>
-                  <td colspan="3">{contract?.payment?.plan_date} </td>
+                  <td colspan="3">{ contract.times === 1 ? "Đã hoàn thành" : contract?.payment?.plan_date} </td>
                 </tr>
               </tbody>
             </Table>

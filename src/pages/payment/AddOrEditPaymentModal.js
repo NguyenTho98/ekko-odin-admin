@@ -184,8 +184,8 @@ function AddOrEditPaymentModal(props) {
                     id="select-basic"
                     onChange={hanldChange}
                   >
-                    <option value="0">Tiền mặt</option>
-                    <option value="1">Chuyển tiền</option>
+                    <option value="1">Tiền mặt</option>
+                    <option value="2">Chuyển tiền</option>
                   </Input>
                 </FormGroup>
               </Col>

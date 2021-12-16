@@ -1,6 +1,6 @@
 // ** React Imports
 import { Fragment, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, withRouter } from 'react-router-dom'
 
 // ** Email App Component Imports
 import Mails from './Mails'
@@ -8,9 +8,9 @@ import Sidebar from './Sidebar'
 
 // ** Third Party Components
 import classnames from 'classnames'
-
+import { actionGetEmailss } from "./EmailsAction";
 // ** Store & Actions
-import { useDispatch, useSelector } from 'react-redux'
+import { connect, useDispatch, useSelector } from 'react-redux'
 import {
   getMails,
   selectMail,
@@ -24,8 +24,11 @@ import {
 
 // ** Styles
 import '@styles/react/apps/app-email.scss'
+import { isEmpty } from '../../utility/Utils'
 
-const EmailApp = () => {
+const EmailApp = (props) => {
+  const { profile, actionGetEmailss, emailss = {}, isFetching } = props;
+  console.log("emails", emailss);
   // ** States
   const [query, setQuery] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -37,7 +40,6 @@ const EmailApp = () => {
   // ** Store Variables
   const dispatch = useDispatch()
   const store = useSelector(state => state.email)
-
   // ** Vars
   const params = useParams()
 
@@ -46,10 +48,19 @@ const EmailApp = () => {
     dispatch(getMails({ q: query || '', folder: params.folder || 'inbox', label: params.label || '' }))
   }, [query, params.folder, params.label])
 
+  useEffect(() => {
+    if (!isEmpty(profile)) {
+      handleFetchEmails(params);
+    }
+  }, [profile]);
+
+  const handleFetchEmails = (params = {}) => {
+    actionGetEmailss({ ...params });
+  };
   return (
     <Fragment>
       <Sidebar
-        store={store}
+        // store={}
         dispatch={dispatch}
         getMails={getMails}
         sidebarOpen={sidebarOpen}
@@ -66,7 +77,7 @@ const EmailApp = () => {
             onClick={() => setSidebarOpen(false)}
           ></div>
           <Mails
-            store={store}
+            emailss={emailss.results}
             query={query}
             setQuery={setQuery}
             dispatch={dispatch}
@@ -88,4 +99,11 @@ const EmailApp = () => {
   )
 }
 
-export default EmailApp
+export default connect(
+  (state) => ({
+    profile: state.system?.profile,
+    emailss: state.emails?.emailss,
+    isFetching: state.emails?.isFetching,
+  }),
+  { actionGetEmailss }
+)(withRouter(EmailApp));

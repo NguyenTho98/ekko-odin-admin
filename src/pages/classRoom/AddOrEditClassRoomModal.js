@@ -12,6 +12,7 @@ function AddOrEditClassRoomModal(props) {
   const isAddNew = isEmpty(item);
   const [object, setObject] = useState({});
   const [centerData, setCenterData] = useState([]);
+  const [center, setCenter] = useState(item?.center);
   useEffect(() => {
     if (item && item.id) {
       setObject(item);
@@ -36,17 +37,18 @@ function AddOrEditClassRoomModal(props) {
   };
   const hanldChange = (e) => {
       const {name, value} = e.target;
-      console.log("1", name);
-      console.log("2", value);
       setObject({...object, [name]: value})
   }
-  console.log("object", object);
   const onSummit = async () => {
+    const data = {
+      ...object,
+      center: center?.id
+    }
     if (isAddNew) {
-        await actionAddClassRoom(object);
+        await actionAddClassRoom(data);
         toastSuccess("Thêm mới phòng học thành công")
       } else {
-        await actionEditClassRoom(object, item?.id);
+        await actionEditClassRoom(data, item?.id);
         toastSuccess("Cập nhật phòng học thành công")
       }
       onCancel(true);
@@ -97,11 +99,19 @@ function AddOrEditClassRoomModal(props) {
               <Col sm="12">
                 <FormGroup>
                 <Label>Trung tâm</Label>
-                <Input type='select' name='center' id='select-basic' onChange={hanldChange} value={object?.center?.id}>
-                  {
-                    centerData.map((item, index) => <option key={index} value={item.id}>{item.name}</option>)
-                  }
-                </Input>
+                  <Select
+                    isClearable={false}
+                    theme={selectThemeColors}
+                    name="colors"
+                    options={centerData}
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                    className="react-select"
+                    classNamePrefix="select"
+                    placeholder="Chọn trung tâm"
+                    value={center}
+                    onChange={(item) => setCenter(item) }
+                  />
                 </FormGroup>
               </Col>
               <Col sm="12">

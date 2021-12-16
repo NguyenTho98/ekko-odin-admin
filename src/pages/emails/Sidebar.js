@@ -61,12 +61,10 @@ const Sidebar = props => {
                   active={!Object.keys(params).length || handleActiveItem('inbox')}
                 >
                   <Mail size={18} className='mr-75' />
-                  <span className='align-middle'>Inbox</span>
-                  {store.emailsMeta.inbox ? (
-                    <Badge className='float-right' color='light-primary' pill>
+                  <span className='align-middle'>Tất cả Email</span>
+                    {/* <Badge className='float-right' color='light-primary' pill>
                       {store.emailsMeta.inbox}
-                    </Badge>
-                  ) : null}
+                    </Badge> */}
                 </ListGroupItem>
                 {/* <ListGroupItem
                   tag={Link}

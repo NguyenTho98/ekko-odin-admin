@@ -24,14 +24,16 @@ import "@styles/react/libs/flatpickr/flatpickr.scss";
 import moment from "moment";
 function AddOrEditStudentModal(props) {
   const { visible, onCancel, item = {} } = props;
-  const [picker, setPicker] = useState(item?.birth_day ? new Date(item?.birth_day) : '');
- 
+  const [picker, setPicker] = useState(
+    item?.birth_day ? new Date(item?.birth_day) : ""
+  );
+
   const isAddNew = isEmpty(item);
   const [object, setObject] = useState({
     gender: 1,
-   });
+  });
   const [centerData, setCenterData] = useState([]);
-  const [center, setCenter] = useState();
+  const [center, setCenter] = useState(item?.center);
   useEffect(() => {
     if (item && item.id) {
       setObject(item);
@@ -55,11 +57,31 @@ function AddOrEditStudentModal(props) {
   };
   console.log("object", object);
   const onSummit = async () => {
+    if (!object.full_name) {
+      toastError('Vui lòng nhập họ và tên')
+      return;
+    }
+    if (!object.username) {
+      toastError('Vui lòng nhập tên đăng nhập')
+      return;
+    }
+    if (!object.password) {
+      toastError('Vui lòng nhập tên password')
+      return;
+    }
+    if (!object.email) {
+      toastError('Vui lòng nhập email')
+      return;
+    }
+    if (!center) {
+      toastError('Vui lòng chọn trung tâm')
+      return;
+    }
     const data = {
       ...object,
-      center: center.id,
+      center: center?.id,
       birth_day: moment(new Date(picker)).format("YYYY-MM-DD"),
-    }
+    };
     if (isAddNew) {
       await actionAddStudent(data);
       toastSuccess("Thêm mới học viên thành công");
@@ -69,7 +91,6 @@ function AddOrEditStudentModal(props) {
     }
     onCancel(true);
   };
-
 
   console.log("picker", picker);
   return (
@@ -133,18 +154,22 @@ function AddOrEditStudentModal(props) {
                   />
                 </FormGroup>
               </Col>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="nameVertical">Mật khẩu</Label>
-                  <Input
-                    type="text"
-                    name="password"
-                    value={object?.password}
-                    onChange={hanldChange}
-                    placeholder="Mật khẩu"
-                  />
-                </FormGroup>
-              </Col>
+              {isAddNew ? (
+                <Col sm="6">
+                  <FormGroup>
+                    <Label for="nameVertical">Mật khẩu</Label>
+                    <Input
+                      type="text"
+                      name="password"
+                      value={object?.password}
+                      onChange={hanldChange}
+                      placeholder="Mật khẩu"
+                    />
+                  </FormGroup>
+                </Col>
+              ) : (
+                ""
+              )}
               <Col sm="6">
                 <FormGroup>
                   <Label for="nameVertical">Số điện thoại</Label>
@@ -157,7 +182,6 @@ function AddOrEditStudentModal(props) {
                   />
                 </FormGroup>
               </Col>
-            
               <Col sm="6">
                 <FormGroup>
                   <Label for="default-picker">Ngày sinh</Label>

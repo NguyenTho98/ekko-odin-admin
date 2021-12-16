@@ -60,7 +60,7 @@ const MailDetails = props => {
 
   // ** States
   const [showReplies, setShowReplies] = useState(false)
-
+  console.log("email", mail);
   // ** Renders Labels
   const renderLabels = arr => {
     if (arr && arr.length) {
@@ -98,14 +98,14 @@ const MailDetails = props => {
       <Card>
         <CardHeader className='email-detail-head'>
           <div className='user-details d-flex justify-content-between align-items-center flex-wrap'>
-            <Avatar img={obj.from.avatar} className='mr-75' imgHeight='48' imgWidth='48' />
+            {/* <Avatar img={obj.from.avatar} className='mr-75' imgHeight='48' imgWidth='48' /> */}
             <div className='mail-items'>
-              <h5 className='mb-0'>{obj.from.name}</h5>
+              <h5 className='mb-0'>{obj.from_email}</h5>
               <UncontrolledDropdown className='email-info-dropup'>
                 <DropdownToggle className='font-small-3 text-muted cursor-pointer' tag='span' caret>
-                  {obj.from.email}
+                  {obj.from_email}
                 </DropdownToggle>
-                <DropdownMenu>
+                {/* <DropdownMenu>
                   <Table className='font-small-3' size='sm' borderless>
                     <tbody>
                       <tr>
@@ -124,13 +124,13 @@ const MailDetails = props => {
                       </tr>
                     </tbody>
                   </Table>
-                </DropdownMenu>
+                </DropdownMenu> */}
               </UncontrolledDropdown>
             </div>
           </div>
           <div className='mail-meta-item d-flex align-items-center'>
             <small className='mail-date-time text-muted'>{formatDate(obj.time)}</small>
-            <UncontrolledDropdown className='ml-50'>
+            {/* <UncontrolledDropdown className='ml-50'>
               <DropdownToggle className='cursor-pointer' tag='span'>
                 <MoreVertical size={14} />
               </DropdownToggle>
@@ -148,23 +148,12 @@ const MailDetails = props => {
                   Delete
                 </DropdownItem>
               </DropdownMenu>
-            </UncontrolledDropdown>
+            </UncontrolledDropdown> */}
           </div>
         </CardHeader>
         <CardBody className='mail-message-wrapper pt-2'>
-          <div className='mail-message' dangerouslySetInnerHTML={{ __html: obj.message }}></div>
+          <div className='mail-message' dangerouslySetInnerHTML={{ __html: obj.content }}></div>
         </CardBody>
-        {obj.attachments && obj.attachments.length ? (
-          <CardFooter>
-            <div className='mail-attachments'>
-              <div className='d-flex align-items-center mb-1'>
-                <Paperclip size={16} />
-                <h5 className='font-weight-bolder text-body mb-0 ml-50'>{obj.attachments.length} Attachment</h5>
-              </div>
-              <div className='d-flex flex-column'>{renderAttachments(obj.attachments)}</div>
-            </div>
-          </CardFooter>
-        ) : null}
       </Card>
     )
   }
@@ -384,7 +373,7 @@ const MailDetails = props => {
             <Row>
               <Col sm='12'>{renderMessage(mail)}</Col>
             </Row>
-            <Row>
+            {/* <Row>
               <Col sm='12'>
                 <Card>
                   <CardBody>
@@ -401,7 +390,7 @@ const MailDetails = props => {
                   </CardBody>
                 </Card>
               </Col>
-            </Row>
+            </Row> */}
           </PerfectScrollbar>
         </Fragment>
       ) : null}

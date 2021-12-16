@@ -123,9 +123,8 @@ function FilterByDate() {
       "e",
       picker.endDate.unix()
     );
-    // pushstate(history, `/home/report?${lastParams}`);
+    history.push(`${history.location.pathname}?${lastParams}`);
   };
-
   useEffect(() => {
     const startTime = searchParams.get("s");
     const endTime = searchParams.get("e");

@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useEffect, Fragment, useCallback } from "react";
+import React, { useState, useEffect, Fragment, useCallback } from "react";
 import { Link, withRouter } from "react-router-dom";
 
 // ** Third Party Components
@@ -28,6 +28,8 @@ import Breadcrumbs from "@components/breadcrumbs";
 import { isEmpty } from "../../utility/Utils";
 import AddOrEditPaymentModal from "./AddOrEditPaymentModal";
 import DeletePaymentModal from "./DeletePaymentModal";
+import NumberFormat from "react-number-format";
+import moment from "moment";
 const CustomHeader = ({
   handleFilter,
   value,
@@ -96,7 +98,7 @@ const CustomHeader = ({
 };
 let params = {
   offset: 0,
-  limit: 20,
+  limit: 25,
 };
 const Payment = (props) => {
   const { profile, actionGetPayments, payments = {}, isFetching } = props;
@@ -107,12 +109,12 @@ const Payment = (props) => {
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [statusValue, setStatusValue] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(params.limit);
   useEffect(() => {
     return () => {
       params = {
         offset: 0,
-        limit: 10,
+        limit: 25,
       };
     };
   }, []);
@@ -125,7 +127,7 @@ const Payment = (props) => {
   }, [profile]);
 
   const handleFetchPayment = (params = {}) => {
-    actionGetPayments({ ...params, offset: params.offset - 1 });
+    actionGetPayments({ ...params });
   };
 
   const handleEditItem = (items = {}) => {
@@ -138,57 +140,103 @@ const Payment = (props) => {
     setVisibleModalDelete(true);
   };
 
+  const renderMethod = (value) => {
+    if (value === 2) {
+      return "Chuyển tiền"
+    }
+    return "Tiền mặt"
+  }
+
+  const renderState = (value) => {
+    if (value === 2) {
+      return "Chờ"
+    }
+    if (value === 3) {
+      return "Từ chối"
+    }
+    return "Đồng ý"
+  }
   const columns = [
+    // {
+    //   name: "#",
+    //   selector: "id",
+    //   cell: (row) => <span>{`#${row.id}`}</span>,
+    // },
     {
-      name: "#",
-      selector: "id",
-      cell: (row) => <span>{`#${row.id}`}</span>,
-    },
-    {
-      name: "Tiêu đề",
-      selector: "title",
+      name: "Mã hóa đơn",
+      selector: "code",
       sortable: true,
-      cell: (row) => <span>{row.title || "---"}</span>,
+      cell: (row) => <span>{row.code || "---"}</span>,
     },
     {
       name: "Số tiền đóng",
       selector: "pay_amount",
       minWidth: "150px",
       sortable: true,
-      cell: (row) => row.pay_amount || "---",
+      cell: (row) =>
+        (
+          <React.Fragment>
+            <NumberFormat
+              value={row?.pay_amount}
+              displayType={"text"}
+              thousandSeparator={true}
+            />
+          </React.Fragment>
+        ) || "---",
     },
     {
       name: "Số tiền còn nợ",
       minWidth: "150px",
       selector: "rest_amount",
       sortable: true,
-      cell: (row) => row.rest_amount || "---",
+      cell: (row) =>
+        (
+          <React.Fragment>
+            <NumberFormat
+              value={row.rest_amount}
+              displayType={"text"}
+              thousandSeparator={true}
+            />
+          </React.Fragment>
+        ) || "---",
     },
     {
       name: "Ngày nộp",
       selector: "payment_date",
       minWidth: "150px",
       sortable: true,
-      cell: (row) => row?.payment_date || "---",
+      cell: (row) => (
+        <React.Fragment>
+          {row?.payment_date
+            ? moment(row?.payment_date).format("DD-MM-YYYY")
+            : "---"}
+        </React.Fragment>
+      ),
     },
     {
       name: "Ngày hẹn hoàn thành",
       selector: "plan_date",
       sortable: true,
       minWidth: "200px",
-      cell: (row) => row?.plan_date || "---",
+      cell: (row) => (
+        <React.Fragment>
+          {row?.plan_date
+            ? moment(row?.plan_date).format("DD-MM-YYYY")
+            : "---"}
+        </React.Fragment>
+      ),
     },
     {
       name: "Hình thức",
       selector: "method",
       sortable: true,
-      cell: (row) => row.method || "---",
+      cell: (row) => renderMethod(row.method) || "---",
     },
     {
       name: "Trạng thái",
       selector: "state",
       sortable: true,
-      cell: (row) => row?.state || "---",
+      cell: (row) => renderState(row?.state) || "---",
     },
     {
       name: "Khuyễn mãi",
@@ -210,11 +258,11 @@ const Payment = (props) => {
       cell: (row) => row?.cashier?.username || "---",
     },
     {
-        name: "Ghi chú",
-        selector: "note",
-        sortable: true,
-        cell: (row) => row?.note || "---",
-      },
+      name: "Ghi chú",
+      selector: "note",
+      sortable: true,
+      cell: (row) => row?.note || "---",
+    },
     {
       name: "Action",
       minWidth: "110px",
@@ -248,17 +296,6 @@ const Payment = (props) => {
       ),
     },
   ];
-  //   useEffect(() => {
-  //     dispatch(
-  //       getData({
-  //         page: currentPage,
-  //         perPage: rowsPerPage,
-  //         status: statusValue,
-  //         q: value,
-  //       })
-  //     );
-  //   }, [dispatch, store.data.length]);
-
   const handleFilter = (val) => {
     setValue(val);
     // dispatch(
@@ -280,6 +317,7 @@ const Payment = (props) => {
     //     q: value,
     //   })
     // );
+    actionGetPayments({ ...params, limit: e.target.value });
     setRowsPerPage(parseInt(e.target.value));
   };
 
@@ -296,14 +334,11 @@ const Payment = (props) => {
   };
 
   const handlePagination = (page) => {
-    // dispatch(
-    //   getData({
-    //     page: page.selected + 1,
-    //     perPage: rowsPerPage,
-    //     status: statusValue,
-    //     q: value,
-    //   })
-    // );
+    actionGetPayments({
+      ...params,
+      limit: rowsPerPage,
+      offset: page.selected * rowsPerPage,
+    });
     setCurrentPage(page.selected + 1);
   };
   const handleAddNew = useCallback(() => {

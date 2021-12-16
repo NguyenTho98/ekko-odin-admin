@@ -1,6 +1,7 @@
 import axios from "axios";
 import cookie from "js-cookie";
 import Qs from "qs";
+import { toastError } from "../common/toastify";
 // import { message } from "antd";
 import { TOKEN, CONFIG_SERVER } from "../constants/config";
 
@@ -34,9 +35,8 @@ request.interceptors.response.use(
     //   message.error(
     //     "Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại!"
     //   );
-    Be
     } else {
-    //   message.error(data?.status?.message || "Lỗi hệ thống!");
+      toastError(JSON.stringify(data) || "Lỗi hệ thống!");
     }
     return Promise.reject(error?.response || { data: {} });
   }

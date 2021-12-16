@@ -96,7 +96,7 @@ const CustomHeader = ({
 };
 let params = {
   offset: 0,
-  limit: 20,
+  limit: 25,
 };
 const Comment = (props) => {
   const { profile, actionGetComments, comments = {}, isFetching } = props;
@@ -107,12 +107,12 @@ const Comment = (props) => {
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [statusValue, setStatusValue] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(params.limit);
   useEffect(() => {
     return () => {
       params = {
         offset: 0,
-        limit: 10,
+        limit: 25,
       };
     };
   }, []);
@@ -125,7 +125,7 @@ const Comment = (props) => {
   }, [profile]);
 
   const handleFetchComment = (params = {}) => {
-    actionGetComments({ ...params, offset: params.offset - 1 });
+    actionGetComments({ ...params });
   };
 
   const handleEditItem = (items = {}) => {
@@ -139,12 +139,12 @@ const Comment = (props) => {
   };
 
   const columns = [
-    {
-      name: "#",
-      minWidth: "107px",
-      selector: "id",
-      cell: (row) => <span>{`#${row.id}`}</span>,
-    },
+    // {
+    //   name: "#",
+    //   minWidth: "107px",
+    //   selector: "id",
+    //   cell: (row) => <span>{`#${row.id}`}</span>,
+    // },
     {
       name: "Tiêu đề",
       selector: "title",
@@ -227,17 +227,6 @@ const Comment = (props) => {
       ),
     },
   ];
-  //   useEffect(() => {
-  //     dispatch(
-  //       getData({
-  //         page: currentPage,
-  //         perPage: rowsPerPage,
-  //         status: statusValue,
-  //         q: value,
-  //       })
-  //     );
-  //   }, [dispatch, store.data.length]);
-
   const handleFilter = (val) => {
     setValue(val);
     // dispatch(
@@ -259,6 +248,7 @@ const Comment = (props) => {
     //     q: value,
     //   })
     // );
+    actionGetComments({ ...params, limit:e.target.value })
     setRowsPerPage(parseInt(e.target.value));
   };
 
@@ -275,14 +265,7 @@ const Comment = (props) => {
   };
 
   const handlePagination = (page) => {
-    // dispatch(
-    //   getData({
-    //     page: page.selected + 1,
-    //     perPage: rowsPerPage,
-    //     status: statusValue,
-    //     q: value,
-    //   })
-    // );
+    actionGetComments({ ...params, limit: rowsPerPage, offset: (page.selected) * rowsPerPage })
     setCurrentPage(page.selected + 1);
   };
   const handleAddNew = useCallback(() => {

@@ -37,7 +37,7 @@ const MailCard = props => {
   return (
     <Media tag='li' onClick={() => onMailClick(mail.id)} className={classnames({ 'mail-read': mail.isRead })}>
       <div className='media-left pr-50'>
-        <Avatar img={mail.from.avatar} />
+        {/* <Avatar img={mail.from.avatar} /> */}
         <div className='user-action'>
           {/* <CustomInput
             label=''
@@ -89,17 +89,17 @@ const MailCard = props => {
       <Media body>
         <div className='mail-details'>
           <div className='mail-items'>
-            <h5 className='mb-25'>{mail.from.name}</h5>
+            <h5 className='mb-25'>{mail?.to_email}</h5>
             <span className='text-truncate'>{mail.subject}</span>
           </div>
           <div className='mail-meta-item'>
-            {mail.attachments && mail.attachments.length ? <Paperclip size={14} /> : null}
-            {renderLabels(mail.labels)}
-            <span className='mail-date'>{formatDateToMonthShort(mail.time)}</span>
+            {/* {mail.attachments && mail.attachments.length ? <Paperclip size={14} /> : null} */}
+            {/* {renderLabels(mail.labels)} */}
+            <span className='mail-date'>{formatDateToMonthShort(mail.sent_date_time)}</span>
           </div>
         </div>
         <div className='mail-message'>
-          <p className='text-truncate mb-0'>{htmlToString(mail.message)}</p>
+          <p className='text-truncate mb-0'>{htmlToString(mail.content)}</p>
         </div>
       </Media>
     </Media>

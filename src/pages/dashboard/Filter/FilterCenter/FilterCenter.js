@@ -16,48 +16,26 @@ function GroupBy(props) {
   const history = useHistory();
   const { search } = history.location;
   const searchParams = new URLSearchParams(search);
-  const group = searchParams.get("group");
+  const centerID = searchParams.get("center");
   const [centerData, setCenterData] = useState([]);
   const [center, setCenter] = useState();
   useEffect(() => {
     handleFetchCenterData();
-  }, []);
+  }, [centerID]);
   const handleFetchCenterData = async () => {
     try {
       const { data } = await getCenterList();
       setCenterData(data?.results || []);
+      if (searchParams.get("center")) {
+        const dataCenter = data?.results
+        const idCenter = searchParams.get("center")
+        const tmp = dataCenter.find(a => a.id === Number(idCenter))
+        if (tmp) {
+          setCenter(tmp)
+        }
+      }
     } catch (error) {}
   };
-  const convertToIndex = () => {
-    switch (group) {
-      case "day":
-        return 0;
-      case "week":
-        return 1;
-      case "month":
-        return 2;
-      case "year":
-        return 3;
-      default:
-        return 0;
-    }
-  };
-
-  const convertToType = (index) => {
-    switch (index) {
-      case 0:
-        return "day";
-      case 1:
-        return "week";
-      case 2:
-        return "month";
-      case 3:
-        return "year";
-      default:
-        return "day";
-    }
-  };
-
   useEffect(() => {
     if (currentShow !== "groupby") {
       setShow(false);
@@ -80,11 +58,11 @@ function GroupBy(props) {
     e.stopPropagation();
   };
 
-  const handleSelect = (index) => {
-    const type = convertToType(index);
-    const newParams = getNewParams(history.location.search, "group", type);
+  const handleSelect = (item) => {
+    const newParams = getNewParams(history.location.search, "center", item.id);
     setShow(false);
-    // pushstate(history, `/home/report?${newParams}`);
+    setCenter(item)
+    history.push(`${history.location.pathname}?${newParams}`);
   };
 
   const onClick = () => {
@@ -125,8 +103,9 @@ function GroupBy(props) {
           />
         </svg>
         <div className="content">
-          Tất cả cơ sở học 
-          {/* <span>&nbsp;{arr[convertToIndex()]}</span> */}
+          {
+            center?.name ? center?.name : "Tất cả cơ sở học"
+          }
         </div>
         <svg
           width="12"
@@ -151,10 +130,10 @@ function GroupBy(props) {
               <div
                 className="d-flex align-items-center justify-content-between center-item"
                 key={index}
-                onClick={() => handleSelect(index)}
+                onClick={() => handleSelect(item)}
               >
                 <span>{item.name}</span>
-                {convertToIndex() === index ? (
+                {center?.id === item?.id ? (
                   <svg
                     width="15"
                     height="12"

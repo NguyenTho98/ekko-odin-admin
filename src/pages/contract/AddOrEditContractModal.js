@@ -193,7 +193,7 @@ function AddOrEditContractModal(props) {
                     theme={selectThemeColors}
                     name="colors"
                     options={usersData}
-                    getOptionLabel={(option) => option.username}
+                    getOptionLabel={(option) => option.full_name}
                     getOptionValue={(option) => option.id}
                     className="react-select"
                     classNamePrefix="select"
@@ -229,7 +229,7 @@ function AddOrEditContractModal(props) {
                     theme={selectThemeColors}
                     name="colors"
                     options={paymentData}
-                    getOptionLabel={(option) => option.title}
+                    getOptionLabel={(option) => option.name}
                     getOptionValue={(option) => option.id}
                     className="react-select"
                     classNamePrefix="select"
@@ -246,7 +246,7 @@ function AddOrEditContractModal(props) {
                   theme={selectThemeColors}
                   name="colors"
                   options={usersData}
-                  getOptionLabel={(option) => option.username}
+                  getOptionLabel={(option) => option.full_name}
                   getOptionValue={(option) => option.id}
                   className="react-select"
                   classNamePrefix="select"

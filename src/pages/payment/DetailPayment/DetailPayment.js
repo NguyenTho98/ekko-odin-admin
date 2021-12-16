@@ -52,7 +52,7 @@ function DetailPayment(props) {
   const [method, setMethod] = useState(1);
   const [payment_date, setPayment_date] = useState(new Date());
   const [plan_date, setPlan_date] = useState(new Date());
-  const [studentData, setStudentData] = useState({});
+  const [studentData, setStudentData] = useState([]);
   const [object, setObject] = useState({
     state: 1,
   });
@@ -179,12 +179,50 @@ function DetailPayment(props) {
 
   const hanldChange = (e) => {
     const { name, value } = e.target;
-    setObject({ ...object, [name]: value });
+    if (name === "times" && value > 1) {
+      setPlan_date(moment(new Date()).add(40, 'days').format('DD-MM-YYYY'))
+    } else {
+      setPlan_date(new Date())
+    }
+    if (name === "pay_amount") {
+      const tmp = renderTotal() - parseInt(numberWithCommas(value));
+      setObject({ ...object, [name]: value, rest_amount: tmp });
+    } else {
+      setObject({ ...object, [name]: value });
+    }
   };
   function numberWithCommas(x) {
     return x.toString().replaceAll(",", "");
   }
   const onSummit = async () => {
+    if (!student) {
+      toastError('Vui lòng chọn học viên')
+      return;
+    }
+    if (course.length === 0) {
+      toastError('Vui lòng chọn khóa học')
+      return;
+    }
+    if (!receptionist) {
+      toastError('Vui lòng chọn nhân viên thu tiền')
+      return;
+    }
+    if (!receptionist) {
+      toastError('Vui lòng chọn nhân viên thu tiền')
+      return;
+    }
+    if (!center) {
+      toastError('Vui lòng chọn trung tâm')
+      return;
+    }
+    if (!object.times) {
+      toastError('Vui nhập số lần đóng tiền')
+      return;
+    }
+    if (!object.pay_amount) {
+      toastError('Vui nhập số tiền đóng')
+      return;
+    }
     const idCourse = course.length > 0 ? course.map((item) => item.id) : [];
     const idClasses = course.length > 0 ? classes.map((item) => item.id) : [];
     const dataPayment = {
@@ -572,6 +610,7 @@ function DetailPayment(props) {
                     className="form-control"
                     options={options}
                     id="numeral-formatting"
+                    disabled={course.length === 0}
                   />
                 </FormGroup>
                 <FormGroup>
@@ -584,6 +623,8 @@ function DetailPayment(props) {
                     placeholder="Số tiền còn nợ"
                     className="form-control"
                     options={options}
+                    disabled
+                    min={0}
                     id="numeral-formatting"
                   />
                 </FormGroup>
@@ -607,6 +648,7 @@ function DetailPayment(props) {
                       value={plan_date}
                       onChange={(date) => setPlan_date(date)}
                       id="default-picker"
+                      disabled
                       options={{
                         dateFormat: "Y-m-d h:m:i",
                       }}
@@ -706,6 +748,8 @@ function DetailPayment(props) {
               setVisibleModal(false);
             }}
             setStudent={setStudent}
+            setStudentData={setStudentData}
+            studentData={studentData}
           />
         )}
       </div>

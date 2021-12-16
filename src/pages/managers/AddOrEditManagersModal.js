@@ -56,6 +56,26 @@ function AddOrEditManagersModal(props) {
   };
   console.log("object", object);
   const onSummit = async () => {
+    if (!object.full_name) {
+      toastError('Vui lòng nhập họ và tên')
+      return;
+    }
+    if (!object.username) {
+      toastError('Vui lòng nhập tên đăng nhập')
+      return;
+    }
+    if (!object.password) {
+      toastError('Vui lòng nhập tên password')
+      return;
+    }
+    if (!object.email) {
+      toastError('Vui lòng nhập email')
+      return;
+    }
+    if (!center) {
+      toastError('Vui lòng chọn trung tâm')
+      return;
+    }
     const data = {
       ...object,
       center: center.id,
@@ -134,6 +154,22 @@ function AddOrEditManagersModal(props) {
                   />
                 </FormGroup>
               </Col>
+              {isAddNew ? (
+                <Col sm="6">
+                  <FormGroup>
+                    <Label for="nameVertical">Mật khẩu</Label>
+                    <Input
+                      type="text"
+                      name="password"
+                      value={object?.password}
+                      onChange={hanldChange}
+                      placeholder="Mật khẩu"
+                    />
+                  </FormGroup>
+                </Col>
+              ) : (
+                ""
+              )}
               <Col sm="6">
                 <FormGroup>
                   <Label for="nameVertical">Số điện thoại</Label>

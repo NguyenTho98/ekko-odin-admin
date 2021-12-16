@@ -87,7 +87,7 @@ const CustomHeader = ({
 };
 let params = {
     offset: 0,
-    limit: 20,
+    limit: 25,
     query: "",
 };
 const ClassRoom = (props) => {
@@ -99,12 +99,12 @@ const ClassRoom = (props) => {
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [statusValue, setStatusValue] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(params.limit);
   useEffect(() => {
     return () => {
       params = {
         offset: 0,
-        limit: 10,
+        limit: 25,
         query: "",
       };
     };
@@ -118,7 +118,7 @@ const ClassRoom = (props) => {
   }, [profile]);
 
   const handleFetchClassRoom = (params = {}) => {
-    actionGetClassRooms({ ...params, offset: params.offset - 1 });
+    actionGetClassRooms({ ...params });
   };
 
   const handleEditItem = (items = {}) => {
@@ -132,12 +132,12 @@ const ClassRoom = (props) => {
   }
 
   const columns = [
-    {
-      name: '#',
-      minWidth: '107px',
-      selector: 'id',
-      cell: row => <span>{`#${row.id}`}</span>
-    },
+    // {
+    //   name: '#',
+    //   minWidth: '107px',
+    //   selector: 'id',
+    //   cell: row => <span>{`#${row.id}`}</span>
+    // },
     {
       name: 'Tên phòng học',
       selector: 'name',
@@ -185,17 +185,6 @@ const ClassRoom = (props) => {
       )
     }
   ]
-//   useEffect(() => {
-//     dispatch(
-//       getData({
-//         page: currentPage,
-//         perPage: rowsPerPage,
-//         status: statusValue,
-//         q: value,
-//       })
-//     );
-//   }, [dispatch, store.data.length]);
-
   const handleFilter = (val) => {
     setValue(val);
     // dispatch(
@@ -217,6 +206,7 @@ const ClassRoom = (props) => {
     //     q: value,
     //   })
     // );
+    actionGetClassRooms({ ...params, limit:e.target.value })
     setRowsPerPage(parseInt(e.target.value));
   };
 
@@ -233,14 +223,7 @@ const ClassRoom = (props) => {
   };
 
   const handlePagination = (page) => {
-    // dispatch(
-    //   getData({
-    //     page: page.selected + 1,
-    //     perPage: rowsPerPage,
-    //     status: statusValue,
-    //     q: value,
-    //   })
-    // );
+    actionGetClassRooms({ ...params, limit: rowsPerPage, offset: (page.selected) * rowsPerPage })
     setCurrentPage(page.selected + 1);
   };
   const handleAddNew = useCallback(() => {

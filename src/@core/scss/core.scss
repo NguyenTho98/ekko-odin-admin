@@ -11,3 +11,11 @@
 
 // React Specific
 @import 'react/index';
+.table{
+    color: black !important;
+}
+@media print{
+    div.print{
+      width: 100%;
+    }
+}
