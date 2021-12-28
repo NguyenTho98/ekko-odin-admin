@@ -41,6 +41,7 @@ import {
 import { toastSuccess } from "../../../utility/common/toastify";
 import { useParams, withRouter, useHistory, Link } from "react-router-dom";
 import Cleave from "cleave.js/react";
+import PaymentModal from "../CreatePayment/PaymentModal";
 
 const options = { numeral: true, numeralThousandsGroupStyle: "thousand" };
 function DetailPayment(props) {
@@ -57,6 +58,7 @@ function DetailPayment(props) {
     state: 1,
   });
   const [visibleModal, setVisibleModal] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [classesData, setClassesData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [rewardData, setRewardData] = useState([]);
@@ -180,9 +182,9 @@ function DetailPayment(props) {
   const hanldChange = (e) => {
     const { name, value } = e.target;
     if (name === "times" && value > 1) {
-      setPlan_date(moment(new Date()).add(40, 'days').format('DD-MM-YYYY'))
+      setPlan_date(moment(new Date()).add(40, "days").format("DD-MM-YYYY"));
     } else {
-      setPlan_date(new Date())
+      setPlan_date(new Date());
     }
     if (name === "pay_amount") {
       const tmp = renderTotal() - parseInt(numberWithCommas(value));
@@ -196,38 +198,38 @@ function DetailPayment(props) {
   }
   const onSummit = async () => {
     if (!student) {
-      toastError('Vui lòng chọn học viên')
+      toastError("Vui lòng chọn học viên");
       return;
     }
     if (course.length === 0) {
-      toastError('Vui lòng chọn khóa học')
+      toastError("Vui lòng chọn khóa học");
       return;
     }
     if (!receptionist) {
-      toastError('Vui lòng chọn nhân viên thu tiền')
+      toastError("Vui lòng chọn nhân viên thu tiền");
       return;
     }
     if (!receptionist) {
-      toastError('Vui lòng chọn nhân viên thu tiền')
+      toastError("Vui lòng chọn nhân viên thu tiền");
       return;
     }
     if (!center) {
-      toastError('Vui lòng chọn trung tâm')
+      toastError("Vui lòng chọn trung tâm");
       return;
     }
-    if (!object.times) {
-      toastError('Vui nhập số lần đóng tiền')
-      return;
-    }
-    if (!object.pay_amount) {
-      toastError('Vui nhập số tiền đóng')
-      return;
-    }
+    // if (!object.times) {
+    //   toastError('Vui nhập số lần đóng tiền')
+    //   return;
+    // }
+    // if (!object.pay_amount) {
+    //   toastError('Vui nhập số tiền đóng')
+    //   return;
+    // }
     const idCourse = course.length > 0 ? course.map((item) => item.id) : [];
     const idClasses = course.length > 0 ? classes.map((item) => item.id) : [];
     const dataPayment = {
-      pay_amount: parseInt(numberWithCommas(object?.pay_amount)),
-      rest_amount: parseInt(numberWithCommas(object?.rest_amount)),
+      // pay_amount: parseInt(numberWithCommas(object?.pay_amount)),
+      // rest_amount: object.rest_amount,
       payment_date: moment(new Date(payment_date)).format("YYYY-MM-DD"),
       plan_date: moment(new Date(plan_date)).format("YYYY-MM-DD"),
       method,
@@ -266,7 +268,7 @@ function DetailPayment(props) {
         total += schedule === "1" ? element.night_cost : element.daytime_cost;
       }
     }
-    total = reward ? (total - ((reward.discount * total) / 100)) : total;
+    total = reward ? total - (reward.discount * total) / 100 : total;
     return total;
   };
   const renderLesson = () => {
@@ -290,8 +292,8 @@ function DetailPayment(props) {
             <Breadcrumbs breadCrumbTitle="Chi tiết hợp đồng" />
           </div>
           <div style={{ marginRight: 5 }}>
-           { id ? (
-                <Button.Ripple
+            {id ? (
+              <Button.Ripple
                 color="primary"
                 tag={Link}
                 to={`/contract/print/${id}`}
@@ -300,10 +302,11 @@ function DetailPayment(props) {
                 <Printer size={18} />
                 <span className="align-middle ml-25">In hợp đồng</span>
               </Button.Ripple>
-            ) : ""}
-           {
-               object?.payment?.id ? 
-                <Button.Ripple
+            ) : (
+              ""
+            )}
+            {/* {object?.payment?.id ? (
+              <Button.Ripple
                 color="primary"
                 tag={Link}
                 to={`/payment/print/${object?.payment?.id}`}
@@ -312,12 +315,10 @@ function DetailPayment(props) {
               >
                 <Printer size={18} />
                 <span className="align-middle ml-25">In hóa đơn</span>
-              </Button.Ripple> : ""
-           }
-            <Button.Ripple color="primary" onClick={onSummit}>
-              <Save size={18} />
-              <span className="align-middle ml-25">Lưu</span>
-            </Button.Ripple>
+              </Button.Ripple>
+            ) : (
+              ""
+            )} */}
           </div>
         </div>
         <Row>
@@ -481,80 +482,88 @@ function DetailPayment(props) {
                 </Row>
               </CardBody>
             </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4" className="">
+                  Thông tin hóa đơn
+                  <span>
+                    {" "}
+                    <Button.Ripple
+                      className="btn-icon"
+                      id="create-payment"
+                      outline
+                      color="primary"
+                      onClick={() => setVisible(true)}
+                      style={{ borderRadius: "50%", padding: 2 }}
+                    >
+                      <Plus size={16} />
+                    </Button.Ripple>
+                    <UncontrolledTooltip
+                      placement="top"
+                      target="create-payment"
+                    >
+                      Thêm mới hóa đơn
+                    </UncontrolledTooltip>
+                  </span>
+                </CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Table striped responsive >
+                  <thead>
+                    <tr>
+                      <th>Mã hóa đơn</th>
+                      <th>Số tiền</th>
+                      <th>Trạng thái</th>
+                      <th>Ngày hẹn hoàn thành</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  {course?.length > 0 ? (
+                    <tbody>
+                      {course.map((item) => (
+                        <tr key={item.id}>
+                          <td>{item.code}</td>
+                          <td>{item.name}</td>
+                          <td>
+                            <NumberFormat
+                              value={item.study_shift_count}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                            />{" "}
+                          </td>
+                          <td>
+                            {" "}
+                            <NumberFormat
+                              value={item.night_cost}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                            />{" "}
+                          </td>
+                          <td><Printer size={18} /></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  ) : (
+                    ""
+                  )}
+                </Table>
+                {course?.length === 0 && (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      width: "100%",
+                      padding: "20px 0px",
+                    }}
+                  >
+                    <div style={{ marginTop: 10 }}>
+                      Hợp đồng của bạn chưa có hóa đơn nào
+                    </div>
+                  </div>
+                )}
+              </CardBody>
+            </Card>
             <Row>
-              <Col md="6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle tag="h4" className="">
-                      Xác nhận thanh toán
-                    </CardTitle>
-                  </CardHeader>
-                  <CardBody>
-                    <FormGroup>
-                      <div style={{ marginBottom: 20 }}>
-                        <CustomInput
-                          type="radio"
-                          id="exampleCustomRadio"
-                          name="method"
-                          onChange={(e) => setMethod(1)}
-                          checked={method === 1}
-                          inline
-                          label="Tiền mặt"
-                        />
-                        <CustomInput
-                          type="radio"
-                          id="exampleCustomRadio2"
-                          name="method"
-                          onChange={(e) => setMethod(2)}
-                          checked={method === 2}
-                          inline
-                          label="Chuyển khoản"
-                        />
-                      </div>
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="nameVertical">Nhân viên thu tiền</Label>
-                      <Select
-                        isClearable={false}
-                        theme={selectThemeColors}
-                        name="colors"
-                        options={receptionistData}
-                        getOptionLabel={(option) => option.username}
-                        getOptionValue={(option) => option.id}
-                        className="react-select"
-                        classNamePrefix="select"
-                        placeholder="Chọn nhân viên thu tiền"
-                        value={receptionist}
-                        onChange={(item) => setReceptionist(item)}
-                      />
-                    </FormGroup>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col md="6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle tag="h4" className="">
-                      Ưu đãi
-                    </CardTitle>
-                  </CardHeader>
-                  <CardBody style={{ paddingBottom: 97 }}>
-                    <Select
-                      isClearable={false}
-                      theme={selectThemeColors}
-                      name="colors"
-                      options={rewardData}
-                      getOptionLabel={(option) => option.title}
-                      getOptionValue={(option) => option.id}
-                      className="react-select"
-                      classNamePrefix="select"
-                      placeholder="Chọn ưu đãi"
-                      value={reward}
-                      onChange={(item) => setReward(item)}
-                    />
-                  </CardBody>
-                </Card>
-              </Col>
+             
             </Row>
           </Col>
           <Col md="4" lg="4">
@@ -565,7 +574,7 @@ function DetailPayment(props) {
                 </CardTitle>
               </CardHeader>
               <CardBody>
-                <FormGroup>
+                {/* <FormGroup>
                   <Label for="nameVertical">Nội dung</Label>
                   <Input
                     type="text"
@@ -574,7 +583,7 @@ function DetailPayment(props) {
                     onChange={hanldChange}
                     placeholder="Nội dung"
                   />
-                </FormGroup>
+                </FormGroup> */}
                 <FormGroup>
                   <Label for="select-basic">Ca học</Label>
                   <Input
@@ -587,73 +596,6 @@ function DetailPayment(props) {
                     <option value="1">Ca ngày</option>
                     <option value="2">Ca tối</option>
                   </Input>
-                </FormGroup>
-                <FormGroup>
-                  <Label for="nameVertical">Số lần đóng tiền</Label>
-                  <Cleave
-                    name="times"
-                    value={object?.times}
-                    className="form-control"
-                    onChange={hanldChange}
-                    placeholder="Số lần đóng tiền"
-                    options={options}
-                    id="numeral-formatting"
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="nameVertical">Số tiền đóng</Label>
-                  <Cleave
-                    name="pay_amount"
-                    value={object?.pay_amount}
-                    onChange={hanldChange}
-                    placeholder="Số tiền đóng"
-                    className="form-control"
-                    options={options}
-                    id="numeral-formatting"
-                    disabled={course.length === 0}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="nameVertical">Số tiền còn nợ</Label>
-
-                  <Cleave
-                    name="rest_amount"
-                    value={object?.rest_amount}
-                    onChange={hanldChange}
-                    placeholder="Số tiền còn nợ"
-                    className="form-control"
-                    options={options}
-                    disabled
-                    min={0}
-                    id="numeral-formatting"
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="default-picker">Ngày nộp</Label>
-                  <Flatpickr
-                    className="form-control"
-                    value={payment_date}
-                    onChange={(date) => setPayment_date(date)}
-                    id="default-picker"
-                    options={{
-                      dateFormat: "Y-m-d h:m:i",
-                    }}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <FormGroup>
-                    <Label for="default-picker">Ngày hẹn nộp hoàn thành</Label>
-                    <Flatpickr
-                      className="form-control"
-                      value={plan_date}
-                      onChange={(date) => setPlan_date(date)}
-                      id="default-picker"
-                      disabled
-                      options={{
-                        dateFormat: "Y-m-d h:m:i",
-                      }}
-                    />
-                  </FormGroup>
                 </FormGroup>
                 <FormGroup>
                   <Label for="select-basic">Tình trạng hợp đồng</Label>
@@ -687,6 +629,23 @@ function DetailPayment(props) {
                     onChange={(item) => setStudentcare(item)}
                   />
                 </FormGroup>
+                <FormGroup>
+                  <Label for="nameVertical">Ưu đãi</Label>
+                  <Select
+                    isClearable={false}
+                    theme={selectThemeColors}
+                    name="colors"
+                    options={rewardData}
+                    getOptionLabel={(option) => option.title}
+                    getOptionValue={(option) => option.id}
+                    className="react-select"
+                    classNamePrefix="select"
+                    placeholder="Chọn ưu đãi"
+                    value={reward}
+                    onChange={(item) => setReward(item)}
+                  />
+                </FormGroup>
+
                 <FormGroup>
                   <Label for="nameVertical">Lớp học</Label>
                   <Select
@@ -750,6 +709,15 @@ function DetailPayment(props) {
             setStudent={setStudent}
             setStudentData={setStudentData}
             studentData={studentData}
+          />
+        )}
+         {visible && (
+          <PaymentModal
+            visible={visible}
+            onCancel={(isRefreshData) => {
+              // setSelectedItem({});
+              setVisible(false);
+            }}
           />
         )}
       </div>

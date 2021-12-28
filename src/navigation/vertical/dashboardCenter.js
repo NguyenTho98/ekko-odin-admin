@@ -1,4 +1,4 @@
-import { Box, Circle } from 'react-feather'
+import { Box, Circle, RotateCw } from 'react-feather'
 
 export default [
   {
@@ -43,17 +43,25 @@ export default [
         icon: <Circle size={12} />,
         navLink: '/reward'
       },
-      {
-        id: 'paymentDashCenter',
-        title: 'Hóa đơn',
-        icon: <Circle size={12} />,
-        navLink: '/payment'
-      },
+    ]
+  },
+  {
+    id: 'dashboardCenter1',
+    title: 'Quản lý thu chi',
+    icon: <RotateCw size={20} />,
+    badge: 'light-warning',
+    children: [
       {
         id: 'contractDashCenter',
         title: 'Hợp đồng',
         icon: <Circle size={12} />,
         navLink: '/contract'
+      },
+      {
+        id: 'paymentDashCenter',
+        title: 'Hóa đơn',
+        icon: <Circle size={12} />,
+        navLink: '/payment'
       },
     ]
   }

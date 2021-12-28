@@ -1,8 +1,8 @@
-import React, { useState, useEffect, Fragment, useRef } from "react";
-import "./CreatePayment.scss";
+import React, { useState, useEffect, Fragment } from "react";
+import "./DetailPayment.scss";
 import Select, { components } from "react-select";
 import Breadcrumbs from "@components/breadcrumbs";
-import StudentModal from "./StudentModal.js";
+import StudentModal from "./../CreatePayment/StudentModal";
 import NumberFormat from "react-number-format";
 import {
   Button,
@@ -21,26 +21,31 @@ import {
 } from "reactstrap";
 import { getStudentList } from "../../student/StudentAction";
 import { selectThemeColors } from "@utils";
-import { Edit, Plus, Save } from "react-feather";
+import { Edit, Plus, Printer, Save } from "react-feather";
 import { getCourseList } from "../../course/CourseAction";
 import { getRewardList } from "../../reward/RewardAction";
 import Flatpickr from "react-flatpickr";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
+import { getBussinessemployeeList } from "../../bussinessemployee/BussinessemployeeAction";
 import { getStudentcareList } from "../../studentcare/StudentcareAction";
 import { getReceptionistList } from "../../receptionist/ReceptionistAction";
 import { getClassesList } from "../../classes/ClassesAction";
 import { getCenterList } from "../../center/CenterAction";
 import moment from "moment";
-import { actionAddPayment } from "../PaymentAction";
-import { actionAddContract } from "../../contract/ContractAction";
-import { toastSuccess, toastError } from "../../../utility/common/toastify";
-
+import { actionAddPayment, actionEditPayment } from "../PaymentAction";
+import {
+  actionAddContract,
+  actionEditContract,
+  getContractDetail,
+} from "../../contract/ContractAction";
+import { toastSuccess } from "../../../utility/common/toastify";
+import { useParams, withRouter, useHistory, Link } from "react-router-dom";
 import Cleave from "cleave.js/react";
-import { useHistory } from "react-router-dom";
-import PaymentModal from "./PaymentModal";
 
 const options = { numeral: true, numeralThousandsGroupStyle: "thousand" };
-function CreatePayment(props) {
+function DetailPayment(props) {
+  const { item } = props;
+  const { id } = useParams();
   const history = useHistory();
   const [student, setStudent] = useState("");
   const [schedule, setSchedule] = useState("1");
@@ -52,7 +57,6 @@ function CreatePayment(props) {
     state: 1,
   });
   const [visibleModal, setVisibleModal] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [classesData, setClassesData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [rewardData, setRewardData] = useState([]);
@@ -63,21 +67,47 @@ function CreatePayment(props) {
   const [center, setCenter] = useState();
   const [studentcare, setStudentcare] = useState();
   const [receptionist, setReceptionist] = useState();
+  const [salerData, setSalerData] = useState([]);
   const [studentcareData, setStudentcareData] = useState([]);
   const [receptionistData, setReceptionistData] = useState([]);
-  const courseRef = useRef()
-  useEffect(() => {
-    handleFetchCourseData();
-    handleFetchStudentData();
-    handleFetchRewardData();
-    handleFetchStudentcareData();
-    handleFetchReceptionistData();
-    handleFetchCenterData();
-    handleFetchClassesData();
+
+  useEffect(async () => {
+    await handleFetchCourseData();
+    await handleFetchStudentData();
+    await handleFetchRewardData();
+    await handleFetchSalerData();
+    await handleFetchStudentcareData();
+    await handleFetchReceptionistData();
+    await handleFetchCenterData();
+    await handleFetchClassesData();
+    const res = await getContractDetail(id).then((res) => {
+      setStudent(res?.data?.customers);
+      setCourse(res?.data?.course);
+      setClasses(res?.data?.classes);
+      setReceptionist(res?.data?.payment?.cashier);
+      setStudentcare(res?.data?.consultant);
+      setCenter(res?.data?.center);
+      setReward(res?.data?.payment?.reward);
+      setMethod(res?.data?.payment?.method);
+      setPlan_date(res?.data?.payment?.plan_date);
+      setPayment_date(res?.data?.payment?.payment_date);
+      setMethod(res?.data?.payment?.method);
+      setSchedule(res?.data?.shift);
+      const data = {
+        ...res.data,
+        id: res?.data?.id,
+        pay_amount: res?.data?.payment?.pay_amount,
+        rest_amount: res?.data?.payment?.rest_amount,
+        state: 1,
+        title: res?.data?.title,
+        times: res?.data?.times,
+        state: res?.data?.state,
+        note: res?.data?.note,
+      };
+      setObject(data);
+    });
   }, []);
-  const autoFocusCourse = () => {
-    courseRef.current.focus()
-  }
+
   const onChangeStudent = (item) => {
     setStudent(item);
   };
@@ -87,13 +117,17 @@ function CreatePayment(props) {
       setStudentData(data?.results || []);
     } catch (error) {}
   };
-  console.log("studentData", studentData);
+
   const onChangeMulCourse = (value) => {
     setCourse(value);
   };
 
   const onChangeMulClasses = (value) => {
-    setClasses(value);
+    let tmp = null;
+    if (value && value.length > 0) {
+      tmp = value.map((item) => item.id);
+    }
+    setClasses(tmp);
   };
   const handleFetchCourseData = async () => {
     try {
@@ -119,6 +153,13 @@ function CreatePayment(props) {
     try {
       const { data } = await getClassesList();
       setClassesData(data?.results || []);
+    } catch (error) {}
+  };
+
+  const handleFetchSalerData = async () => {
+    try {
+      const { data } = await getBussinessemployeeList();
+      setSalerData(data?.results || []);
     } catch (error) {}
   };
 
@@ -149,11 +190,10 @@ function CreatePayment(props) {
     } else {
       setObject({ ...object, [name]: value });
     }
-    
   };
   function numberWithCommas(x) {
-    return  x.replaceAll(",", "");
- }
+    return x.toString().replaceAll(",", "");
+  }
   const onSummit = async () => {
     if (!student) {
       toastError('Vui lòng chọn học viên')
@@ -183,32 +223,38 @@ function CreatePayment(props) {
     //   toastError('Vui nhập số tiền đóng')
     //   return;
     // }
-    // if (object.rest_amount < 0) {
-    //   toastError('Vui nhập lại số tiền đóng cho đúng')
-    //   return;
-    // }
-  
     const idCourse = course.length > 0 ? course.map((item) => item.id) : [];
-    const idClasses = classes.length > 0 ? classes.map((item) => item.id) : [];
+    const idClasses = course.length > 0 ? classes.map((item) => item.id) : [];
+    const dataPayment = {
+      // pay_amount: parseInt(numberWithCommas(object?.pay_amount)),
+      // rest_amount: object.rest_amount,
+      payment_date: moment(new Date(payment_date)).format("YYYY-MM-DD"),
+      plan_date: moment(new Date(plan_date)).format("YYYY-MM-DD"),
+      method,
+      state: 2,
+      center: center?.id,
+      payer: student?.id,
+      cashier: receptionist?.id,
+      reward: reward?.id,
+    };
+
+    const res = await actionEditPayment(dataPayment, object?.payment?.id);
     if (res && res.data) {
       const dataContract = {
         title: object?.title,
-        // times: object?.times,
+        times: object?.times,
         state: object?.state,
         note: object?.note,
         customers: student?.id,
         center: center?.id,
-        // payment: res?.data?.id,
+        payment: res?.data?.id,
         classes: idClasses,
         consultant: studentcare?.id,
         course: idCourse,
         shift: method,
       };
-      const res1 = await actionAddContract(dataContract);
-      if (res1 && res1.data?.id) {
-        history.push(`/contract-edit/${res1.data.id}`)
-        toastSuccess("Thêm mới hợp đồng thành công");
-      }
+      await actionEditContract(dataContract, object?.id);
+      toastSuccess("Chỉnh sửa hợp đồng thành công");
     }
   };
 
@@ -235,15 +281,39 @@ function CreatePayment(props) {
   };
   return (
     <Fragment>
-      <div className="invoice-list-wrapper create-payment-wrapper">
+      <div className="invoice-list-wrapper detail-payment-wrapper">
         <div
           className="d-flex justify-content-between"
           style={{ marginBottom: 20 }}
         >
-          <div style={{ width: "calc((100% - 300px))" }}>
-            <Breadcrumbs breadCrumbTitle="Thêm mới hợp đồng" />
+          <div style={{ width: "calc((100% - 450px))" }}>
+            <Breadcrumbs breadCrumbTitle="Chi tiết hợp đồng" />
           </div>
           <div style={{ marginRight: 5 }}>
+           { id ? (
+                <Button.Ripple
+                color="primary"
+                tag={Link}
+                to={`/contract/print/${id}`}
+                target="_blank"
+              >
+                <Printer size={18} />
+                <span className="align-middle ml-25">In hợp đồng</span>
+              </Button.Ripple>
+            ) : ""}
+           {
+               object?.payment?.id ? 
+                <Button.Ripple
+                color="primary"
+                tag={Link}
+                to={`/payment/print/${object?.payment?.id}`}
+                target="_blank"
+                style={{ margin: "0px 5px" }}
+              >
+                <Printer size={18} />
+                <span className="align-middle ml-25">In hóa đơn</span>
+              </Button.Ripple> : ""
+           }
             <Button.Ripple color="primary" onClick={onSummit}>
               <Save size={18} />
               <span className="align-middle ml-25">Lưu</span>
@@ -313,7 +383,6 @@ function CreatePayment(props) {
                   placeholder="Chọn học khóa học"
                   value={course}
                   onChange={(item) => onChangeMulCourse(item)}
-                  ref={courseRef}
                 />
                 <Table striped responsive style={{ marginTop: 20 }}>
                   <thead>
@@ -376,10 +445,7 @@ function CreatePayment(props) {
                   </div>
                 )}
                 <Row style={{ padding: "30px 0px 20px 0px" }}>
-                  <Col md="6">
-                 
-                    <div>{reward ? reward.gift : ""}</div>
-                    </Col>
+                  <Col md="6">{reward ? reward.gift : ""}</Col>
                   <Col md="6">
                     <div className="d-flex justify-content-between">
                       <div>Học phí({renderLesson} buổi)</div>
@@ -415,9 +481,82 @@ function CreatePayment(props) {
                 </Row>
               </CardBody>
             </Card>
-           
+            <Row>
+              <Col md="6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle tag="h4" className="">
+                      Xác nhận thanh toán
+                    </CardTitle>
+                  </CardHeader>
+                  <CardBody>
+                    <FormGroup>
+                      <div style={{ marginBottom: 20 }}>
+                        <CustomInput
+                          type="radio"
+                          id="exampleCustomRadio"
+                          name="method"
+                          onChange={(e) => setMethod(1)}
+                          checked={method === 1}
+                          inline
+                          label="Tiền mặt"
+                        />
+                        <CustomInput
+                          type="radio"
+                          id="exampleCustomRadio2"
+                          name="method"
+                          onChange={(e) => setMethod(2)}
+                          checked={method === 2}
+                          inline
+                          label="Chuyển khoản"
+                        />
+                      </div>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="nameVertical">Nhân viên thu tiền</Label>
+                      <Select
+                        isClearable={false}
+                        theme={selectThemeColors}
+                        name="colors"
+                        options={receptionistData}
+                        getOptionLabel={(option) => option.username}
+                        getOptionValue={(option) => option.id}
+                        className="react-select"
+                        classNamePrefix="select"
+                        placeholder="Chọn nhân viên thu tiền"
+                        value={receptionist}
+                        onChange={(item) => setReceptionist(item)}
+                      />
+                    </FormGroup>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col md="6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle tag="h4" className="">
+                      Ưu đãi
+                    </CardTitle>
+                  </CardHeader>
+                  <CardBody style={{ paddingBottom: 97 }}>
+                    <Select
+                      isClearable={false}
+                      theme={selectThemeColors}
+                      name="colors"
+                      options={rewardData}
+                      getOptionLabel={(option) => option.title}
+                      getOptionValue={(option) => option.id}
+                      className="react-select"
+                      classNamePrefix="select"
+                      placeholder="Chọn ưu đãi"
+                      value={reward}
+                      onChange={(item) => setReward(item)}
+                    />
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
           </Col>
-          
           <Col md="4" lg="4">
             <Card>
               <CardHeader>
@@ -426,6 +565,16 @@ function CreatePayment(props) {
                 </CardTitle>
               </CardHeader>
               <CardBody>
+                <FormGroup>
+                  <Label for="nameVertical">Nội dung</Label>
+                  <Input
+                    type="text"
+                    name="title"
+                    value={object?.title}
+                    onChange={hanldChange}
+                    placeholder="Nội dung"
+                  />
+                </FormGroup>
                 <FormGroup>
                   <Label for="select-basic">Ca học</Label>
                   <Input
@@ -438,6 +587,73 @@ function CreatePayment(props) {
                     <option value="1">Ca ngày</option>
                     <option value="2">Ca tối</option>
                   </Input>
+                </FormGroup>
+                {/* <FormGroup>
+                  <Label for="nameVertical">Số lần đóng tiền</Label>
+                  <Cleave
+                    name="times"
+                    value={object?.times}
+                    className="form-control"
+                    onChange={hanldChange}
+                    placeholder="Số lần đóng tiền"
+                    options={options}
+                    id="numeral-formatting"
+                  />
+                </FormGroup> */}
+                {/* <FormGroup>
+                  <Label for="nameVertical">Số tiền đóng</Label>
+                  <Cleave
+                    name="pay_amount"
+                    value={object?.pay_amount}
+                    onChange={hanldChange}
+                    placeholder="Số tiền đóng"
+                    className="form-control"
+                    options={options}
+                    id="numeral-formatting"
+                    disabled={course.length === 0}
+                  />
+                </FormGroup> */}
+                {/* <FormGroup>
+                  <Label for="nameVertical">Số tiền còn nợ</Label>
+
+                  <Cleave
+                    name="rest_amount"
+                    value={object?.rest_amount}
+                    onChange={hanldChange}
+                    placeholder="Số tiền còn nợ"
+                    className="form-control"
+                    options={options}
+                    disabled
+                    min={0}
+                    id="numeral-formatting"
+                  />
+                </FormGroup> */}
+                <FormGroup>
+                  <Label for="default-picker">Ngày nộp</Label>
+                  <Flatpickr
+                    className="form-control"
+                    value={payment_date}
+                    onChange={(date) => setPayment_date(date)}
+                    id="default-picker"
+                    options={{
+                      dateFormat: "Y-m-d h:m:i",
+                    }}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <FormGroup>
+                    <Label for="default-picker">Ngày hẹn nộp hoàn thành</Label>
+                    <Flatpickr
+                      className="form-control"
+                      value={plan_date}
+                      onChange={(date) => setPlan_date(date)}
+                      id="default-picker"
+                      disabled
+                      options={{
+                        dateFormat: "Y-m-d h:m:i",
+                      }}
+                    />
+                  </FormGroup>
                 </FormGroup>
                 <FormGroup>
                   <Label for="select-basic">Tình trạng hợp đồng</Label>
@@ -471,21 +687,6 @@ function CreatePayment(props) {
                     onChange={(item) => setStudentcare(item)}
                   />
                 </FormGroup>
-                <FormGroup>
-                      <Label for="nameVertical">Ưu đãi</Label>
-                      <Select
-                      isClearable={false}
-                      theme={selectThemeColors}
-                      name="colors"
-                      options={rewardData}
-                      getOptionLabel={(option) => option.title}
-                      getOptionValue={(option) => option.id}
-                      className="react-select"
-                      classNamePrefix="select"
-                      placeholder="Chọn ưu đãi"
-                      value={reward}
-                      onChange={(item) => setReward(item)}
-                    /> </FormGroup>
                 <FormGroup>
                   <Label for="nameVertical">Lớp học</Label>
                   <Select
@@ -549,16 +750,14 @@ function CreatePayment(props) {
             setStudent={setStudent}
             setStudentData={setStudentData}
             studentData={studentData}
-            autoFocusCourse={autoFocusCourse}
           />
         )}
-       
       </div>
     </Fragment>
   );
 }
 
-export default CreatePayment;
+export default withRouter(DetailPayment);
 
 export const SvgCourese = () => {
   return (

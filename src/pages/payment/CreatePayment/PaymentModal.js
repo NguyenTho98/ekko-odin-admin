@@ -14,17 +14,16 @@ import {
   Row,
 } from "reactstrap";
 import { selectThemeColors } from "@utils";
-import { toastSuccess } from "../../utility/common/toastify";
-import { isEmpty } from "../../utility/Utils";
-import { actionAddPayment, actionEditPayment } from "./PaymentAction";
-import { getCenterList } from "../center/CenterAction";
 import Select, { components } from "react-select";
 import Flatpickr from "react-flatpickr";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
-import { getRewardList } from "../reward/RewardAction";
-import { getUserList } from "../users/UsersAction";
 import moment from "moment";
-function AddOrEditPaymentModal(props) {
+import { toastSuccess } from "../../../utility/common/toastify";
+import { isEmpty } from "../../../utility/Utils";
+import { getRewardList } from "../../reward/RewardAction";
+import { getUserList } from "../../users/UsersAction";
+import { actionAddPayment, actionEditPayment } from "../PaymentAction";
+function PaymentModal(props) {
   const { visible, onCancel, item = {} } = props;
   const [payment_date, setPayment_date] = useState(new Date());
   const [plan_date, setPlan_date] = useState(new Date());
@@ -290,4 +289,4 @@ function AddOrEditPaymentModal(props) {
   );
 }
 
-export default AddOrEditPaymentModal;
+export default PaymentModal;

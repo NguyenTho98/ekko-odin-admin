@@ -154,7 +154,7 @@ const Payment = (props) => {
     if (value === 3) {
       return "Từ chối"
     }
-    return "Đồng ý"
+    return "Hoàn thành"
   }
   const columns = [
     // {

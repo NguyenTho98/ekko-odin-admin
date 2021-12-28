@@ -31,6 +31,7 @@ import { useNavbarColor } from '@hooks/useNavbarColor'
 // ** Styles
 import '@styles/base/core/menu/menu-types/vertical-menu.scss'
 import '@styles/base/core/menu/menu-types/vertical-overlay-menu.scss'
+import Loading from '../../components/isLoading/Loading'
 
 const VerticalLayout = props => {
   // ** Props
@@ -168,6 +169,7 @@ const VerticalLayout = props => {
           )}
         </div>
       </Navbar>
+    
       {children}
 
       {/* Vertical Nav Menu Overlay */}
@@ -204,6 +206,7 @@ const VerticalLayout = props => {
           themeConfig={themeConfig}
         />
       ) : null}
+     
       <footer
         className={classnames(`footer footer-light ${footerClasses[footerType] || 'footer-static'}`, {
           'd-none': footerType === 'hidden'

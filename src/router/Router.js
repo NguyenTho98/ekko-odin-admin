@@ -32,6 +32,7 @@ import { ToastContainer } from "react-toastify";
 import { TOKEN } from "../utility/constants/config";
 import { connect } from "react-redux";
 import cookie from "js-cookie";
+import Loading from "../components/isLoading/Loading";
 
 const Router = (props) => {
   useEffect(() => {
@@ -165,6 +166,7 @@ const Router = (props) => {
                       return (
                         <Suspense fallback={null}>
                           {/* Layout Wrapper to add classes based on route's layout, appLayout and className */}
+                          <Loading></Loading>
                           <LayoutWrapper
                             layout={DefaultLayout}
                             transition={transition}
