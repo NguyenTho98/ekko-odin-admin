@@ -57,10 +57,10 @@ const CustomHeader = ({
               <option value="50">50</option>
             </CustomInput>
           </div>
-          <Button.Ripple onClick={handleAddNew} color="primary">
+          {/* <Button.Ripple onClick={handleAddNew} color="primary">
             <Plus size={18} />
             <span className="align-middle ml-25">Thêm mới</span>
-          </Button.Ripple>
+          </Button.Ripple> */}
         </Col>
         <Col
           lg="6"

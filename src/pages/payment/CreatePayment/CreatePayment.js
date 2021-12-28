@@ -163,14 +163,6 @@ function CreatePayment(props) {
       toastError('Vui lòng chọn khóa học')
       return;
     }
-    if (!receptionist) {
-      toastError('Vui lòng chọn nhân viên thu tiền')
-      return;
-    }
-    if (!receptionist) {
-      toastError('Vui lòng chọn nhân viên thu tiền')
-      return;
-    }
     if (!center) {
       toastError('Vui lòng chọn trung tâm')
       return;
@@ -190,7 +182,6 @@ function CreatePayment(props) {
   
     const idCourse = course.length > 0 ? course.map((item) => item.id) : [];
     const idClasses = classes.length > 0 ? classes.map((item) => item.id) : [];
-    if (res && res.data) {
       const dataContract = {
         title: object?.title,
         // times: object?.times,
@@ -198,18 +189,18 @@ function CreatePayment(props) {
         note: object?.note,
         customers: student?.id,
         center: center?.id,
-        // payment: res?.data?.id,
         classes: idClasses,
-        consultant: studentcare?.id,
         course: idCourse,
+        // payment: res?.data?.id,
+        consultant: studentcare?.id,
+        reward: reward?.id,
         shift: method,
-      };
+      }
       const res1 = await actionAddContract(dataContract);
       if (res1 && res1.data?.id) {
         history.push(`/contract-edit/${res1.data.id}`)
         toastSuccess("Thêm mới hợp đồng thành công");
       }
-    }
   };
 
   const renderTotal = () => {
@@ -531,8 +522,8 @@ function CreatePayment(props) {
                 <Input
                   type="textarea"
                   name="title"
-                  // value={object?.title}
-                  // onChange={hanldChange}
+                  value={object?.title}
+                  onChange={hanldChange}
                   placeholder="Ghi chú"
                 />
               </CardBody>

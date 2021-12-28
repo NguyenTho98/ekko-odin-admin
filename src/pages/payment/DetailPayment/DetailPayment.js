@@ -54,6 +54,7 @@ function DetailPayment(props) {
   const [payment_date, setPayment_date] = useState(new Date());
   const [plan_date, setPlan_date] = useState(new Date());
   const [studentData, setStudentData] = useState([]);
+  const [paymentData, setPaymentData] = useState([]);
   const [object, setObject] = useState({
     state: 1,
   });
@@ -86,27 +87,11 @@ function DetailPayment(props) {
       setStudent(res?.data?.customers);
       setCourse(res?.data?.course);
       setClasses(res?.data?.classes);
-      setReceptionist(res?.data?.payment?.cashier);
       setStudentcare(res?.data?.consultant);
       setCenter(res?.data?.center);
-      setReward(res?.data?.payment?.reward);
-      setMethod(res?.data?.payment?.method);
-      setPlan_date(res?.data?.payment?.plan_date);
-      setPayment_date(res?.data?.payment?.payment_date);
-      setMethod(res?.data?.payment?.method);
+      setPaymentData(res.data?.payment)
       setSchedule(res?.data?.shift);
-      const data = {
-        ...res.data,
-        id: res?.data?.id,
-        pay_amount: res?.data?.payment?.pay_amount,
-        rest_amount: res?.data?.payment?.rest_amount,
-        state: 1,
-        title: res?.data?.title,
-        times: res?.data?.times,
-        state: res?.data?.state,
-        note: res?.data?.note,
-      };
-      setObject(data);
+      setObject(res.data);
     });
   }, []);
 
@@ -196,69 +181,7 @@ function DetailPayment(props) {
   function numberWithCommas(x) {
     return x.toString().replaceAll(",", "");
   }
-  const onSummit = async () => {
-    if (!student) {
-      toastError("Vui lòng chọn học viên");
-      return;
-    }
-    if (course.length === 0) {
-      toastError("Vui lòng chọn khóa học");
-      return;
-    }
-    if (!receptionist) {
-      toastError("Vui lòng chọn nhân viên thu tiền");
-      return;
-    }
-    if (!receptionist) {
-      toastError("Vui lòng chọn nhân viên thu tiền");
-      return;
-    }
-    if (!center) {
-      toastError("Vui lòng chọn trung tâm");
-      return;
-    }
-    // if (!object.times) {
-    //   toastError('Vui nhập số lần đóng tiền')
-    //   return;
-    // }
-    // if (!object.pay_amount) {
-    //   toastError('Vui nhập số tiền đóng')
-    //   return;
-    // }
-    const idCourse = course.length > 0 ? course.map((item) => item.id) : [];
-    const idClasses = course.length > 0 ? classes.map((item) => item.id) : [];
-    const dataPayment = {
-      // pay_amount: parseInt(numberWithCommas(object?.pay_amount)),
-      // rest_amount: object.rest_amount,
-      payment_date: moment(new Date(payment_date)).format("YYYY-MM-DD"),
-      plan_date: moment(new Date(plan_date)).format("YYYY-MM-DD"),
-      method,
-      state: 2,
-      center: center?.id,
-      payer: student?.id,
-      cashier: receptionist?.id,
-      reward: reward?.id,
-    };
 
-    const res = await actionEditPayment(dataPayment, object?.payment?.id);
-    if (res && res.data) {
-      const dataContract = {
-        title: object?.title,
-        times: object?.times,
-        state: object?.state,
-        note: object?.note,
-        customers: student?.id,
-        center: center?.id,
-        payment: res?.data?.id,
-        classes: idClasses,
-        consultant: studentcare?.id,
-        course: idCourse,
-        shift: method,
-      };
-      await actionEditContract(dataContract, object?.id);
-      toastSuccess("Chỉnh sửa hợp đồng thành công");
-    }
-  };
 
   const renderTotal = () => {
     let total = 0;
@@ -281,6 +204,15 @@ function DetailPayment(props) {
     }
     return total;
   };
+  const renderState = (value) => {
+    if (value === 2) {
+      return "Chờ"
+    }
+    if (value === 3) {
+      return "Từ chối"
+    }
+    return "Hoàn thành"
+  }
   return (
     <Fragment>
       <div className="invoice-list-wrapper detail-payment-wrapper">
@@ -512,32 +444,36 @@ function DetailPayment(props) {
                   <thead>
                     <tr>
                       <th>Mã hóa đơn</th>
-                      <th>Số tiền</th>
+                      <th>Số tiền đóng</th>
+                      <th>Số tiền còn nợ</th>
                       <th>Trạng thái</th>
                       <th>Ngày hẹn hoàn thành</th>
                       <th>Action</th>
                     </tr>
                   </thead>
-                  {course?.length > 0 ? (
+                  {paymentData?.length > 0 ? (
                     <tbody>
-                      {course.map((item) => (
+                      {paymentData.map((item) => (
                         <tr key={item.id}>
                           <td>{item.code}</td>
-                          <td>{item.name}</td>
-                          <td>
-                            <NumberFormat
-                              value={item.study_shift_count}
+                          <td><NumberFormat
+                              value={item.pay_amount}
                               displayType={"text"}
                               thousandSeparator={true}
-                            />{" "}
+                            />{" "}</td>
+                            <td><NumberFormat
+                              value={item.rest_amount}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                            />{" "}</td>
+                          <td>
+                          
+                            { renderState(item.state) }
                           </td>
                           <td>
-                            {" "}
-                            <NumberFormat
-                              value={item.night_cost}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                            />{" "}
+                            {
+                              item.rest_amount <= 0 ? "Đã hoàn thành" :  moment(new Date(item.plan_date)).format("YYYY-MM-DD")
+                            }
                           </td>
                           <td><Printer size={18} /></td>
                         </tr>
@@ -718,6 +654,8 @@ function DetailPayment(props) {
               // setSelectedItem({});
               setVisible(false);
             }}
+            renderTotal={renderTotal()}
+            detailContract={object}
           />
         )}
       </div>
