@@ -110,18 +110,7 @@ function AddOrEditPaymentModal(props) {
         <ModalBody>
           <Form>
             <Row>
-              <Col sm="6">
-                <FormGroup>
-                  <Label for="nameVertical">Nội dung</Label>
-                  <Input
-                    type="text"
-                    name="title"
-                    value={object?.title}
-                    onChange={hanldChange}
-                    placeholder="Nội dung"
-                  />
-                </FormGroup>
-              </Col>
+             
               <Col sm="6">
                 <FormGroup>
                   <Label for="nameVertical">Số tiền đóng</Label>
@@ -191,6 +180,18 @@ function AddOrEditPaymentModal(props) {
               </Col>
               <Col sm="6">
                 <FormGroup>
+                  <Label for="nameVertical">Tên ngân hàng</Label>
+                  <Input
+                    type="text"
+                    name="banks"
+                    value={object?.banks}
+                    onChange={hanldChange}
+                    placeholder="Tên ngân hàng"
+                  />
+                </FormGroup>
+              </Col>
+              <Col sm="6">
+                <FormGroup>
                   <Label for="select-basic">Trạng thái</Label>
                   <Input
                     type="select"
@@ -206,7 +207,7 @@ function AddOrEditPaymentModal(props) {
                 </FormGroup>
               </Col>
              
-              <Col sm="12">
+              <Col sm="6">
                 <Label for="nameVertical">Người nộp</Label>
                 <Select
                   isClearable={false}
@@ -222,7 +223,7 @@ function AddOrEditPaymentModal(props) {
                   onChange={(item) => setPayer(item) }
                 />
               </Col>
-              <Col sm="12">
+              <Col sm="6">
                 <Label for="nameVertical">Người thu</Label>
                 <Select
                   isClearable={false}
@@ -238,22 +239,7 @@ function AddOrEditPaymentModal(props) {
                   onChange={(item) => setCashier(item) }
                 />
               </Col>
-              <Col sm="12">
-                <Label for="nameVertical">Ưu đãi</Label>
-                <Select
-                  isClearable={false}
-                  theme={selectThemeColors}
-                  name="colors"
-                  options={rewardData}
-                  getOptionLabel={(option) => option.title}
-                  getOptionValue={(option) => option.id}
-                  className="react-select"
-                  classNamePrefix="select"
-                  placeholder="Chọn ưu đãi"
-                  value={reward}
-                  onChange={(item) => setReward(item) }
-                />
-              </Col>
+           
               <Col sm="12">
                 <FormGroup>
                   <Label for="nameVertical">Ghi chú</Label>

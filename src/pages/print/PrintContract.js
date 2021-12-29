@@ -77,6 +77,13 @@ function PrintContract(props) {
             <div style={{ textAlign: "center", fontWeight: 600 }}>
               Mã Hợp Đồng: {contract?.code}{" "}
             </div>
+            <div style={{ textAlign: "center", fontWeight: 600 }}>
+              Khóa học: {contract?.course?.length > 0
+                  ? contract?.course?.map((item) => (
+                      <span>{item.name},</span>
+                    ))
+                  : ""}
+            </div>
             <div
               style={{ textAlign: "center", fontWeight: 600, marginBottom: 20 }}
             >

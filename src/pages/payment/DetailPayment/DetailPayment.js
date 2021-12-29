@@ -91,6 +91,7 @@ function DetailPayment(props) {
       setCenter(res?.data?.center);
       setPaymentData(res.data?.payment)
       setSchedule(res?.data?.shift);
+      setReward(res?.data?.reward)
       setObject(res.data);
     });
   }, []);
@@ -292,6 +293,7 @@ function DetailPayment(props) {
                   classNamePrefix="select"
                   placeholder="Chọn học viên"
                   value={student}
+                  isDisabled={true}
                   onChange={(item) => onChangeStudent(item)}
                 />
               </CardBody>
@@ -315,6 +317,7 @@ function DetailPayment(props) {
                   classNamePrefix="select"
                   placeholder="Chọn học khóa học"
                   value={course}
+                  isDisabled={true}
                   onChange={(item) => onChangeMulCourse(item)}
                 />
                 <Table striped responsive style={{ marginTop: 20 }}>
@@ -475,7 +478,15 @@ function DetailPayment(props) {
                               item.rest_amount <= 0 ? "Đã hoàn thành" :  moment(new Date(item.plan_date)).format("YYYY-MM-DD")
                             }
                           </td>
-                          <td><Printer size={18} /></td>
+                          <td><Button.Ripple
+                color="primary"
+                tag={Link}
+                to={`/payment/print/${item.id}`}
+                target="_blank"
+                style={{ margin: "0px 5px" }}
+              >
+                <Printer size={18} />
+              </Button.Ripple></td>
                         </tr>
                       ))}
                     </tbody>
@@ -527,6 +538,7 @@ function DetailPayment(props) {
                     value={schedule}
                     name="state"
                     id="select-basic"
+                    disabled
                     onChange={(item) => setSchedule(item.target.value)}
                   >
                     <option value="1">Ca ngày</option>
@@ -541,6 +553,7 @@ function DetailPayment(props) {
                     name="state"
                     id="select-basic"
                     onChange={hanldChange}
+                    disabled
                   >
                     <option value="1">Cam kết</option>
                     <option value="2">Mất cam kết</option>
@@ -555,6 +568,7 @@ function DetailPayment(props) {
                     isClearable={false}
                     theme={selectThemeColors}
                     name="colors"
+                    isDisabled={true}
                     options={studentcareData}
                     getOptionLabel={(option) => option.username}
                     getOptionValue={(option) => option.id}
@@ -570,6 +584,7 @@ function DetailPayment(props) {
                   <Select
                     isClearable={false}
                     theme={selectThemeColors}
+                    isDisabled={true}
                     name="colors"
                     options={rewardData}
                     getOptionLabel={(option) => option.title}
@@ -594,6 +609,7 @@ function DetailPayment(props) {
                     className="react-select"
                     classNamePrefix="select"
                     isMulti
+                    isDisabled={true}
                     placeholder="Chọn lớp học"
                     value={classes}
                     onChange={(item) => onChangeMulClasses(item)}
@@ -612,6 +628,7 @@ function DetailPayment(props) {
                     classNamePrefix="select"
                     placeholder="Chọn trung tâm"
                     value={center}
+                    isDisabled={true}
                     onChange={(item) => setCenter(item)}
                   />
                 </FormGroup>
@@ -627,6 +644,7 @@ function DetailPayment(props) {
                 <Input
                   type="textarea"
                   name="title"
+                  disabled
                   // value={object?.title}
                   // onChange={hanldChange}
                   placeholder="Ghi chú"

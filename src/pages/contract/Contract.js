@@ -254,7 +254,7 @@ const Contract = (props) => {
           >
             Delete
           </UncontrolledTooltip>
-          <Edit
+          {/* <Edit
             style={{ cursor: "pointer" }}
             size={17}
             className="mx-1"
@@ -263,7 +263,7 @@ const Contract = (props) => {
           />
           <UncontrolledTooltip placement="top" target={`pw-tooltip-${row.id}`}>
             Edit
-          </UncontrolledTooltip>
+          </UncontrolledTooltip> */}
         </div>
       ),
     },

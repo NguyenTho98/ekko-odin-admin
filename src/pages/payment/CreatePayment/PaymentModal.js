@@ -112,22 +112,18 @@ function PaymentModal(props) {
         const idClasses = detailContract?.classes?.length > 0 ? detailContract?.classes?.map((item) => item.id) : [];
         const tmp = {...detailContract,
           center: detailContract?.center?.id,
-          classes: idCourse,
+          classes: idClasses,
           consultant: detailContract?.consultant?.id,
-          course: idClasses,
+          course: idCourse,
           reward: detailContract?.reward?.id,
           customers: detailContract?.customers?.id,
         }
-        let tmp1 = []
-        debugger;
         if (detailContract?.payment?.length > 0) {
           const tmp2 = detailContract?.payment?.map(item => item.id);
-          tmp1 = tmp2.push(tm?.data?.id)
-          console.log("tmp1", tmp1);
+          tmp.payment = tmp2.concat([tm?.data?.id])
         } else {
-          tmp1 = [tm?.data?.id]
+          tmp.payment = [tm?.data?.id]
         }
-        tmp.payment = tmp1
         console.log(" tmp.payment",  tmp);
         await actionEditContract(tmp, detailContract?.id)
       } 
